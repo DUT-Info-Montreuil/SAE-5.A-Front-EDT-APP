@@ -1,52 +1,55 @@
-# Cache and logs (Symfony2)
-/app/cache/*
-/app/logs/*
-!app/cache/.gitkeep
-!app/logs/.gitkeep
+# Created by https://www.toptal.com/developers/gitignore/api/visualstudiocode,angular
+# Edit at https://www.toptal.com/developers/gitignore?templates=visualstudiocode,angular
 
-# Email spool folder
-/app/spool/*
+### Angular ###
+## Angular ##
+# compiled output
+dist/
+tmp/
+app/**/*.js
+app/**/*.js.map
 
-# Cache, session files and logs (Symfony3)
-/var/cache/*
-/var/logs/*
-/var/sessions/*
-!var/cache/.gitkeep
-!var/logs/.gitkeep
-!var/sessions/.gitkeep
+# dependencies
+node_modules/
+bower_components/
 
-# Logs (Symfony4)
-/var/log/*
-!var/log/.gitkeep
+# IDEs and editors
+.idea/
 
-# Parameters
-/app/config/parameters.yml
-/app/config/parameters.ini
+# misc
+.sass-cache/
+connect.lock/
+coverage/
+libpeerconnection.log/
+npm-debug.log
+testem.log
+typings/
+.angular/
 
-# Managed by Composer
-/app/bootstrap.php.cache
-/var/bootstrap.php.cache
-/bin/*
-!bin/console
-!bin/symfony_requirements
-/vendor/
+# e2e
+e2e/*.js
+e2e/*.map
 
-# Assets and user uploads
-/web/bundles/
-/web/uploads/
+# System Files
+.DS_Store/
 
-# PHPUnit
-/app/phpunit.xml
-/phpunit.xml
+### VisualStudioCode ###
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
 
-# Build data
-/build/
+# Local History for Visual Studio Code
+.history/
 
-# Composer PHAR
-/composer.phar
+# Built Visual Studio Code Extensions
+*.vsix
 
-# Backup entities generated with doctrine:generate:entities command
-**/Entity/*~
+### VisualStudioCode Patch ###
+# Ignore all local history of files
+.history
+.ionide
 
-# Embedded web-server pid file
-/.web-server-pid
+# End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,angular

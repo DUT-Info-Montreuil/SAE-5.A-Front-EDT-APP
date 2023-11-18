@@ -1,1 +1,18 @@
 /* You can add global styles to this file, and also import other style files */
+:root{
+
+}
+
+.wrapper {
+    display: flex;
+    flex: auto;
+    align-items: center;
+}
+
+.container {
+    display: grid;
+}
+
+.card {
+    border: 1em black;
+}

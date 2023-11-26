@@ -11,7 +11,7 @@ describe('ConnexionComponent', () => {
       imports: [ConnexionComponent]
     })
     .compileComponents();
-    
+
     fixture = TestBed.createComponent(ConnexionComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

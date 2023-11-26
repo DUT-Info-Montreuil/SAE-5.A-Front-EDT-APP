@@ -8,6 +8,8 @@
             id="login"
             type="text"
             class="form-input on-primary-container"
+            [(ngModel)]="msg"
+            name="msg"
           />
           <label class="label-large form-input-label" for="login"
             >Identifiant</label
@@ -25,7 +27,8 @@
         </div>
       </section>
       <section>
-        <button>Se connecter</button>
+        <button (click)="clickEvent()">Se connecter</button>
+        <h2>{{msg}}</h2>
       </section>
     </form>
   </div>

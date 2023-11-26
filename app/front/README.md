@@ -1,6 +1,6 @@
 
 # SAE-5.A-Front-EDT-APP
-_____
+
 ##  TABLE OF CONTENTS
  - [Angular Setup](#Angular-Setup-(Windows,-maybe-Linux?))
  - [Angular Readme](CodeFront/README.md)

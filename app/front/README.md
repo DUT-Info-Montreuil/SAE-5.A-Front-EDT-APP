@@ -5,7 +5,6 @@
  - [Angular Setup](#Angular-Setup-(Windows,-maybe-Linux?))
  - [Angular Readme](CodeFront/README.md)
  - [Useful links](#useful-links)
----
 
 ## Angular Setup (Windows, maybe Linux?)
 1. Install NodeJS

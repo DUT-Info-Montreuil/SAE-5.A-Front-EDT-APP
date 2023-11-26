@@ -14,6 +14,8 @@ section {
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    height: 110px;
+    width: 200px;
 }
 
 input {
@@ -32,6 +34,7 @@ input {
     border: var(--border-size) solid #000;
     border-radius: 1rem;
     transition: border 0.25s ease-in-out;
+    color: white;
 
     &:focus {
         outline: none;
@@ -55,4 +58,8 @@ input {
             var(--md-sys-color-on-primary-container) calc(50% - var(--border-size)),
             var(--md-sys-color-on-primary-container) 100%);
     padding-inline: 10px;
+}
+
+#loginHeader {
+  margin-bottom: 10px;
 }

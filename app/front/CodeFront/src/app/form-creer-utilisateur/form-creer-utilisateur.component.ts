@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-form-creer-utilisateur',
@@ -10,5 +11,9 @@ import { CommonModule } from '@angular/common';
   styleUrl: './form-creer-utilisateur.component.css'
 })
 export class FormCreerUtilisateurComponent {
-
+	constructor(private router: Router) { }
+	
+  redirectToPage() {
+	this.router.navigate(['/menu-utilisateur']);
+  }
 }

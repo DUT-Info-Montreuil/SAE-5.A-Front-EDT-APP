@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { AxiosService } from './axios.service';
 
 @Component({
   selector: 'app-form-trouver-utilisateur',
@@ -9,6 +10,15 @@ import { CommonModule } from '@angular/common';
   templateUrl: './form-trouver-utilisateur.component.html',
   styleUrl: './form-trouver-utilisateur.component.css'
 })
-export class FormTrouverUtilisateurComponent {
 
+export class FormTrouverUtilisateurComponent implements OnInit {
+  data: any;
+
+  constructor(private axiosService: AxiosService) { }
+
+  ngOnInit(): void {
+    this.axiosService.getData().subscribe(response => {
+      this.data = response;
+    });
+  }
 }

@@ -1,15 +1,16 @@
 <main class="wrapper surface">
   <div class="card on-surface surface-text">
-    <form class="">
+    <form class="" [formGroup]="loginForm">
       <h1 class="headline-large" id="loginHeader">Connexion</h1>
-      <section>
+      <section class="text-section">
         <div class="form-input-group">
           <input
             id="login"
             type="text"
             class="form-input on-primary-container"
-            [(ngModel)]="msg"
-            name="msg"
+            formControlName="login"
+            [ngClass]="{'isFill':login?.valid}"
+            name="login"
           />
           <label class="label-large form-input-label" for="login"
             >Identifiant</label
@@ -20,6 +21,9 @@
             id="password"
             type="password"
             class="form-input on-primary-container"
+            formControlName="password"
+            [ngClass]="{'isFill':password?.valid}"
+            name="password"
           />
           <label class="label-large form-input-label" for="password"
             >Mot de passe</label
@@ -28,7 +32,6 @@
       </section>
       <section>
         <button (click)="clickEvent()">Se connecter</button>
-        <h2>{{msg}}</h2>
       </section>
     </form>
   </div>

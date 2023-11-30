@@ -14,12 +14,15 @@ section {
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    height: 110px;
-    width: 200px;
 }
 
 input {
     box-shadow: 3px 3px 1rem 0.5rem rgba(0, 0, 0, 0.06);
+}
+
+.text-section{
+  height: 140px;
+  width: 195px;
 }
 
 .form-input-group {
@@ -37,7 +40,7 @@ input {
     color: white;
 
     &:focus {
-        outline: none;
+        /*outline: none;*/
         border: var(--border-size) solid lighten(#000, 75%);
     }
 }
@@ -50,7 +53,7 @@ input {
     transition: all 0.25s ease-in-out;
 }
 
-.form-input:focus~.form-input-label {
+.form-input:is(:focus,.isFill)~.form-input-label {
     top: 0;
     background: linear-gradient(180deg,
             var(--md-sys-color-on-surface) 0%,

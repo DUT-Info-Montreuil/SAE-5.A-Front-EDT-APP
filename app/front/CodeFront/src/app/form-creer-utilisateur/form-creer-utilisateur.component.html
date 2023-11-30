@@ -1,11 +1,22 @@
-<p>Veuillez remplir les différents champs afin de créer l'utilisateur</p>
-    <form action="">
-		<p>Nom: <input type="text" /><p>
-		<p>Prénom: <input type="text" /><p>
-		<p>IdUtilisateur: <input type="text" /><p>
-		<p>Username: <input type="text" /><p>
-		<p>PassWord: <input type="text" /><p>
-		
-		<input type="submit" value="Envoyer"/>
-	</form>
+
+<form (ngSubmit)="onSubmit()">
+  <!-- Ajoutez vos champs de formulaire ici -->
+  <p><label for="exampleInput">Nom :</label><p>
+  <input type="text" id="exampleInput" [(ngModel)]="formData.FirstName" name="exampleInput" required>
+  
+  <p><label for="exampleInput">Prénom :</label><p>
+  <input type="text" id="exampleInput" [(ngModel)]="formData.LastName" name="exampleInput" required>
+  
+  <p><label for="exampleInput">IdUtilisateur :</label><p>
+  <input type="text" id="exampleInput" [(ngModel)]="formData.IdUtilisateur" name="exampleInput" required>
+  
+  <p><label for="exampleInput">Username :</label><p>
+  <input type="text" id="exampleInput" [(ngModel)]="formData.Username" name="exampleInput" required>
+  
+  <p><label for="exampleInput">PassWord :</label><p>
+  <input type="text" id="exampleInput" [(ngModel)]="formData.PassWord" name="exampleInput" required>
+
+  <p><button type="submit">Envoyer</button><p>
+</form>
+
 <button (click)="redirectToPage()">Retour au menu</button>

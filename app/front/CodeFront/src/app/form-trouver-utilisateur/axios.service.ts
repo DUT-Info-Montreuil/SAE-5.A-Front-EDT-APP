@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 
 export class AxiosService {
-  private apiUrl = 'http://127.0.0.1:4200/utilisateurs/get';
+  private apiUrl = 'http://127.0.0.1:5050/utilisateurs/get';
 
   getData(): Observable<any> {
     return new Observable(observer => {

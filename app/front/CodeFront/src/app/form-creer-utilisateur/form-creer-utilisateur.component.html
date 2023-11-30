@@ -19,4 +19,11 @@
   <p><button type="submit">Envoyer</button><p>
 </form>
 
+<div *ngIf="successMessage" class="success-message">
+  {{ successMessage }}
+</div>
+
+<div *ngIf="errorMessage" class="error-message">
+  {{ errorMessage }}
+</div>
 <button (click)="redirectToPage()">Retour au menu</button>

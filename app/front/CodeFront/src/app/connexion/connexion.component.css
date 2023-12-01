@@ -1,0 +1,68 @@
+@import url("../../styles.css");
+
+.wrapper {
+    align-items: center;
+    justify-content: center;
+}
+
+main {
+    height: 100vh;
+}
+
+section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+input {
+    box-shadow: 3px 3px 1rem 0.5rem rgba(0, 0, 0, 0.06);
+}
+
+.text-section{
+  height: 140px;
+  width: 195px;
+}
+
+.form-input-group {
+    margin-block: 15px;
+    position: relative;
+    display: flex;
+}
+
+.form-input {
+    width: 100%;
+    padding: 10px;
+    border: var(--border-size) solid #000;
+    border-radius: 1rem;
+    transition: border 0.25s ease-in-out;
+    color: white;
+
+    &:focus {
+        /*outline: none;*/
+        border: var(--border-size) solid lighten(#000, 75%);
+    }
+}
+
+.form-input-label {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translateY(-50%);
+    transition: all 0.25s ease-in-out;
+}
+
+.form-input:is(:focus,.isFill)~.form-input-label {
+    top: 0;
+    background: linear-gradient(180deg,
+            var(--md-sys-color-on-surface) 0%,
+            var(--md-sys-color-on-surface) calc(50% + var(--border-size)),
+            var(--md-sys-color-on-primary-container) calc(50% - var(--border-size)),
+            var(--md-sys-color-on-primary-container) 100%);
+    padding-inline: 10px;
+}
+
+#loginHeader {
+  margin-bottom: 10px;
+}

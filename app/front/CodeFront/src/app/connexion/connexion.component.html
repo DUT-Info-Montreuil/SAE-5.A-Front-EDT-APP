@@ -1,0 +1,38 @@
+<main class="wrapper surface">
+  <div class="card on-surface surface-text">
+    <form class="" [formGroup]="loginForm">
+      <h1 class="headline-large" id="loginHeader">Connexion</h1>
+      <section class="text-section">
+        <div class="form-input-group">
+          <input
+            id="login"
+            type="text"
+            class="form-input on-primary-container"
+            formControlName="login"
+            [ngClass]="{'isFill':login?.valid}"
+            name="login"
+          />
+          <label class="label-large form-input-label" for="login"
+            >Identifiant</label
+          >
+        </div>
+        <div class="form-input-group">
+          <input
+            id="password"
+            type="password"
+            class="form-input on-primary-container"
+            formControlName="password"
+            [ngClass]="{'isFill':password?.valid}"
+            name="password"
+          />
+          <label class="label-large form-input-label" for="password"
+            >Mot de passe</label
+          >
+        </div>
+      </section>
+      <section>
+        <button (click)="clickEvent()">Se connecter</button>
+      </section>
+    </form>
+  </div>
+</main>

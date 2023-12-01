@@ -6,10 +6,6 @@ import { FormTrouverUtilisateurComponent } from './form-trouver-utilisateur/form
 import { MenuUtilisateurComponent } from './menu-utilisateur/menu-utilisateur.component';
 
 
-@NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule],
-})
 
 export const routes: Routes = [
   {path: 'connexion', component: ConnexionComponent},
@@ -18,6 +14,11 @@ export const routes: Routes = [
 	{ path: 'menu-utilisateur', component: MenuUtilisateurComponent },
 ];
 
+@NgModule({
+    imports: [RouterModule.forRoot(routes)],
+    exports: [RouterModule],
+  })
+  
 
 export class AppRoutes { }
 

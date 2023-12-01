@@ -1,12 +1,11 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
-import {TotoComponent} from "../toto/toto.component";
 import {Router} from "@angular/router";
 @Component({
   selector: 'app-connexion',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, TotoComponent],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './connexion.component.html',
   styleUrl: './connexion.component.css'
 })
@@ -21,7 +20,7 @@ export class ConnexionComponent {
   }
 
   clickEvent() {
-    //this.router.navigate(['/toto']);
+
   }
 
   get login() {

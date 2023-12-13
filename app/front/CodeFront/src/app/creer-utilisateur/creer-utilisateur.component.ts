@@ -48,7 +48,7 @@ export class CreerUtilisateurComponent {
     };
 
 
-    this.http.post('http://127.0.0.1:5050/utilisateurs/add/', body, httpOptions)
+    this.http.post('http://localhost:5050/utilisateurs/add/', body, httpOptions)
     .subscribe({
       next: (response: any) => {
         console.log('Réponse de l\'API :', response);

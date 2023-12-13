@@ -18,22 +18,19 @@ export class CreateUserArrayComponent {
   ngOnInit(): void {
     this.initializeForm();
   }
-
+ 
   initializeForm(): void {
     this.mainForm = this.formBuilder.group({
+      role: ['', Validators.required],
       users: this.formBuilder.array([this.createUserForm()])
     });
   }
 
-  get userFormArray(): FormArray | null {
-    return this.mainForm.get('users') as FormArray;
-  }
-
+  
   createUserForm(): FormGroup {
     return this.formBuilder.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
-      role: ['', Validators.required],
       info: this.formBuilder.group({
         idGroupe: [''],
         idSalle: [''],
@@ -42,6 +39,10 @@ export class CreateUserArrayComponent {
     });
   }
 
+
+  get userFormArray(): FormArray | null {
+    return this.mainForm.get('users') as FormArray;
+  }
   addUser(): void {
     if (this.userFormArray) {
       const newUserForm = this.createUserForm(); // Crée un nouveau FormGroup pour le nouvel utilisateur
@@ -55,13 +56,8 @@ export class CreateUserArrayComponent {
   }
   
 
-  onRoleChange(index: number): void {
-    const userGroup = this.userFormArray?.at(index);
-    if (userGroup && userGroup.get('role')?.value === 'eleve') {
-      // Handle role change logic for 'eleve'
-    } else if (userGroup && userGroup.get('role')?.value === 'professeur') {
-      // Handle role change logic for 'professeur'
-    }
+  onRoleChange(): void {
+    
   }
 
   onSubmit(): void {

@@ -35,9 +35,9 @@ export class CreateUserArrayComponent {
       Username: [''],
       Password: [''],
       info: this.formBuilder.group({
-        idgroupe: ['', Validators.required],
-        idsalle: ['', Validators.required],
-        isManager: [false, Validators.required]
+        // idgroupe: ['', Validators.required],
+        // idsalle: ['', Validators.required],
+        // isManager: [false, Validators.required]
       })
     });
   }
@@ -79,9 +79,38 @@ export class CreateUserArrayComponent {
   }
   addUser(): void {
     if (this.userFormArray) {
-      const newUserForm = this.createUserForm(); // Crée un nouveau FormGroup pour le nouvel utilisateur
-      this.userFormArray.push(newUserForm); // Ajoute le nouvel utilisateur au FormArray
+      let userForm;
+      const roleControl = this.mainForm.get('role');
+      if (roleControl?.value === 'professeur') {
+        //create userForm with idsalle, isManager
+        userForm = this.formBuilder.group({
+          FirstName: ['', Validators.required],
+          LastName: ['', Validators.required],
+          Username: [''],
+          Password: [''],
+          info: this.formBuilder.group({
+            idsalle: ['', Validators.required],
+            isManager: [false, Validators.required]
+          })
+        });
+      } else if (roleControl?.value === 'eleve') {
+        //create userForm with idgroupe
+        userForm = this.formBuilder.group({
+          FirstName: ['', Validators.required],
+          LastName: ['', Validators.required],
+          Username: [''],
+          Password: [''],
+          info: this.formBuilder.group({
+            idgroupe: ['', Validators.required]
+          })
+        });
+      }else{
+        //create userForm
+        userForm = this.createUserForm();
+      }
+      this.userFormArray.push(userForm);
     }
+
   }
   removeUser(index: number): void {
     if (this.userFormArray && index !== 0) {

@@ -13,11 +13,15 @@ import { HttpClient } from '@angular/common/http';
 
 export class CreateUserArrayComponent {
   mainForm!: FormGroup;
+  groupes: any[] = [];
+  salles: any[] = [];
 
   constructor(private formBuilder: FormBuilder, private http: HttpClient ) {}
 
   ngOnInit(): void {
     this.initializeForm();
+    this.loadGroupes();
+    this.loadSalles();
   }
  
   initializeForm(): void {
@@ -27,6 +31,36 @@ export class CreateUserArrayComponent {
     });
   }
 
+  loadGroupes(): void {
+
+    const token = localStorage.getItem('token');
+    const headers = { 'Authorization': `Bearer ${token}` };
+    this.http.get('http://localhost:5050/groupe/getAll', { headers }).subscribe({
+      next: (data: any) => {
+        console.log(data);
+        this.groupes = data;
+      },
+      error: (error: any) => {
+        console.log(error);
+      }
+    });
+  }
+
+
+  loadSalles(): void {
+
+    const token = localStorage.getItem('token');
+    const headers = { 'Authorization': `Bearer ${token}` };
+    this.http.get('http://localhost:5050/salle/getAll', { headers }).subscribe({
+      next: (data: any) => {
+        console.log(data);
+        this.salles = data;
+      },
+      error: (error: any) => {
+        console.log(error);
+      }
+    });
+  }
   
   createUserForm(): FormGroup {
     return this.formBuilder.group({
@@ -59,7 +93,7 @@ export class CreateUserArrayComponent {
       }
     });
 
-    const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcwMjU1MzIxMywianRpIjoiMjc3M2YzMjUtNDJlOC00ZGYzLWEwMTUtZDA5ZjdlZTIxMGY4IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6MiwibmJmIjoxNzAyNTUzMjEzLCJleHAiOjE3MDI1NTQxMTN9.aK-Hi46cjUXMf6jt0IC6NvnLY1YpEbOrADC_1CzwJUg";
+    const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcwMjU1ODA5NiwianRpIjoiNzk5MTBmYTEtZTE4Ny00ZjljLWIwNjgtOGI5NTI3ZmYxM2NkIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6MiwibmJmIjoxNzAyNTU4MDk2LCJleHAiOjE3MDI1NTg5OTZ9.HoGBLbY39DdJ34Crbct6CUUGEHkjM7fV-6efcTLW94w";
     const headers = { 'Authorization': `Bearer ${token}` };
     const body = this.mainForm.value;
     this.http.post('http://localhost:5050/utilisateurs/add', body, { headers }).subscribe({

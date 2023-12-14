@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormGroup, FormBuilder, FormArray, Validators, ReactiveFormsModule, AbstractControl, FormControl } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-create-user-array',
@@ -13,7 +14,7 @@ import { FormGroup, FormBuilder, FormArray, Validators, ReactiveFormsModule, Abs
 export class CreateUserArrayComponent {
   mainForm!: FormGroup;
 
-  constructor(private formBuilder: FormBuilder) {}
+  constructor(private formBuilder: FormBuilder, private http: HttpClient ) {}
 
   ngOnInit(): void {
     this.initializeForm();
@@ -29,13 +30,13 @@ export class CreateUserArrayComponent {
   
   createUserForm(): FormGroup {
     return this.formBuilder.group({
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      userName: [''],
-      password: [''],
+      FirstName: ['', Validators.required],
+      LastName: ['', Validators.required],
+      Username: [''],
+      Password: [''],
       info: this.formBuilder.group({
-        idGroupe: ['', Validators.required],
-        idSalle: ['', Validators.required],
+        idgroupe: ['', Validators.required],
+        idsalle: ['', Validators.required],
         isManager: [false, Validators.required]
       })
     });
@@ -43,19 +44,30 @@ export class CreateUserArrayComponent {
 
   onSubmit(): void {
     const usersArray = this.mainForm.get('users') as FormArray;
-
     usersArray.controls.forEach((userGroup: AbstractControl<any, any>) => {
-      const firstName = userGroup.get('firstName')?.value;
-      const lastName = userGroup.get('lastName')?.value;
+      const firstName = userGroup.get('FirstName')?.value;
+      const lastName = userGroup.get('LastName')?.value;
 
       if (firstName && lastName) {
         const firstLetter = firstName.charAt(0);
         const userName = `${firstLetter}${lastName}`.replace(/[^A-Za-z]/g, '').toLowerCase();
-        userGroup.get('userName')?.patchValue(userName);
+        userGroup.get('Username')?.patchValue(userName);
 
         const currentYear = new Date().getFullYear();
         const password = `${userName}${currentYear}`;
-        userGroup.get('password')?.patchValue(password);
+        userGroup.get('Password')?.patchValue(password);
+      }
+    });
+
+    const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcwMjU1MzIxMywianRpIjoiMjc3M2YzMjUtNDJlOC00ZGYzLWEwMTUtZDA5ZjdlZTIxMGY4IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6MiwibmJmIjoxNzAyNTUzMjEzLCJleHAiOjE3MDI1NTQxMTN9.aK-Hi46cjUXMf6jt0IC6NvnLY1YpEbOrADC_1CzwJUg";
+    const headers = { 'Authorization': `Bearer ${token}` };
+    const body = this.mainForm.value;
+    this.http.post('http://localhost:5050/utilisateurs/add', body, { headers }).subscribe({
+      next: (data: any) => {
+        console.log(data);
+      },
+      error: (error: any) => {
+        console.log(error);
       }
     });
     
@@ -91,10 +103,10 @@ export class CreateUserArrayComponent {
 
       // Ajouter les contrôles spécifiques pour le rôle sélectionné pour chaque utilisateur
       if (roleControl?.value === 'professeur') {
-        infoGroup.addControl('idSalle', new FormControl('', Validators.required));
+        infoGroup.addControl('idsalle', new FormControl('', Validators.required));
         infoGroup.addControl('isManager', new FormControl(false, Validators.required));
       } else if (roleControl?.value === 'eleve') {
-        infoGroup.addControl('idGroupe', new FormControl('', Validators.required));
+        infoGroup.addControl('idgroupe', new FormControl('', Validators.required));
       }
     });
 

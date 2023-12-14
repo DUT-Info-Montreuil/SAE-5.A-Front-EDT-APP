@@ -71,14 +71,10 @@
             <ng-container *ngIf="userFormArray">
               <tr *ngFor="let userGroup of userFormArray.controls; let i = index" [formGroupName]="i" class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                   <th class="px-6 py-4" formArrayName="info">
-                    <div class="flex items-center" >
-                      <input id="idSalle-{{ i }}" type="checkbox" formControlName="isManager" class="hidden peer"/>
-                      <label for="idSalle-{{ i }}" class="inline-flex items-center justify-between w-full p-1 text-gray-500 bg-white border-2 border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 peer-checked:border-blue-600 hover:text-gray-600 dark:peer-checked:text-gray-300 peer-checked:text-gray-600 hover:bg-gray-50 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">
-                        <div class="block ">
-                          <div class="w-full text-lg font-semibold">Est un manager</div>
-                        </div>
-                      </label>
-                    </div>
+                    <label class="relative inline-flex items-center mb-5 cursor-pointer">
+                      <input formControlName="isManager" type="checkbox" value="" class="sr-only peer">
+                      <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:w-5 after:h-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                    </label>
                   </th>
                   <td scope="row" class="px-6 py-4">
                     <input type="text" formControlName="FirstName" class="px-3 border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Prénom"/>

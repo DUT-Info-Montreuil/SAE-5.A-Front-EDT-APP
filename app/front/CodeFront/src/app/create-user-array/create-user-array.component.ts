@@ -31,6 +31,8 @@ export class CreateUserArrayComponent {
     return this.formBuilder.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
+      userName: [''],
+      password: [''],
       info: this.formBuilder.group({
         idGroupe: ['', Validators.required],
         idSalle: ['', Validators.required],
@@ -40,7 +42,23 @@ export class CreateUserArrayComponent {
   }
 
   onSubmit(): void {
-    console.log(this.mainForm.value);
+    const usersArray = this.mainForm.get('users') as FormArray;
+
+    usersArray.controls.forEach((userGroup: AbstractControl<any, any>) => {
+      const firstName = userGroup.get('firstName')?.value;
+      const lastName = userGroup.get('lastName')?.value;
+
+      if (firstName && lastName) {
+        const firstLetter = firstName.charAt(0);
+        const userName = `${firstLetter}${lastName}`.replace(/[^A-Za-z]/g, '').toLowerCase();
+        userGroup.get('userName')?.patchValue(userName);
+
+        const currentYear = new Date().getFullYear();
+        const password = `${userName}${currentYear}`;
+        userGroup.get('password')?.patchValue(password);
+      }
+    });
+    
   }
 
 

@@ -36,9 +36,9 @@ export class CreerUtilisateurComponent {
     }
     
     
-    //const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcwMjA0MTA5MCwianRpIjoiNDVhOTk0MTQtMzg0Zi00NjE2LTg3OTUtY2M4MjVlNTdjZTI1IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6Im1vbm9rdW1hIiwibmJmIjoxNzAyMDQxMDkwLCJleHAiOjE3MDIwNDE5OTB9.hkjwgsv4MJToGF8hpxoiQU7LJhfmxSFWWvnVw9mgfnw"
+    const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcwMjQ1OTUwNSwianRpIjoiZWJkZmI5ZTktMmUwZS00MDVjLTllOTEtYjRlNmM4NDQzZjIyIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IlVydWsiLCJuYmYiOjE3MDI0NTk1MDUsImV4cCI6MTcwMjQ2MDQwNX0.267ppzQDiToAaxbIY3pcF-8652CjAK7nhQubC-GMN2s"
 
-    const token = localStorage.getItem('token');
+    //const token = localStorage.getItem('token');
     const body = this.userForm.value;
     const httpOptions = {
       headers: new HttpHeaders({
@@ -48,7 +48,7 @@ export class CreerUtilisateurComponent {
     };
 
 
-    this.http.post('http://localhost:5050/utilisateurs/add/', body, httpOptions)
+    this.http.post('http://localhost:5050/utilisateurs/add', body, httpOptions)
     .subscribe({
       next: (response: any) => {
         console.log('Réponse de l\'API :', response);

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormGroup, FormBuilder, FormArray, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormGroup, FormBuilder, FormArray, Validators, ReactiveFormsModule, AbstractControl, FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-create-user-array',
@@ -32,11 +32,15 @@ export class CreateUserArrayComponent {
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       info: this.formBuilder.group({
-        idGroupe: [''],
-        idSalle: [''],
-        isManager: ['']
+        idGroupe: ['', Validators.required],
+        idSalle: ['', Validators.required],
+        isManager: [false, Validators.required]
       })
     });
+  }
+
+  onSubmit(): void {
+    console.log(this.mainForm.value);
   }
 
 
@@ -57,13 +61,30 @@ export class CreateUserArrayComponent {
   
 
   onRoleChange(): void {
-    
+    const roleControl = this.mainForm.get('role');
+    const usersArray = this.mainForm.get('users') as FormArray;
+
+    // Supprimer tous les contrôles existants dans le groupe "info"
+    usersArray.controls.forEach((userGroup: AbstractControl<any, any>) => {
+      const infoGroup = userGroup.get('info') as FormGroup;
+      Object.keys(infoGroup.controls).forEach((controlName: string) => {
+        this.removeControl(infoGroup, controlName);
+      });
+
+      // Ajouter les contrôles spécifiques pour le rôle sélectionné pour chaque utilisateur
+      if (roleControl?.value === 'professeur') {
+        infoGroup.addControl('idSalle', new FormControl('', Validators.required));
+        infoGroup.addControl('isManager', new FormControl(false, Validators.required));
+      } else if (roleControl?.value === 'eleve') {
+        infoGroup.addControl('idGroupe', new FormControl('', Validators.required));
+      }
+    });
+
   }
 
-  onSubmit(): void {
-    if (this.mainForm.valid) {
-      // Handle form submission
-      console.log(this.mainForm.value);
+  private removeControl(formGroup: AbstractControl | null, controlName: string): void {
+    if (formGroup instanceof FormGroup && formGroup.get(controlName)) {
+      formGroup.removeControl(controlName);
     }
   }
 

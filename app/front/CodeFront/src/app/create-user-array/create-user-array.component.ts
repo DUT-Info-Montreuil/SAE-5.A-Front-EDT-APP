@@ -69,15 +69,13 @@ export class CreateUserArrayComponent {
       Username: [''],
       Password: [''],
       info: this.formBuilder.group({
-        // idgroupe: ['', Validators.required],
-        // idsalle: ['', Validators.required],
-        // isManager: [false, Validators.required]
       })
     });
   }
 
   onSubmit(): void {
     const usersArray = this.mainForm.get('users') as FormArray;
+    const roleControl = this.mainForm.get('role');
     usersArray.controls.forEach((userGroup: AbstractControl<any, any>) => {
       const firstName = userGroup.get('FirstName')?.value;
       const lastName = userGroup.get('LastName')?.value;
@@ -90,6 +88,11 @@ export class CreateUserArrayComponent {
         const currentYear = new Date().getFullYear();
         const password = `${userName}${currentYear}`;
         userGroup.get('Password')?.patchValue(password);
+
+        if (roleControl?.value === 'professeur') {
+          const initiale = `${firstLetter}${lastName.charAt(0)}`.toUpperCase();
+          userGroup.get('info.Initiale')?.patchValue(initiale);
+        }
       }
     });
 
@@ -123,6 +126,7 @@ export class CreateUserArrayComponent {
           Username: [''],
           Password: [''],
           info: this.formBuilder.group({
+            Initiale: [''],
             idsalle: ['', Validators.required],
             isManager: [false, Validators.required]
           })
@@ -166,6 +170,7 @@ export class CreateUserArrayComponent {
 
       // Ajouter les contrôles spécifiques pour le rôle sélectionné pour chaque utilisateur
       if (roleControl?.value === 'professeur') {
+        infoGroup.addControl('Initiale', new FormControl(''));
         infoGroup.addControl('idsalle', new FormControl('', Validators.required));
         infoGroup.addControl('isManager', new FormControl(false, Validators.required));
       } else if (roleControl?.value === 'eleve') {

@@ -1,0 +1,7 @@
+.floating-label {
+    background-color: linear-gradient(180deg,
+            var(--md-sys-color-on-surface) 0%,
+            var(--md-sys-color-on-surface) 50%,
+            var(--md-sys-color-on-primary-container) 50%,
+            var(--md-sys-color-on-primary-container) 100%);
+}

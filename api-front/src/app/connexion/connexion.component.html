@@ -1,0 +1,42 @@
+<main class="flex items-center justify-center">
+  <div class="rounded-xl p-2 bg-gray-300 dark:bg-gray-700">
+    <form class="my-2" [formGroup]="loginForm">
+      <h1 class="text-center text-xl dark:text-white">Connexion</h1>
+      <section class="flex flex-col">
+        <div class="relative h-8 rounded-lg m-2 bg-white dark:bg-black">
+          <input
+            id="login"
+            type="text"
+            class="block ps-1 h-full w-full text-sm bg-transparent text-gray-900 rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+            formControlName="Username"
+            name="login"
+            placeholder=""
+          />
+          <label
+            class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-1 z-10 origin-[0] px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-1 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
+            for="login"
+            >Identifiant</label
+          >
+        </div>
+        <div class="relative h-8 rounded-lg m-2 bg-white dark:bg-black">
+          <input
+            id="password"
+            type="password"
+            class="block ps-1 h-full w-full text-sm bg-transparent text-gray-900 rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+            formControlName="Password"
+            name="password"
+            placeholder=""
+          />
+          <label
+            class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-1 z-10 origin-[0] px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-1 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
+            for="password"
+            >Mot de passe</label
+          >
+        </div>
+      </section>
+      <section class="flex justify-center">
+        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" (touch)="connexion()" (click)="connexion()">Se connecter</button>
+      </section>
+    </form>
+  </div>
+</main>

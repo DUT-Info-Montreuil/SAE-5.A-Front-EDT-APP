@@ -11,13 +11,15 @@ import { CreateUsersComponent } from './create-users/create-users.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { ConnexionComponent } from './connexion/connexion.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     CalendarComponent,
-    CreateUsersComponent
+    CreateUsersComponent,
+    ConnexionComponent
   ],
   imports: [
     BrowserAnimationsModule,

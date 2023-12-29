@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { changePage } from '../../main';
 
 @Component({
   selector: 'app-connexion',
@@ -8,6 +9,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
   styleUrl: './connexion.component.css',
 })
 export class ConnexionComponent {
+
   protected loginForm = new FormGroup({
     Username: new FormControl('', [
       Validators.required,
@@ -18,7 +20,7 @@ export class ConnexionComponent {
       Validators.minLength(1),
     ]),
   });
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, ) {
     this.loginForm.valid;
   }
 
@@ -31,13 +33,17 @@ export class ConnexionComponent {
         next: (data: any) => {
           let token = data.accessToken;
           let firstLogin = data.fistLogin;
-          window.localStorage.setItem('token', token);
+          this.setToken(token)
           if (firstLogin) {
             // TODO: redirect to page first login
             console.log('redirect to page for first login');
           }
-          document.location.pathname = '/create-users';
+          changePage('/home');
         },
       });
+  }
+
+  setToken(token:string) {
+    window.localStorage.setItem('token', token);
   }
 }

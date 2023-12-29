@@ -8,11 +8,13 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule,ReactiveFormsModule } from '@angular/forms';
 import { ConnexionComponent } from './components/connexion/connexion.component';
 import { DashboardModule } from './components/dashboard/dashboard.module';
+import { NavbarComponent } from './components/navbar/navbar.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ConnexionComponent,
+    NavbarComponent,
   ],
   imports: [
     BrowserAnimationsModule,

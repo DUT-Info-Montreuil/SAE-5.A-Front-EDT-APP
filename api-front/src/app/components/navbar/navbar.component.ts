@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { changePage } from '../../main';
+import { changePage } from '../../../main';
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',

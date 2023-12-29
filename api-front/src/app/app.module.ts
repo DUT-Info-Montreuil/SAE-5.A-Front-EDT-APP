@@ -7,10 +7,8 @@ import { AppComponent } from './app.component';
 import  { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { CalendarComponent } from './components/calendar/calendar.component';
-import { CreateUsersComponent } from './components/dashboard/create-users/create-users.component';
-import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
+import { FormsModule,ReactiveFormsModule } from '@angular/forms';
 import { ConnexionComponent } from './components/connexion/connexion.component';
 import { DashboardModule } from './components/dashboard/dashboard.module';
 
@@ -18,7 +16,6 @@ import { DashboardModule } from './components/dashboard/dashboard.module';
   declarations: [
     AppComponent,
     CalendarComponent,
-    CreateUsersComponent,
     ConnexionComponent,
   ],
   imports: [

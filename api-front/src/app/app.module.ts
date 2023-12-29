@@ -12,7 +12,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { ConnexionComponent } from './components/connexion/connexion.component';
-
+import { DashboardModule } from './components/dashboard/dashboard.module';
 
 @NgModule({
   declarations: [
@@ -32,7 +32,8 @@ import { ConnexionComponent } from './components/connexion/connexion.component';
     CommonModule,
     ReactiveFormsModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    DashboardModule
   ],
   providers: [],
   bootstrap: [AppComponent]

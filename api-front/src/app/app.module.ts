@@ -20,7 +20,6 @@ import { ConnexionComponent } from './components/connexion/connexion.component';
     CalendarComponent,
     CreateUsersComponent,
     ConnexionComponent,
-    DashboardComponent
   ],
   imports: [
     BrowserAnimationsModule,

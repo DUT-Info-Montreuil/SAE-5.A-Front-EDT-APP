@@ -4,12 +4,12 @@ import { RouterModule, Routes } from '@angular/router';
 /* import components */
 import { ConnexionComponent } from './components/connexion/connexion.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
-import {NavbarComponent} from "./components/navbar/navbar.component";
+import {SidebarComponent} from "./components/sidebar/sidebar.component";
 
 export const appRoutes: Routes = [
   { path: 'connexion', component: ConnexionComponent },
   { path: 'dashboard', component: DashboardComponent },
-  { path: 'navbar', component: NavbarComponent }
+  { path: 'sidebar', component: SidebarComponent }
 ];
 
 @NgModule({

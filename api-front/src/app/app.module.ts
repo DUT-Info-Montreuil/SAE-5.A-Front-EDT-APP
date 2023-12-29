@@ -4,9 +4,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import  { CalendarModule, DateAdapter } from 'angular-calendar';
-import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
-import { CalendarComponent } from './components/calendar/calendar.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule,ReactiveFormsModule } from '@angular/forms';
 import { ConnexionComponent } from './components/connexion/connexion.component';
@@ -15,15 +12,11 @@ import { DashboardModule } from './components/dashboard/dashboard.module';
 @NgModule({
   declarations: [
     AppComponent,
-    CalendarComponent,
     ConnexionComponent,
   ],
   imports: [
     BrowserAnimationsModule,
-    CalendarModule.forRoot({
-      provide: DateAdapter,
-      useFactory: adapterFactory,
-    }),
+    
     BrowserModule,
     AppRoutingModule,
     CommonModule,

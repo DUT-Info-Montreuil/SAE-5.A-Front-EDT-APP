@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, Inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { changePage } from '../../main';
 
 @Component({
   selector: 'app-connexion',
@@ -8,8 +9,6 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
   styleUrl: './connexion.component.css',
 })
 export class ConnexionComponent {
-
-
 
   protected loginForm = new FormGroup({
     Username: new FormControl('', [
@@ -21,7 +20,6 @@ export class ConnexionComponent {
       Validators.minLength(1),
     ]),
   });
-  private timeoutId = {currentTimeout:0, oldTimeout:0};
   constructor(private http: HttpClient, ) {
     this.loginForm.valid;
   }
@@ -40,21 +38,12 @@ export class ConnexionComponent {
             // TODO: redirect to page first login
             console.log('redirect to page for first login');
           }
-          document.location.pathname = '/create-users';
+          changePage('/home');
         },
       });
   }
-  /**
-   * Set the token for a certain time default is 30min
-   * @param {string} token identification token
-   * @param {number} [expire=1800000] time before destroying token in ms
-   */
-  setToken(token:string, expire:number = 1800000) {
-    this.timeoutId.currentTimeout = window.setTimeout(() => {
-      clearTimeout(this.timeoutId.oldTimeout);
-      this.timeoutId.oldTimeout = this.timeoutId.currentTimeout;
-      window.localStorage.removeItem('token')
-    }, /*expire*/ 10000)
+
+  setToken(token:string) {
     window.localStorage.setItem('token', token);
   }
 }

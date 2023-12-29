@@ -4,10 +4,13 @@ import { RouterModule, Routes } from '@angular/router';
 /* import components */
 import { ConnexionComponent } from './components/connexion/connexion.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { HomeComponent } from './home/home.component';
 
 export const appRoutes: Routes = [
   { path: 'connexion', component: ConnexionComponent },
   { path: 'dashboard', component: DashboardComponent },
+  { path:'home', component:HomeComponent },
+  { path:'', component:HomeComponent },
 ];
 
 @NgModule({

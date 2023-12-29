@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
@@ -8,6 +8,9 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
   styleUrl: './connexion.component.css',
 })
 export class ConnexionComponent {
+
+
+
   protected loginForm = new FormGroup({
     Username: new FormControl('', [
       Validators.required,
@@ -18,7 +21,8 @@ export class ConnexionComponent {
       Validators.minLength(1),
     ]),
   });
-  constructor(private http: HttpClient) {
+  private timeoutId = {currentTimeout:0, oldTimeout:0};
+  constructor(private http: HttpClient, ) {
     this.loginForm.valid;
   }
 
@@ -31,7 +35,7 @@ export class ConnexionComponent {
         next: (data: any) => {
           let token = data.accessToken;
           let firstLogin = data.fistLogin;
-          window.localStorage.setItem('token', token);
+          this.setToken(token)
           if (firstLogin) {
             // TODO: redirect to page first login
             console.log('redirect to page for first login');
@@ -39,5 +43,18 @@ export class ConnexionComponent {
           document.location.pathname = '/create-users';
         },
       });
+  }
+  /**
+   * Set the token for a certain time default is 30min
+   * @param {string} token identification token
+   * @param {number} [expire=1800000] time before destroying token in ms
+   */
+  setToken(token:string, expire:number = 1800000) {
+    this.timeoutId.currentTimeout = window.setTimeout(() => {
+      clearTimeout(this.timeoutId.oldTimeout);
+      this.timeoutId.oldTimeout = this.timeoutId.currentTimeout;
+      window.localStorage.removeItem('token')
+    }, /*expire*/ 10000)
+    window.localStorage.setItem('token', token);
   }
 }

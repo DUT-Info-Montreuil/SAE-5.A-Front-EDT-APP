@@ -7,12 +7,16 @@ import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule,ReactiveFormsModule } from '@angular/forms';
 import { ConnexionComponent } from './components/connexion/connexion.component';
+import { NavbarComponent } from './navbar/navbar.component';
+import { HomeComponent } from './home/home.component';
 import { DashboardModule } from './components/dashboard/dashboard.module';
 
 @NgModule({
   declarations: [
     AppComponent,
     ConnexionComponent,
+    NavbarComponent,
+    HomeComponent,
   ],
   imports: [
     BrowserAnimationsModule,

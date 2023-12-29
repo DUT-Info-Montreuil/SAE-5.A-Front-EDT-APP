@@ -4,7 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 /* import components */
 import { CalendarComponent } from './components/calendar/calendar.component';
 import { ConnexionComponent } from './components/connexion/connexion.component';
-import { CreateUsersComponent } from './components/create-users/create-users.component';
+import { CreateUsersComponent } from './components/dashboard/create-users/create-users.component';
 
 export const appRoutes: Routes = [
   { path: 'calendar', component: CalendarComponent },

@@ -14,7 +14,7 @@ function redirectToLogin() {
   if (!window.localStorage.getItem("token") && document.location.pathname!="/connexion")
     document.location.pathname ="/connexion";
 }
-function changePage(pathname:string, changeWebSite:boolean) {  
+function changePage(pathname:string, changeWebSite:boolean=false) {
   if (changeWebSite){
     document.location.href = pathname
     return;

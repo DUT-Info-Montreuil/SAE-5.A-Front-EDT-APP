@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, Inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { changePage } from '../../main';
+import { changePage } from '../../../main';
 
 @Component({
   selector: 'app-connexion',

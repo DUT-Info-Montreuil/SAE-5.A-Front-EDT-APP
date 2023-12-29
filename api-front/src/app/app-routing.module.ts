@@ -2,9 +2,9 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 /* import components */
-import { CalendarComponent } from './calendar/calendar.component';
-import { ConnexionComponent } from './connexion/connexion.component';
-import { CreateUsersComponent } from './create-users/create-users.component';
+import { CalendarComponent } from './components/calendar/calendar.component';
+import { ConnexionComponent } from './components/connexion/connexion.component';
+import { CreateUsersComponent } from './components/create-users/create-users.component';
 
 export const appRoutes: Routes = [
   { path: 'calendar', component: CalendarComponent },

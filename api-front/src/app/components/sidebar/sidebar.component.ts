@@ -20,11 +20,12 @@ import {animate, state, style, transition, trigger} from "@angular/animations";
           style({
             opacity: 0,
             transform: "scale(0.95, 0.95)",
-            width: 0
+            width: 0,
+            margin: "0px"
           })
       ),
-      transition("open => closed", [animate("100ms ease-in")]),
-      transition("closed => open", [animate("200ms ease-out")])
+      transition("open => closed", [animate("80ms ease-in")]),
+      transition("closed => open", [animate("300ms ease-out")])
     ]),
     trigger("openClose2", [
         // ...
@@ -41,11 +42,12 @@ import {animate, state, style, transition, trigger} from "@angular/animations";
                 opacity: 0,
                 transform: "scale(0.95, 0.95)",
                 width: 0,
-                height: 0
+                height: 0,
+                margin: 0
             })
         ),
-        transition("open => closed", [animate("100ms ease-in")]),
-        transition("closed => open", [animate("200ms ease-out")])
+        transition("open => closed", [animate("50ms ease-in")]),
+        transition("closed => open", [animate("300ms ease-out")])
     ])
   ]
 })

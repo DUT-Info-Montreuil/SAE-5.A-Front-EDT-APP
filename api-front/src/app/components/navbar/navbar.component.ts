@@ -13,7 +13,6 @@ export class NavbarComponent {
     changePage("/"+pageName)
   }
   isConnection(){
-    console.log("isconnection : " + this.sidebar.isConnection)
     return this.sidebar.isConnection
   }
 }

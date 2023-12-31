@@ -67,7 +67,6 @@ export class SidebarComponent {
   }
 
   onRouterOutletActivate(event: any) {
-    console.log(event);
     this.isConnection = event instanceof ConnexionComponent;
     SidebarComponent.isConnection = this.isConnection;
 

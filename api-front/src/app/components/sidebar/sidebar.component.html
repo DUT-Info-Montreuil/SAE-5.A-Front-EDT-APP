@@ -7,7 +7,7 @@
             </svg>
         </div>
     </div>
-    <div class="flex-col flex-shrink-0 bg-clip-border rounded-xl bg-white text-gray-700 h-[calc(80vh-2rem)] max-w-[15rem] p-4 shadow-xl shadow-blue-gray-900/5 py-6 m-4 w-52" [@openClose]="isSideBarOpen">
+    <div class="flex-col flex-shrink-0 bg-clip-border rounded-xl bg-white text-gray-700 h-[calc(80vh-2rem)] max-w-[15rem] p-4 shadow-xl shadow-blue-gray-900/5 py-6 m-4 w-52" [@openClose]="isSideBarOpen" *ngIf="!isConnection">
       <div class="flex items-center p-3 rounded-lg text-start leading-tight transition-all">
         <div role="button" class="h-10 px-2 rounded-3xl grid place-items-center ml-auto justify-self-end text-indigo-100 transition-colors duration-150 bg-blue-500 focus:shadow-outline hover:bg-blue-600" (click)="toggleSideBar()">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -87,7 +87,7 @@
     </div>
   </aside>
   <main class="m-4">
-    <router-outlet></router-outlet>
+    <router-outlet (activate)="onRouterOutletActivate($event)"></router-outlet>
   </main>
 
 </div>

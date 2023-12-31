@@ -1,5 +1,6 @@
 import {Component} from '@angular/core';
 import {animate, state, style, transition, trigger} from "@angular/animations";
+import {ConnexionComponent} from "../connexion/connexion.component";
 
 @Component({
   selector: 'app-sidebar',
@@ -53,14 +54,24 @@ import {animate, state, style, transition, trigger} from "@angular/animations";
 })
 export class SidebarComponent {
   isOpen= true;
+  isConnection = false;
+  static isConnection: boolean;
   get isSideBarOpen() {
       return this.isOpen ? "open" : "closed";
   }
+
+
 
   toggleSideBar(){
       this.isOpen = !this.isOpen;
   }
 
+  onRouterOutletActivate(event: any) {
+    console.log(event);
+    this.isConnection = event instanceof ConnexionComponent;
+    SidebarComponent.isConnection = this.isConnection;
+
+  }
 }
 
 

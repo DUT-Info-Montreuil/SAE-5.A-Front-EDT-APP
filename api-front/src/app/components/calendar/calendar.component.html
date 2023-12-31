@@ -1,0 +1,65 @@
+<div class="grid-cols-3">
+    <div class="flex flex-wrap gap-1">
+        <div
+                role="button"
+                class="text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                mwlCalendarPreviousView
+                [view]="view"
+                [(viewDate)]="viewDate"
+                (viewDateChange)="closeOpenMonthViewDay()"
+        >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+            </svg>
+        </div>
+        <div role="button" class=" text-center w-56 text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+            <h3>{{ viewDate | calendarDate:(view + 'ViewTitle'):'fr' }}</h3>
+        </div>
+        <div role="button"
+                class="text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                mwlCalendarNextView
+                [view]="view"
+                [(viewDate)]="viewDate"
+                (viewDateChange)="closeOpenMonthViewDay()"
+        >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+            </svg>
+        </div>
+    </div>
+    <div
+            class="text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+            mwlCalendarToday
+            [(viewDate)]="viewDate"
+    >
+        Aujourd'hui
+    </div>
+</div>
+<br />
+<div [ngSwitch]="view">
+    <mwl-calendar-week-view
+            *ngSwitchCase="CalendarView.Week"
+            [viewDate]="viewDate"
+            [refresh]="refresh"
+            [dayStartHour]="8"
+            [dayEndHour]="19"
+            [hourSegments]="6"
+            [excludeDays]="[0,6]"
+            [events]="events"
+            (eventTimesChanged)="eventTimesChanged($event)"
+            (dayHeaderClicked)="setView(CalendarView.Day)"
+    >
+    </mwl-calendar-week-view>
+    <mwl-calendar-day-view
+            *ngSwitchCase="CalendarView.Day"
+            [viewDate]="viewDate"
+            [refresh]="refresh"
+            [dayStartHour]="8"
+            [dayEndHour]="19"
+            [hourSegments]="6"
+            [events]="events"
+            (eventTimesChanged)="eventTimesChanged($event)"
+            (click)="setView(CalendarView.Week)"
+    >
+    </mwl-calendar-day-view>
+</div>

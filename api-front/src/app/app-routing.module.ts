@@ -6,13 +6,15 @@ import { ConnexionComponent } from './components/connexion/connexion.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import {SidebarComponent} from "./components/sidebar/sidebar.component";
 import { HomeComponent } from './components/home/home.component';
+import {CalendarComponent} from "./components/calendar/calendar.component";
 
 export const appRoutes: Routes = [
   { path: 'connexion', component: ConnexionComponent },
   { path: 'dashboard', component: DashboardComponent },
   { path:'home', component:HomeComponent },
   { path:'', component:HomeComponent },
-  { path: 'sidebar', component: SidebarComponent }
+  { path: 'sidebar', component: SidebarComponent },
+  { path: 'calendar', component: CalendarComponent}
 ];
 
 @NgModule({

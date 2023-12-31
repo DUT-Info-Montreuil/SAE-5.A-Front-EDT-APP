@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import {Injectable, LOCALE_ID, NgModule} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -11,6 +11,36 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { HomeComponent } from './components/home/home.component';
 import { DashboardModule } from './components/dashboard/dashboard.module';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
+import {registerLocaleData} from "@angular/common";
+import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+
+import localeFr from '@angular/common/locales/fr';
+import {
+  CalendarDateFormatter,
+  CalendarModule,
+  CalendarNativeDateFormatter, DateAdapter,
+  DateFormatterParams
+} from "angular-calendar";
+registerLocaleData(localeFr)
+
+class CustomDateFormatter extends CalendarNativeDateFormatter {
+  @Injectable()
+  public override weekViewHour({ date, locale }: DateFormatterParams): string {
+    return new Intl.DateTimeFormat('fr-FR', {
+      hour: 'numeric',
+      minute: 'numeric',
+    }).format(date);
+  }
+  @Injectable()
+  public override dayViewHour({date, locale}: DateFormatterParams): string {
+    return new Intl.DateTimeFormat('fr-FR', {
+      hour: 'numeric',
+      minute: 'numeric'
+    }).format(date);
+  }
+
+
+}
 
 @NgModule({
   declarations: [
@@ -22,16 +52,30 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
   ],
   imports: [
     BrowserAnimationsModule,
-    
     BrowserModule,
     AppRoutingModule,
     CommonModule,
     ReactiveFormsModule,
     HttpClientModule,
     FormsModule,
-    DashboardModule
+    DashboardModule,
+    CalendarModule,
+    CalendarModule.forRoot({
+      provide: DateAdapter,
+      useFactory: adapterFactory,
+    },
+      {
+        dateFormatter: {
+          provide: CalendarDateFormatter,
+          useClass: AppModule
+        }
+      }),
   ],
-  providers: [],
+  providers: [
+    {provide: LOCALE_ID, useValue:'fr-FR'},
+    {provide: CalendarDateFormatter, useClass: CustomDateFormatter}
+  ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}

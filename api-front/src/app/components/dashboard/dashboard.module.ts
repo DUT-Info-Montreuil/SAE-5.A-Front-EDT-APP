@@ -7,11 +7,13 @@ import { CalendarComponent } from './calendar/calendar.component';
 
 import  { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import { RoomManagerComponent } from './room-manager/room-manager.component';
 @NgModule({
   declarations: [
     DashboardComponent,
     CreateUsersComponent,
-    CalendarComponent
+    CalendarComponent,
+    RoomManagerComponent
   ],
   imports: [
     CommonModule,

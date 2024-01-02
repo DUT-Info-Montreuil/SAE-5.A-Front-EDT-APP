@@ -27,15 +27,24 @@
             </svg>
         </div>
     </div>
-    <div
-            class="text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-            mwlCalendarToday
-            [(viewDate)]="viewDate"
-    >
-        Aujourd'hui
+    <div class="flex flex-wrap gap-1">
+      <div class="px-14 py-2.5 mb-2">
+
+      </div>
+      <div role="button"
+              class="justify-self-center text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+              mwlCalendarToday
+              [(viewDate)]="viewDate"
+      >
+          Aujourd'hui
+      </div>
+
     </div>
 </div>
 <br />
+<mwl-calendar-week-view-current-time-marker
+></mwl-calendar-week-view-current-time-marker>
+
 <div [ngSwitch]="view">
     <mwl-calendar-week-view
             *ngSwitchCase="CalendarView.Week"
@@ -44,10 +53,11 @@
             [dayStartHour]="8"
             [dayEndHour]="19"
             [hourSegments]="6"
+            [hourDuration]="60"
             [excludeDays]="[0,6]"
             [events]="events"
             (eventTimesChanged)="eventTimesChanged($event)"
-            (dayHeaderClicked)="setView(CalendarView.Day)"
+            (hourSegmentClicked)="setView(CalendarView.Day, $event.date)"
     >
     </mwl-calendar-week-view>
     <mwl-calendar-day-view
@@ -59,7 +69,7 @@
             [hourSegments]="6"
             [events]="events"
             (eventTimesChanged)="eventTimesChanged($event)"
-            (click)="setView(CalendarView.Week)"
+            (hourSegmentClicked)="setView(CalendarView.Week, $event.date)"
     >
     </mwl-calendar-day-view>
 </div>

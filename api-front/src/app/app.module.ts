@@ -67,7 +67,7 @@ class CustomDateFormatter extends CalendarNativeDateFormatter {
       {
         dateFormatter: {
           provide: CalendarDateFormatter,
-          useClass: AppModule
+          useClass: CustomDateFormatter
         }
       }),
   ],

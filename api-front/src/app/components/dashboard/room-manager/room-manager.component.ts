@@ -14,7 +14,12 @@ import { th } from 'date-fns/locale';
 export class RoomManagerComponent {
   salles: any ;
   roomsDisplay:string = "";
+  showModal = false;
 
+  
+  toggleModal(){
+    this.showModal = !this.showModal;
+  }
 
   constructor( private http: HttpClient ) {}
 
@@ -49,14 +54,8 @@ export class RoomManagerComponent {
         this.roomsDisplay = data.nom;
       }
     );
-    
-    
-    
-    
-   
-
-    
   }
+  
 
   
 }

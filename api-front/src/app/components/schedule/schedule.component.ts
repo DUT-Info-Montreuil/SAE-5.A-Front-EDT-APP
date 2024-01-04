@@ -2,14 +2,17 @@ import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {CalendarEvent, CalendarEventTimesChangedEvent, CalendarView} from 'angular-calendar';
 import {isSameDay, isSameMonth, setHours, setMinutes} from 'date-fns';
 import {Subject} from "rxjs";
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
-  selector: 'app-calendar',
-  templateUrl: './calendar.component.html',
-  styleUrl: './calendar.component.css',
+  selector: 'app-schedule',
+  templateUrl: './schedule.component.html',
+  styleUrl: './schedule.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CalendarComponent {
+export class ScheduleComponent {
+  constructor(private route: ActivatedRoute) {
+  }
 
   view: CalendarView = CalendarView.Week;
 
@@ -41,15 +44,26 @@ export class CalendarComponent {
       start: setHours(setMinutes(new Date(), 20), 15),
       end: setHours(setMinutes(new Date(), 40), 17),
       title: 'An event',
-      resizable: {
-        afterEnd: true,
-        beforeStart: true
-
-      },
-      draggable: true,
+      resizable: this.getResizable(),
+      draggable: this.isInEditionMod(),
     },
   ];
 
+  getResizable(){
+    if(this.isInEditionMod()){
+      return {
+        afterEnd: true,
+        beforeStart: true
+
+      }
+    }
+    return {}
+  }
+
+  isInEditionMod(){
+    console.log("active route : " + this.route.snapshot.component?.name)
+    return this.route.snapshot.component?.name == "_ScheduleEditComponent"
+  }
 
   eventTimesChanged({
                       event,
@@ -66,5 +80,6 @@ export class CalendarComponent {
       this.viewDate = date;
       this.view = CalendarView.Day;
   }
+
 
 }

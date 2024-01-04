@@ -1,0 +1,16 @@
+.cal-cell-row {
+    height: 10px;
+}
+.ng-star-inserted {
+    height: 30px;
+    width: 10px;
+}
+.cal-week-view.cal-day-cell {
+    height: 51px;
+    min-height: 0px;
+    width: 10px;
+}
+
+.cal-time-events{
+    height: 10px;
+}

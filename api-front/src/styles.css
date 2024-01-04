@@ -3,3 +3,22 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+.cal-cell-row {
+    height: 100%;
+}
+.cal-week-view.cal-day-cell {
+    height: 100%;
+    width: 100%;
+}
+
+.cal-time-events{
+    height: 100%;
+}
+
+.cal-hour-segment .cal-hour-start{
+    height: 30px;
+}
+
+.ng-star-inserted{
+
+}

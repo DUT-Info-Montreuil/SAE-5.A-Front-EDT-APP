@@ -21,8 +21,11 @@ import {
   CalendarNativeDateFormatter, DateAdapter,
   DateFormatterParams
 } from "angular-calendar";
+import { ScheduleReadonlyComponent } from './components/schedule/schedule-readonly/schedule-readonly.component';
+import { ScheduleEditComponent } from './components/schedule/schedule-edit/schedule-edit.component';
 registerLocaleData(localeFr)
 
+@Injectable()
 class CustomDateFormatter extends CalendarNativeDateFormatter {
   @Injectable()
   public override weekViewHour({ date, locale }: DateFormatterParams): string {
@@ -49,6 +52,8 @@ class CustomDateFormatter extends CalendarNativeDateFormatter {
     SidebarComponent,
     NavbarComponent,
     HomeComponent,
+    ScheduleReadonlyComponent,
+    ScheduleEditComponent,
   ],
   imports: [
     BrowserAnimationsModule,

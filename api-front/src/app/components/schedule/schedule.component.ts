@@ -3,6 +3,8 @@ import {CalendarEvent, CalendarEventTimesChangedEvent, CalendarView} from 'angul
 import {isSameDay, isSameMonth, setHours, setMinutes} from 'date-fns';
 import {Subject} from "rxjs";
 import {ActivatedRoute} from "@angular/router";
+import {changePage} from "../../../main";
+import {HttpClient} from "@angular/common/http";
 
 @Component({
   selector: 'app-schedule',
@@ -11,7 +13,8 @@ import {ActivatedRoute} from "@angular/router";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ScheduleComponent {
-  constructor(private route: ActivatedRoute) {
+  constructor(private route: ActivatedRoute, private http: HttpClient,) {
+    this.getCours()
   }
 
   view: CalendarView = CalendarView.Week;
@@ -61,7 +64,6 @@ export class ScheduleComponent {
   }
 
   isInEditionMod(){
-    console.log("active route : " + this.route.snapshot.component?.name)
     return this.route.snapshot.component?.name == "_ScheduleEditComponent"
   }
 
@@ -79,6 +81,18 @@ export class ScheduleComponent {
   changeDay(date: Date) {
       this.viewDate = date;
       this.view = CalendarView.Day;
+  }
+
+  getCours() {
+    const  token = localStorage.getItem('token')
+    this.http
+      .get('http://localhost:5050/cours/get/1', {
+        headers: { 'Authorization': `Bearer ${token}` },
+      })
+      .subscribe({
+        next: (data: any) => {
+        },
+      });
   }
 
 

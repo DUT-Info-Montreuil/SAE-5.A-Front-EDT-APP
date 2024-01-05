@@ -1,5 +1,5 @@
 <div class="grid min-h-100hv grid-cols-[auto_1fr] justify-center gap-4 z-50">
-  <aside class="self-start sticky top-0 col-span-1">
+  <aside class="self-start sticky top-0 col-span-1 min-h-fit">
     <div role="button" class=" mt-14 place-items-center flex-col flex-shrink-0 rounded-r-full text-indigo-100 max-w-[56px] max-h-[50px] p-4 shadow-xl shadow-blue-gray-900/5 transition-colors duration-150 bg-blue-500 focus:shadow-outline hover:bg-blue-600" (click)="toggleSideBar()" [@openClose2]="isSideBarOpen">
         <div role="button" >
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -7,7 +7,7 @@
             </svg>
         </div>
     </div>
-    <div class="flex-col flex-shrink-0 bg-clip-border rounded-xl bg-white text-gray-700 h-[calc(80vh-2rem)] max-w-[15rem] p-4 shadow-xl shadow-blue-gray-900/5 py-6 m-4 w-52" [@openClose]="isSideBarOpen" *ngIf="!isConnection">
+    <div class="flex-col flex-shrink-0 bg-clip-border rounded-xl bg-white text-gray-700 max-h-[calc(80vh-2rem)] max-w-[15rem] p-4 shadow-xl shadow-blue-gray-900/5 py-6 m-4 w-52" [@openClose]="isSideBarOpen" *ngIf="componentName!=='ConnexionComponent'">
       <div class="flex items-center p-3 rounded-lg text-start leading-tight transition-all">
         <div role="button" class="h-10 px-2 rounded-3xl grid place-items-center ml-auto justify-self-end text-indigo-100 transition-colors duration-150 bg-blue-500 focus:shadow-outline hover:bg-blue-600" (click)="toggleSideBar()">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -15,7 +15,7 @@
           </svg>
         </div>
       </div>
-      <nav class="h-4/6">
+      <nav class="max-h-[642px]">
         <div role="button" tabindex="0" class="flex items-center w-full p-3 rounded-lg text-start leading-tight transition-all hover:bg-blue-50 hover:bg-opacity-80 focus:bg-blue-100 focus:bg-opacity-80 active:bg-gray-50 active:bg-opacity-80 hover:text-blue-900 focus:text-blue-900 active:text-blue-900 outline-none" routerLink="/home" routerLinkActive="router-link-active">
           <div class="grid place-items-center mr-4">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -49,14 +49,40 @@
             </svg>
           </div>
           Édition
-          <div class="grid place-items-center ml-auto justify-self-end">
+          <div class="grid -place-items-center ml-auto justify-self-end">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
               <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
             </svg>
           </div>
         </div>
+        <div class="border-t-2 border-gray-300 mt-4 mb-4" *ngIf="componentName==='ScheduleEditComponent'">
+          <div class="grid grid-cols-3 rounded-lg bg-gray-200 w-max text-xs max-w-[180px] mt-4">
+            <div>
+              <input type="radio" name="option" id="1" value="matières" class="peer hidden" checked />
+              <label for="1" class="block cursor-pointer select-none rounded-xl p-2 text-center peer-checked:bg-blue-500 peer-checked:font-bold peer-checked:text-white">matières</label>
+            </div>
+
+            <div>
+              <input type="radio" name="option" id="2" value="salles" class="peer hidden" />
+              <label for="2" class="block cursor-pointer select-none rounded-xl p-2 text-center peer-checked:bg-blue-500 peer-checked:font-bold peer-checked:text-white">salles</label>
+            </div>
+
+            <div>
+              <input type="radio" name="option" id="3" value="prof" class="peer hidden" />
+              <label for="3" class="block cursor-pointer select-none rounded-xl p-2 text-center peer-checked:bg-blue-500 peer-checked:font-bold peer-checked:text-white">prof</label>
+            </div>
+          </div>
+          <div class="overflow-auto max-h-96 min-h-fit relative max-w-sm mx-auto bg-white dark:bg-slate-800 dark:highlight-white/5 ring-1 ring-black/5 rounded-xl flex flex-col divide-y dark:divide-slate-200/5 mt-2 place-items-center select-none">
+            <figure class="cours rounded-2xl m-1 p-5 w-fit bg-white shadow-lg ring-1 ring-gray-900/5 text-center justify-self-center cursor-grab" *ngFor="let cours of externalEvents">
+                <p>{{cours.title}}</p>
+            </figure>
+          </div>
+
+        </div>
+
       </nav>
-      <div class="border-t-2 border-gray-300">
+
+      <div class="border-t-2 border-gray-300 h-1/4">
           <div role="button" tabindex="0" class="flex items-center w-full p-3 rounded-lg text-start leading-tight transition-all hover:bg-blue-50 hover:bg-opacity-80 focus:bg-blue-100 focus:bg-opacity-80 active:bg-gray-50 active:bg-opacity-80 hover:text-blue-900 focus:text-blue-900 active:text-blue-900 outline-none">
               <div class="grid place-items-center mr-4">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -70,7 +96,6 @@
                   </svg>
               </div>
           </div>
-      </div>
         <div role="button" tabindex="0" class="flex items-center w-full p-3 rounded-lg text-start leading-tight transition-all hover:bg-blue-50 hover:bg-opacity-80 focus:bg-blue-100 focus:bg-opacity-80 active:bg-gray-50 active:bg-opacity-80 hover:text-blue-900 focus:text-blue-900 active:text-blue-900 outline-none">
             <div class="grid place-items-center mr-4">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -84,9 +109,10 @@
                 </svg>
             </div>
         </div>
+      </div>
     </div>
   </aside>
-  <main class="m-4">
+  <main class="m-4 max-h-screen">
     <router-outlet (activate)="onRouterOutletActivate($event)"></router-outlet>
   </main>
 

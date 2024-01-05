@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Injectable, OnInit} from '@angular/core';
 import {CalendarEvent, CalendarEventTimesChangedEvent, CalendarView} from 'angular-calendar';
 import {isSameDay, isSameMonth, setHours, setMinutes} from 'date-fns';
 import {Subject} from "rxjs";
@@ -12,10 +12,8 @@ import {HttpClient} from "@angular/common/http";
   styleUrl: './schedule.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ScheduleComponent {
-  constructor(private route: ActivatedRoute, private http: HttpClient,) {
-    this.getCours()
-  }
+
+export class ScheduleComponent{
 
   view: CalendarView = CalendarView.Week;
 
@@ -26,6 +24,14 @@ export class ScheduleComponent {
   refresh = new Subject<void>();
 
   activeDayIsOpen: boolean = true;
+
+  constructor(private route: ActivatedRoute, private http: HttpClient,) {
+    this.getCours()
+
+  }
+
+
+
 
 
 
@@ -42,6 +48,18 @@ export class ScheduleComponent {
     this.activeDayIsOpen = false;
   }
 
+  externalEvents: CalendarEvent[] = [
+    {
+      title: 'Event 1',
+      start: new Date(),
+      draggable: true,
+    },
+    {
+      title: 'Event 2',
+      start: new Date(),
+      draggable: true,
+    },
+  ];
   events: CalendarEvent[] = [
     {
       start: setHours(setMinutes(new Date(), 20), 15),
@@ -64,6 +82,7 @@ export class ScheduleComponent {
   }
 
   isInEditionMod(){
+
     return this.route.snapshot.component?.name == "_ScheduleEditComponent"
   }
 
@@ -94,6 +113,4 @@ export class ScheduleComponent {
         },
       });
   }
-
-
 }

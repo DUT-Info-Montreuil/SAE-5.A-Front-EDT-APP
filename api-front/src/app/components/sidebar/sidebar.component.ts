@@ -1,6 +1,10 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {animate, state, style, transition, trigger} from "@angular/animations";
 import {ConnexionComponent} from "../connexion/connexion.component";
+import {ActivatedRoute} from "@angular/router";
+import {ScheduleComponent} from "../schedule/schedule.component";
+import {ScheduleEditComponent} from "../schedule/schedule-edit/schedule-edit.component";
+import {CalendarEvent} from "angular-calendar";
 
 @Component({
   selector: 'app-sidebar',
@@ -53,24 +57,68 @@ import {ConnexionComponent} from "../connexion/connexion.component";
   ]
 })
 export class SidebarComponent {
+
   isOpen= true;
-  isConnection = false;
-  static isConnection: boolean;
+  componentName = "None";
+  static componentName: string;
+  coursList = [
+    "cours1",
+    "cours2",
+    "cours3",
+    "cours3",
+    "cours3",
+    "cours3",
+    "cours3",
+    "cours3",
+  ];
+
+  externalEvents: CalendarEvent[] = [
+    {
+      title: "cours1",
+      start: new Date(),
+      draggable: true,
+    },
+    {
+      title: "cours2",
+      start: new Date(),
+      draggable: true,
+    },
+    {
+      title: "cours3",
+      start: new Date(),
+      draggable: true,
+    },
+    {
+      title: "cours4",
+      start: new Date(),
+      draggable: true,
+    },
+  ];
+
   get isSideBarOpen() {
       return this.isOpen ? "open" : "closed";
   }
-
-
 
   toggleSideBar(){
       this.isOpen = !this.isOpen;
   }
 
+
   onRouterOutletActivate(event: any) {
-    this.isConnection = event instanceof ConnexionComponent;
-    SidebarComponent.isConnection = this.isConnection;
+    if(event  instanceof ConnexionComponent){
+      this.componentName = "ConnexionComponent";
+    }
+    else if (event instanceof ScheduleEditComponent){
+      this.componentName = "ScheduleEditComponent";
+    }
+    else{
+      this.componentName = "None";
+    }
+    SidebarComponent.componentName = this.componentName;
+
 
   }
+
 }
 
 

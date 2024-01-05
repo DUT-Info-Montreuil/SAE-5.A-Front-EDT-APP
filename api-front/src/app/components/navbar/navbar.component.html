@@ -1,4 +1,4 @@
-<nav class="bg-white shadow-lg h-12 flex items-center sticky top-0 col-span-1 z-50 w-full mx-auto" *ngIf="!isConnection()">
+<nav class="bg-white shadow-lg h-12 flex items-center sticky top-0 col-span-1 z-50 w-full mx-auto" *ngIf="getComponent()!=='ConnexionComponent'">
     <a class="w-20" routerLink="home"><img src="../../assets/logo.png" alt="Logo de L'IUT Montreuil" width="591" height="295"></a>
     <div class="flex space-x-3 me-2 w-full justify-end">
         <div routerLink="/home" role="button">

@@ -1,16 +1,26 @@
-import {ChangeDetectionStrategy, Component, Injectable, OnInit} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  Injectable,
+  NgZone,
+  OnInit,
+  ViewEncapsulation
+} from '@angular/core';
 import {CalendarEvent, CalendarEventTimesChangedEvent, CalendarView} from 'angular-calendar';
-import {isSameDay, isSameMonth, setHours, setMinutes} from 'date-fns';
-import {Subject} from "rxjs";
+import {getHours, isSameDay, isSameMonth, setHours, setMinutes} from 'date-fns';
+import {map, share, Subject, Subscription, timer} from "rxjs";
 import {ActivatedRoute} from "@angular/router";
 import {changePage} from "../../../main";
 import {HttpClient} from "@angular/common/http";
+import {DatePipe, formatDate} from "@angular/common";
 
 @Component({
   selector: 'app-schedule',
   templateUrl: './schedule.component.html',
   styleUrl: './schedule.component.css',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.Default,
+  encapsulation: ViewEncapsulation.None,
 })
 
 export class ScheduleComponent{
@@ -19,28 +29,33 @@ export class ScheduleComponent{
 
   CalendarView = CalendarView;
 
-  viewDate: Date = new Date();
+  viewDate = new Date();
+  nowDate = new Date().toLocaleTimeString();
+  //
+  dayStartHour = Math.max(0, getHours(new Date()) - 6);
 
-  refresh = new Subject<void>();
+  dayEndHour = Math.min(23, getHours(new Date()) + 5);
+
+  refreshCalendar = new Subject<void>();
 
   activeDayIsOpen: boolean = true;
 
-  constructor(private route: ActivatedRoute, private http: HttpClient,) {
-    this.getCours()
+  constructor(private route: ActivatedRoute, private http: HttpClient, private elementRef: ElementRef) {
+    setInterval(() => {
 
+        const currentDate = new Date()
+        this.nowDate = currentDate.toLocaleTimeString();
+        this.refreshCalendar.next()
+    }, 1000);
   }
 
 
-
-
-
-
-  setView(view: CalendarView, date:Date) {
+  setView(view: CalendarView, date: Date) {
     this.viewDate = date;
     this.view = view;
   }
 
-  testEvent(event:any) {
+  testEvent(event: any) {
     console.log("EVENNT" + event)
   }
 
@@ -66,12 +81,13 @@ export class ScheduleComponent{
       end: setHours(setMinutes(new Date(), 40), 17),
       title: 'An event',
       resizable: this.getResizable(),
-      draggable: this.isInEditionMod(),
+      draggable: this.isInEditionMod()
     },
   ];
 
-  getResizable(){
-    if(this.isInEditionMod()){
+
+  getResizable() {
+    if (this.isInEditionMod()) {
       return {
         afterEnd: true,
         beforeStart: true
@@ -81,11 +97,10 @@ export class ScheduleComponent{
     return {}
   }
 
-  isInEditionMod(){
+  isInEditionMod() {
 
     return this.route.snapshot.component?.name == "_ScheduleEditComponent"
   }
-
   eventTimesChanged({
                       event,
                       newStart,
@@ -93,24 +108,29 @@ export class ScheduleComponent{
                     }: CalendarEventTimesChangedEvent): void {
     event.start = newStart;
     event.end = newEnd;
-    this.refresh.next();
+    this.refreshCalendar.next()
   }
+
+
 
 
   changeDay(date: Date) {
-      this.viewDate = date;
-      this.view = CalendarView.Day;
+    this.viewDate = date;
+    this.view = CalendarView.Day;
   }
 
   getCours() {
-    const  token = localStorage.getItem('token')
+    const token = localStorage.getItem('token')
     this.http
       .get('http://localhost:5050/cours/get/1', {
-        headers: { 'Authorization': `Bearer ${token}` },
+        headers: {'Authorization': `Bearer ${token}`},
       })
       .subscribe({
         next: (data: any) => {
         },
       });
   }
+
+
+  protected readonly Date = Date;
 }

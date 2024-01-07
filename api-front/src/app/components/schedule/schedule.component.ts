@@ -133,4 +133,5 @@ export class ScheduleComponent{
 
 
   protected readonly Date = Date;
+  protected readonly console = console;
 }

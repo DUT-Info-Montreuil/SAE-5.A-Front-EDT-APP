@@ -18,11 +18,16 @@
 <ng-template
     #eventTemplateCustom
     let-dayEvent="dayEvent"
+    let-events="events"
     let-tooltipPlacement="tooltipPlacement"
+    let-dayStartHour="dayStartHour"
+    let-day="day"
     let-eventClicked="eventClicked"
     let-tooltipTemplate="tooltipTemplate"
     let-tooltipAppendToBody="tooltipAppendToBody">
-
+<div class="cal-event">
+  {{eventClicked.title}}
+  </div>
 </ng-template>
 
 <div class="grid-cols-3">
@@ -101,8 +106,10 @@
             [hourSegmentHeight]="13"
             [currentTimeMarkerTemplate]="currentTimeMarkerTemplate"
             [snapDraggedEvents]="false"
+
     >
     </mwl-calendar-day-view>
+
 
 
 </div>

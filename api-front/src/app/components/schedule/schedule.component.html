@@ -84,6 +84,7 @@
             [dayEndHour]="20"
             [hourSegments]="3"
             [hourDuration]="30"
+            [excludeDays]="[0,6]"
             [events]="events"
             (eventTimesChanged)="eventTimesChanged($event)"
             (hourSegmentClicked)="setView(CalendarView.Day, $event.date)"

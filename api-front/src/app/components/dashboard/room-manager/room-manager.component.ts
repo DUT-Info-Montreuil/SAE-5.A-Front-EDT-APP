@@ -18,22 +18,19 @@ export class RoomManagerComponent {
   showModal = false;
   idInetval : any;
   showModalModifSalle = false;
+  idItervalsearchSalle : any;
+  searchRoom : any;
   
   toggleModal(){
     this.showModal = !this.showModal;
   }
-
+ 
   toggleModalModifSalle(){
     this.showModalModifSalle = !this.showModalModifSalle;
     if (this.showModalModifSalle) {
       this.chargeRoom(1);
     }
   }
-  
-
-
-
-  
   
 
   constructor( private http: HttpClient ) {}
@@ -45,7 +42,7 @@ export class RoomManagerComponent {
     this.loadSalles().subscribe(
       (data: any) => {
       this.salles = data
-      
+      this.searchRoom = this.salles;
       }
     );
       
@@ -59,7 +56,20 @@ export class RoomManagerComponent {
       );
         
     }, 1000*60*2);
-    
+    const search : any = document.getElementById('room-search');
+    search.addEventListener('keyup', (e: any) => {
+      if(search.value != "") {
+        const searchString = e.target.value.toLowerCase();
+        
+  
+      this.searchRoom = this.salles.filter((salle: any) => {return salle.Numero.toLowerCase().startsWith(searchString)});
+      
+    }else {
+      this.searchRoom = this.salles;
+    }
+   
+
+    })
 
   }
 

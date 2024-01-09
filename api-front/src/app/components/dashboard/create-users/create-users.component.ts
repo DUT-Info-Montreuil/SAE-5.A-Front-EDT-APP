@@ -145,6 +145,56 @@ export class CreateUsersComponent {
 
   }
 
+  onFileSelected(event: any): void {
+    const file: File = event.target.files[0];
+    if (file) {
+      this.parseCSV(file);
+    }
+  }
+
+  parseCSV(file: File): void {
+    const reader: FileReader = new FileReader();
+    reader.onload = (e: any) => {
+      const csv: string = e.target.result;
+      const usersData = this.processCSVData(csv);
+      
+      this.mainForm.patchValue({
+        users: usersData
+      });
+    
+    };
+    reader.readAsText(file);
+  }
+
+  processCSVData(csv: string): void {
+    const roleControl = this.mainForm.get('role');
+
+
+    const lines: string[] = csv.split('\n');
+    const headers: string[] = lines[0].split(',');
+
+
+    const usersData: any = {};
+
+    for (let i=1; i<lines.length; i++) {
+      const currentLine: string[] = lines[i].split(',');
+      if (currentLine.length === headers.length) {
+        const user: any = {
+          "FirstName": headers.indexOf('FirstName'),
+          "LastName": headers.indexOf('LastName'),
+          "info": {}
+        };
+
+        if (roleControl?.value === 'professeur') {
+          user.info.idsalle = headers.indexOf('idsalle');
+          user.info.isManager = headers.indexOf('isManager');
+        }
+        usersData.push(user);
+      }
+    }
+    return usersData;
+  }
+
   removeUser(index: number): void {
     if (this.userFormArray && index !== 0) {
       this.userFormArray.removeAt(index);

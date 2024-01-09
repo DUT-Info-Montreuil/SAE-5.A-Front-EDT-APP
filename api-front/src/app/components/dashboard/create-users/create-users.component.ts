@@ -146,6 +146,8 @@ export class CreateUsersComponent {
   }
 
   onFileSelected(event: any): void {
+    console.log("onFileSelected");
+    console.log(event);
     const file: File = event.target.files[0];
     if (file) {
       this.parseCSV(file);
@@ -166,30 +168,42 @@ export class CreateUsersComponent {
     reader.readAsText(file);
   }
 
-  processCSVData(csv: string): void {
+  processCSVData(csv: string): any[] {
     const roleControl = this.mainForm.get('role');
+    const usersArray = this.mainForm.get('users') as FormArray;
+
+    usersArray.clear();
 
 
     const lines: string[] = csv.split('\n');
-    const headers: string[] = lines[0].split(',');
 
+    const headers: string[] = lines[0].split(',').map(header => header.trim());
 
-    const usersData: any = {};
+    const usersData: any[] = []; // Change the declaration to an array
 
     for (let i=1; i<lines.length; i++) {
-      const currentLine: string[] = lines[i].split(',');
+
+      if (i !== 1) {
+        this.addUser(); // Appel à chaque itération après la première
+      }
+
+      const currentLine: string[] = lines[i].split(',').map(value => value.trim());
+      console.log("current" + currentLine);
+      console.log("headers" + headers);
       if (currentLine.length === headers.length) {
         const user: any = {
-          "FirstName": headers.indexOf('FirstName'),
-          "LastName": headers.indexOf('LastName'),
+          
+          "FirstName": currentLine[headers.indexOf('FirstName')],
+          "LastName": currentLine[headers.indexOf('LastName')],
           "info": {}
         };
 
         if (roleControl?.value === 'professeur') {
-          user.info.idsalle = headers.indexOf('idsalle');
-          user.info.isManager = headers.indexOf('isManager');
+          user.info.idsalle = currentLine[headers.indexOf('idsalle')];
+          user.info.isManager = currentLine[headers.indexOf('isManager')] === 'TRUE';
         }
-        usersData.push(user);
+        console.log("user" + user);
+        usersData.push(user); // Use push method to add each user object to the array
       }
     }
     return usersData;

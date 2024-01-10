@@ -7,7 +7,7 @@
                 <button (click)="toggleModal()" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center " type="button">+</button>
               </div>
               <button (click)="loadSalles()" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center " type="button">&#10554;</button>
-              <button (click)="toggleModalModifSalle()" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center " type="button">test</button>
+              <button  class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center " type="button">test</button>
             <label for="table-search" class="sr-only">Search</label>
             <div class="relative">
                 <div class="absolute inset-y-0 left-0 rtl:inset-r-0 rtl:right-0 flex items-center ps-3 pointer-events-none">
@@ -30,11 +30,11 @@
                 </tr>
             </thead>
             <tbody>
-                <tr class="bg-white border-b   hover:bg-gray-50 " *ngFor="let s of searchRoom" onClick="changerRoom(s.Capacite)"   >
-                   
-                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
+                <tr class="bg-white border-b hover:bg-gray-50" *ngFor="let s of searchRoom" (click)="toggleModalModifSalle(s.idSalle)">
+                  
+                    <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
                         {{s.Numero}}
-                    </th>
+                    </td>
                     <td class="px-6 py-4">
                         {{s.Capacite}}
                     </td>
@@ -111,19 +111,19 @@
       <div class="relative p-6 flex-auto">
         <div>
             <label for="small-input" class="block mb-2 text-sm font-medium text-gray-900 ">Nom de la salle</label>
-            <input type="text" id="inputNomChangeRoom" class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 ">
+            <input type="text" id="inputNomChangeRoom" #inputNomChangeRoom class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 ">
         </div>
         <div>
             <label for="small-input" class="block mb-2 text-sm font-medium text-gray-900 ">Capacité de la salle </label>
-            <input type="text" id="inputCapChangeRoom" class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 ">
+            <input type="text" id="inputCapChangeRoom"  class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 ">
         </div>
       </div>
       <!--footer-->
       <div class="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
-        <button class="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" (click)="toggleModalModifSalle()">
+        <button class="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" (click)="closeModalModifSalle()">
           Close
         </button>
-        <button (click)="ChangeRoom()" class="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" (click)="toggleModalModifSalle()">
+        <button (click)="ChangeRoom()" class="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" (click)="closeModalModifSalle()">
           Save 
         </button>
       </div>

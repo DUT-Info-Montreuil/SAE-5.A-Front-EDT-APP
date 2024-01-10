@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormGroup, FormBuilder, FormArray, Validators, AbstractControl, FormControl } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
@@ -12,7 +12,7 @@ import { th } from 'date-fns/locale';
   templateUrl: './room-manager.component.html',
   styleUrl: './room-manager.component.css'
 })
-export class RoomManagerComponent {
+export class RoomManagerComponent implements OnInit, AfterViewInit{
   salles: any ;
   roomsDisplay:string = "";
   showModal = false;
@@ -20,42 +20,49 @@ export class RoomManagerComponent {
   showModalModifSalle = false;
   idItervalsearchSalle : any;
   searchRoom : any;
+  idSalle : any;
+  @ViewChild('inputNomChangeRoom', { static: true }) inputNomChangeRoom! : ElementRef;
   
   toggleModal(){
     this.showModal = !this.showModal;
   }
  
-  toggleModalModifSalle(){
+  toggleModalModifSalle(id : any){
+    console.log("id : "+id);
     this.showModalModifSalle = !this.showModalModifSalle;
     if (this.showModalModifSalle) {
-      this.chargeRoom(1);
+      this.chargeRoom(id);
     }
+  }
+
+  closeModalModifSalle() {
+    this.showModalModifSalle = false;
   }
   
 
   constructor( private http: HttpClient ) {}
 
+
+  ngAfterViewInit() {
+  
+  }
+
+
   ngOnInit(): void {
     //this.initializeForm();
     //this.loadGroupes();
     //charger les salles au chargeement de la page
-    this.loadSalles().subscribe(
-      (data: any) => {
-      this.salles = data
-      this.searchRoom = this.salles;
-      }
-    );
+    this.loadSalles().subscribe((data : any) => {this.searchRoom =  data ; this.salles = data; });
+    
+  
       
       //cree un interval pour recharger les salles toutes les 2 minutes
     this.idInetval = setInterval(() => {
-      this.loadSalles().subscribe(
-        (data: any) => {
-        this.salles = data
-        
-        }
-      );
+      this.loadSalles().subscribe((data : any) => {this.searchRoom =  data ; this.salles = data; });
         
     }, 1000*60*2);
+
+    
     const search : any = document.getElementById('room-search');
     search.addEventListener('keyup', (e: any) => {
       if(search.value != "") {
@@ -85,10 +92,11 @@ export class RoomManagerComponent {
     console.log("load salles");
     const token = localStorage.getItem('token');
     const headers = { 'Authorization': `Bearer ${token}` };
-    return this.http.get('http://localhost:5050/salle/getAll', { headers })
+    return this.http.get('http://localhost:5050/salle/getAll', { headers });
+    
   }
 
-  getRooms(id : any): any {
+  getRooms(id : any): any {2
     const token = localStorage.getItem('token');
     const headers = { 'Authorization': `Bearer ${token}` };
     return this.http.get('http://localhost:5050/salle/get/'+id, { headers })
@@ -96,25 +104,35 @@ export class RoomManagerComponent {
 
 
   chargeRoom(id : any): void {
-    this.getRooms(id).subscribe(
-      (data: any) => {
-        if (document.getElementById('inputNomChangeRoom') != null && document.getElementById('inputCapChangeRoom') != null) {
-          var nomElement = document.getElementById('inputNomChangeRoom');
-          var capElement = document.getElementById('inputCapChangeRoom');
-       
-          if (nomElement != null) {
-              nomElement.setAttribute("value", data != null ? data.Numero : '');
-          }
-       
-          if (capElement != null) {
-              capElement.setAttribute("value", data != null ? data.Capacite : '');
-          }
-       }
-        
+    //filtre les salles pour avoir celle qui a l'id
+    console.log("charge room");
+    const data  = this.salles.filter((salle: any) => {return salle.idSalle == id})[0];
+    console.log(data);
+    this.idSalle = data.idSalle;
+    //wait 0.1 seconde
+    setTimeout(() => {  if (document.getElementById('inputNomChangeRoom') != null && document.getElementById('inputCapChangeRoom') != null) {
+      
+      var nomElement = document.getElementById('inputNomChangeRoom');
+      var capElement = document.getElementById('inputCapChangeRoom');
+      
+      if (nomElement != null) {
+          nomElement.setAttribute("value", data != null ? data.Numero : '');
       }
+  
+      if (capElement != null) {
+          capElement.setAttribute("value", data != null ? data.Capacite : '');
+      }
+ }}, 0);
     
-    );
+      
+  
   }
+       
+        
+    
+    
+    
+  
 
   ChangeRoom(): any {  
     const token = localStorage.getItem('token');
@@ -123,13 +141,13 @@ export class RoomManagerComponent {
     console.log("le numero est : "+Numero.value);
     console.log("la capacite est : "+cap.value);
     const headers = { 'Authorization': `Bearer ${token}` };
-    return this.http.put('http://localhost:5050/salle/update', { "Numero": Numero.value , "Capacite": cap.value }, { headers }).subscribe(this.loadSalles());
+    return this.http.put('http://localhost:5050/salle/update', { "Numero": Numero.value , "Capacite": cap.value , "idSalle": this.idSalle  }, { headers }).subscribe(() => {  this.loadSalles().subscribe((data : any) => {this.searchRoom =  data ; this.salles = data; })});
  
   }
 
 
   //ajouter une salle
-  addRoom(): any {
+  addRoom(): void {
     console.log("add room");
     
     const token = localStorage.getItem('token');
@@ -138,7 +156,7 @@ export class RoomManagerComponent {
     console.log("le numero est : "+Numero.value);
     console.log("la capacite est : "+cap.value);
     const headers = { 'Authorization': `Bearer ${token}` };
-    return this.http.post('http://localhost:5050/salle/add', { "Numero": Numero.value , "Capacite": cap.value }, { headers }).subscribe(this.loadSalles());
+    this.http.post('http://localhost:5050/salle/add', { "Numero": Numero.value , "Capacite": cap.value }, { headers }).subscribe(() => { console.log("sub") ; this.loadSalles().subscribe((data : any) => {this.searchRoom =  data ; this.salles = data; });});
   }
   
 

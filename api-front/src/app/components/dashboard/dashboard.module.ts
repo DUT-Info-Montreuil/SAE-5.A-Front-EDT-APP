@@ -9,13 +9,15 @@ import  { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { RoomManagerComponent } from './room-manager/room-manager.component';
 import { RessourceManagerComponent } from './ressource-manager/ressource-manager.component';
+import { GroupManagerComponent } from './group-manager/group-manager.component';
 @NgModule({
   declarations: [
     DashboardComponent,
     CreateUsersComponent,
     CalendarComponent,
     RoomManagerComponent,
-    RessourceManagerComponent
+    RessourceManagerComponent,
+    GroupManagerComponent
   ],
   imports: [
     CommonModule,

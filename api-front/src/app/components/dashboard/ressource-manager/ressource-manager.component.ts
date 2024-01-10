@@ -97,6 +97,8 @@ export class RessourceManagerComponent {
       return this.http.put('http://localhost:5050/ressource/update/'+this.idChangeRessource , body , {headers}).subscribe(()=> { 
         this.loadRessources().subscribe(
           (data : any) => { 
+            
+
             this.ressources = data ;
             this.searchRessources = data })});
 

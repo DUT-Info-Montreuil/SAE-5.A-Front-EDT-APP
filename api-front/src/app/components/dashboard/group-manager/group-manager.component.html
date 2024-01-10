@@ -68,9 +68,9 @@
         <!--header-->
         <div class="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
           <h3 class="text-3xl font-semibold">
-            Modal Title
+            Cree groupe
           </h3>
-          <button class="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none" (click)="toggleModal()">
+          <button class="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none" (click)="toggleCreateGroupe()">
             <span class="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
               ×
             </span>
@@ -79,20 +79,24 @@
         <!--body-->
         <div class="relative p-6 flex-auto">
           <div>
-              <label for="small-input" class="block mb-2 text-sm font-medium text-gray-900 ">Nom de la salle</label>
-              <input type="text" id="inputNom" class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 ">
+              <label for="small-input" class="block mb-2 text-sm font-medium text-gray-900 ">Nom du groupe</label>
+              <input type="text" id="inputNomGroupe" class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 ">
           </div>
           <div>
-              <label for="small-input" class="block mb-2 text-sm font-medium text-gray-900 ">Capacité de la salle </label>
-              <input type="text" id="inputCap" class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 ">
+              <label for="small-input" class="block mb-2 text-sm font-medium text-gray-900 ">Année</label>
+              <input type="text" id="inputAnneeGroupe" class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 ">
           </div>
+          <div>
+            <label for="small-input" class="block mb-2 text-sm font-medium text-gray-900 ">Année scolaire</label>
+            <input type="text" id="inputAnneeSco" class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 ">
+        </div>
         </div>
         <!--footer-->
         <div class="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
-          <button class="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" (click)="toggleModal()">
+          <button class="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" (click)="toggleCreateGroupe()">
             Close
           </button>
-          <button (click)="addGroupe()" class="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" (click)="toggleModal()">
+          <button (click)="addGroupe()" class="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" (click)="toggleCreateGroupe()">
             Save 
           </button>
         </div>

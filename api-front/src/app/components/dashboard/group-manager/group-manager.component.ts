@@ -31,7 +31,7 @@ export class GroupManagerComponent {
     {
       this.masterGroup = res.filter((group : any) => group.idGroupe_parent == null);
       this.allGroups = res;
-      console.log(this.masterGroup);
+      ;
     });
 
 
@@ -53,6 +53,7 @@ chargerGroupe(id : any)
 }
 
 toggleCreateGroupe(){
+  this.ModalCreateGroup = !this.ModalCreateGroup;
 
 }
 
@@ -62,6 +63,18 @@ showModalCreateGroup()
 }
 
 addGroupe(){
+  const nom = (<HTMLInputElement>document.getElementById("inputNomGroupe")).value;
+  const annee = (<HTMLInputElement>document.getElementById("inputAnneeGroupe")).value;
+  const anneeScolaire = (<HTMLInputElement>document.getElementById("inputAnneeSco")).value;
+  const token = localStorage.getItem('token');
+  const headers = { 'Authorization': `Bearer ${token}` };
+  const body = { "Nom" : nom, "Annee"  : annee, "AnneeScolaire" : anneeScolaire };
+  this.http.post("http://localhost:5050/groupe/add", body, { headers }).subscribe((res: any) => 
+  {
+    
+    this.loadGroups();
+  });
+
 
 
 

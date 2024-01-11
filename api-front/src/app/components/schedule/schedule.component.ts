@@ -19,7 +19,6 @@ import {DatePipe, formatDate} from "@angular/common";
   selector: 'app-schedule',
   templateUrl: './schedule.component.html',
   styleUrl: './schedule.component.css',
-  changeDetection: ChangeDetectionStrategy.Default,
   encapsulation: ViewEncapsulation.None,
 })
 
@@ -41,6 +40,7 @@ export class ScheduleComponent{
   activeDayIsOpen: boolean = true;
 
   constructor(private route: ActivatedRoute, private http: HttpClient, private elementRef: ElementRef) {
+    this.getCours()
     setInterval(() => {
 
         const currentDate = new Date()
@@ -76,13 +76,6 @@ export class ScheduleComponent{
     },
   ];
   events: CalendarEvent[] = [
-    {
-      start: setHours(setMinutes(new Date(), 20), 15),
-      end: setHours(setMinutes(new Date(), 40), 17),
-      title: 'An event',
-      resizable: this.getResizable(),
-      draggable: this.isInEditionMod()
-    },
   ];
 
 
@@ -120,15 +113,55 @@ export class ScheduleComponent{
   }
 
   getCours() {
-    const token = localStorage.getItem('token')
-    this.http
-      .get('http://localhost:5050/cours/get/1', {
-        headers: {'Authorization': `Bearer ${token}`},
+    const token = localStorage.getItem('token');
+    const headers = { 'Authorization': `Bearer ${token}` , 'Content-Type': 'application/json'};
+
+    this.http.get('http://localhost:5050/cours/get/null', {headers}).subscribe({
+      next: (data: any) => {
+        console.log(data);
+        this.events = this.jsonToEvent(data);
+        console.log("events: " + this.events[0].end + this.events[0].start)
+      },
+      error: (error: any) => {
+        console.log(error);
+        return {}
+      }
+    });
+  }
+  jsonToEvent(results: any[]) {
+    let bdEvent = []
+    for (let result of results){
+      if(result != null){
+        console.log("result: " + result)
+      }
+      let heureDebutList = result.HeureDebut.split(':')
+      let nombreHeureList = result.NombreHeure.split(':')
+      let date = new Date(result.Jour);
+      bdEvent.push({
+        start: setHours(setMinutes(date, heureDebutList[1]), heureDebutList[0]),
+        end: setHours(setMinutes(date, Number(nombreHeureList[1])+Number(heureDebutList[1])),  Number(nombreHeureList[0])+Number(heureDebutList[0])),
+        title: this.getRessource(result.idCours),
+        resizable: this.getResizable(),
+        draggable: this.isInEditionMod()
       })
-      .subscribe({
-        next: (data: any) => {
-        },
-      });
+    }
+    return bdEvent
+  }
+
+  getRessource(idCours: Number){
+    const token = localStorage.getItem('token');
+    const headers = { 'Authorization': `Bearer ${token}` , 'Content-Type': 'application/json'};
+     titreRessource : String = ''
+    this.http.get('http://localhost:5050/ressource/get/'+idCours, {headers}).subscribe({
+      next: (data: any) => {
+        titreRessource = data[0].titre
+        return titreRessource
+      },
+      error: (error: any) => {
+        return 'toto'
+      }
+    });
+    return titreRessource
   }
 
 

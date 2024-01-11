@@ -5,7 +5,7 @@
             <div>
                 <button (click)="toggleCreateGroupe()" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center " type="button">+</button>
               </div>
-              <button  class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center " type="button">&#10554;</button>
+              <button (click)="goBackGroupe()" id="goBackButton" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center " type="button">&#10554;</button>
               
             <label for="table-search" class="sr-only">Search</label>
             <div class="relative">
@@ -32,11 +32,11 @@
                     </th>
                    
                 </tr>
-                0
+                
 
             </thead>
             <tbody>
-                <tr class="bg-white border-b   hover:bg-gray-50 " *ngFor="let r of masterGroup" (click)="chargerGroupe(r.idressource)"   >
+                <tr class="bg-white border-b   hover:bg-gray-50 " *ngFor="let r of masterGroup" (click)="chargerGroupe(r.IdGroupe)"   >
                    
                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
                         {{r.Nom}}
@@ -49,7 +49,7 @@
                     </td>
                     <td class="px-6 py-4">
                         <!--<button  class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center " type="button">Sous-groupe</button>-->
-                        <img class="svg" src="../../../../assets/rightArrow.svg" alt="">
+                        <img (click)="goInGroup(r.IdGroupe)" class="svg" src="../../../../assets/rightArrow.svg" alt="">
                     </td>
                 </tr>
             </tbody>
@@ -104,3 +104,51 @@
     </div>
   </div>
   <div *ngIf="ModalCreateGroup" class="opacity-25 fixed inset-0 z-40 bg-black"></div>
+
+
+
+  <!-- modal modif ressource -->
+  <div *ngIf="showModalModifGroupe" class="overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none justify-center items-center flex">
+    <div class="relative w-auto my-6 mx-auto max-w-6xl">
+      <!--content-->
+      <div class="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+        <!--header-->
+        <div class="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
+          <h3 class="text-3xl font-semibold">
+            Modal Title
+          </h3>
+          <button class="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none" (click)="toggleModalModifGroupe()">
+            <span class="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
+              ×
+            </span>
+          </button>
+        </div>
+        <!--body-->
+        <div class="relative p-6 flex-auto">
+          <div>
+            <label for="small-input" class="block mb-2 text-sm font-medium text-gray-900 ">Nom du groupe</label>
+            <input type="text" id="changerNomGroupe" class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 ">
+        </div>
+        <div>
+            <label for="small-input" class="block mb-2 text-sm font-medium text-gray-900 ">Année</label>
+            <input type="text" id="changerAnneeGroupe" class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 ">
+        </div>
+        <div>
+          <label for="small-input" class="block mb-2 text-sm font-medium text-gray-900 ">Année scolaire</label>
+          <input type="text" id="changerAnneeSco" class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 ">
+      </div>
+          
+        </div>
+        <!--footer-->
+        <div class="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
+          <button class="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" (click)="toggleModalModifGroupe()">
+            Close
+          </button>
+          <button (click)="changerGroupe()" class="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" (click)="toggleModalModifGroupe()">
+            Save 
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="showModalModifGroupe" class="opacity-25 fixed inset-0 z-40 bg-black"></div>

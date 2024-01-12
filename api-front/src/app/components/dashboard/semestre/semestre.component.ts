@@ -55,15 +55,12 @@ export class SemestreComponent {
     this.idChangeSemestre = id;
      setTimeout(() => {
      
-      const s : any = this.allSemestres.find((r : any) => r.idressource == id);
+      const s : any = this.allSemestres.find((r : any) => r.IdSemestre == id);
       
-      const numSemestre : any = document.getElementById('modifNomRessource')
+      const numSemestre : any = document.getElementById('modifierNumero')
      
-     nomRessource.setAttribute('value', ressource.titre);
-      numeroRessource.setAttribute('value', ressource.numero);
-      nbrHeureRessource.setAttribute('value', ressource.nbrheuresemestre);
-      ressourceSelect.value = ressource.idsemestre;
-      ColorRessource.setAttribute('value', ressource.codecouleur);
+      numSemestre.setAttribute('value', s.Numero);
+      
       
 
 
@@ -73,7 +70,12 @@ export class SemestreComponent {
 
 
   changerRessource(){
-
+    const token = localStorage.getItem('token');
+    const header = { 'Authorization': `Bearer ${token}` };
+    const num  = document.getElementById('modifierNumero') as HTMLInputElement;
+    this.http.put('http://localhost:5050/semestre/update/'+this.idChangeSemestre ,{"Numero":num.value},{ headers: header }).subscribe((res: any) => {
+      this.loadSemestre();
+    });
   }
 
   toggleModalModifSemestre(){

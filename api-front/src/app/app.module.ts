@@ -13,8 +13,11 @@ import { DashboardModule } from './components/dashboard/dashboard.module';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import {registerLocaleData} from "@angular/common";
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
-
 import localeFr from '@angular/common/locales/fr';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatInputModule} from '@angular/material/input';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatNativeDateModule} from '@angular/material/core';
 import {
   CalendarDateFormatter,
   CalendarModule,
@@ -65,6 +68,10 @@ class CustomDateFormatter extends CalendarNativeDateFormatter {
     FormsModule,
     DashboardModule,
     CalendarModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
     CalendarModule.forRoot({
       provide: DateAdapter,
       useFactory: adapterFactory,

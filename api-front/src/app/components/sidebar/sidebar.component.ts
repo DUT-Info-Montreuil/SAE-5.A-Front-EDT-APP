@@ -118,7 +118,7 @@ export class SidebarComponent {
 
 
   }
-
+  protected readonly event = event;
 }
 
 

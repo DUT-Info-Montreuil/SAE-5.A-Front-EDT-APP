@@ -1,3 +1,4 @@
+<script src="../dashboard/dashboard.component.ts"></script>
 <div class="grid min-h-100hv grid-cols-[auto_1fr] justify-center gap-4 z-50">
   <aside class="self-start sticky top-0 col-span-1 min-h-fit">
     <div role="button" class=" mt-14 place-items-center flex-col flex-shrink-0 rounded-r-full text-indigo-100 max-w-[56px] max-h-[50px] p-4 shadow-xl shadow-blue-gray-900/5 transition-colors duration-150 bg-blue-500 focus:shadow-outline hover:bg-blue-600" (click)="toggleSideBar()" [@openClose2]="isSideBarOpen">
@@ -72,8 +73,9 @@
               <label for="3" class="block cursor-pointer select-none rounded-xl p-2 text-center peer-checked:bg-blue-500 peer-checked:font-bold peer-checked:text-white">prof</label>
             </div>
           </div>
-          <div class="overflow-auto max-h-96 min-h-fit relative max-w-sm mx-auto bg-white dark:bg-slate-800 dark:highlight-white/5 ring-1 ring-black/5 rounded-xl flex flex-col divide-y dark:divide-slate-200/5 mt-2 place-items-center select-none">
-            <figure class="cours rounded-2xl m-1 p-5 w-fit bg-white shadow-lg ring-1 ring-gray-900/5 text-center justify-self-center cursor-grab" *ngFor="let cours of externalEvents">
+          <div class="overflow-auto max-h-96 min-h-fit relative max-w-sm mx-auto bg-white dark:bg-slate-800 dark:highlight-white/5 ring-1 ring-black/5 rounded-xl flex flex-col divide-y dark:divide-slate-200/5 mt-2 place-items-center select-none border-blue-500">
+
+            <figure class="cours rounded-2xl m-1 p-5 w-fit bg-white shadow-lg ring-1 ring-gray-900/5 text-center justify-self-center hover:cursor-grab" *ngFor="let cours of externalEvents" mwlDraggable [dropData]="{event: event}" dragActiveClass="drag-active">
                 <p>{{cours.title}}</p>
             </figure>
           </div>
@@ -83,7 +85,7 @@
       </nav>
 
       <div class="border-t-2 border-gray-300 h-1/4">
-          <div role="button" tabindex="0" class="flex items-center w-full p-3 rounded-lg text-start leading-tight transition-all hover:bg-blue-50 hover:bg-opacity-80 focus:bg-blue-100 focus:bg-opacity-80 active:bg-gray-50 active:bg-opacity-80 hover:text-blue-900 focus:text-blue-900 active:text-blue-900 outline-none">
+          <div role="button" class="flex items-center w-full p-3 rounded-lg text-start leading-tight transition-all hover:bg-blue-50 hover:bg-opacity-80 focus:bg-blue-100 focus:bg-opacity-80 active:bg-gray-50 active:bg-opacity-80 hover:text-blue-900 focus:text-blue-900 active:text-blue-900 outline-none">
               <div class="grid place-items-center mr-4">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" />

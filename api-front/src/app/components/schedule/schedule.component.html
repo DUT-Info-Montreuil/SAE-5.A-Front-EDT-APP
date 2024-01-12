@@ -10,69 +10,80 @@
     let-topPx="topPx"
 >
 
-    <div class="cal-current-time-marker" [style.top.px]="topPx+13" *ngIf="isVisible" >
-     <div class="bg-red-500 w-fit text-xs">{{ nowDate }}</div>
+    <div class="cal-current-time-marker" [style.top.px]="topPx" *ngIf="isVisible" >
+     <div class="bg-red-500 w-fit text-xs">{{ nowTime }}</div>
     </div>
 </ng-template>
 
+
 <ng-template
     #eventTemplateCustom
-    let-dayEvent="dayEvent"
-    let-events="events"
-    let-tooltipPlacement="tooltipPlacement"
-    let-dayStartHour="dayStartHour"
-    let-day="day"
-    let-eventClicked="eventClicked"
-    let-tooltipTemplate="tooltipTemplate"
+    let-weekEvent="weekEvent"
     let-tooltipAppendToBody="tooltipAppendToBody">
-<div class="cal-event">
-  {{eventClicked.title}}
+  <div class="cal-event text-center m-0 mb-0">
+    <div class="h-1/6">
+      {{ weekEvent.event.title}}
+    </div>
+    <div class="h-3/6">
+    </div>
+    <div class="flex h-2/6 place-items-end">
+      <div class="mb-0.5 rounded-3xl place-items-end ml-auto justify-self-end text-indigo-100 transition-colors duration-150 bg-blue-500 focus:shadow-outline hover:bg-blue-600 ng-tns-c2656273316-0 max-h-[30px] max-w-[30px]" *ngIf="isInEditionMod()" role="button" (click)="addProf(weekEvent.event)">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+        </svg>
+
+      </div>
+    </div>
+
   </div>
+
 </ng-template>
 
-<div class="grid-cols-3">
-    <div class="flex flex-wrap gap-1">
+    <div class="w-5/12 grid grid-cols-3 grid-rows-2 content-evenly flex-wrap gap-1">
         <div
                 role="button"
-                class="text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                class=" justify-self-end w-1/5 self-center text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-4 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
                 mwlCalendarPreviousView
                 [view]="view"
                 [(viewDate)]="viewDate"
-                (viewDateChange)="closeOpenMonthViewDay()"
+                (viewDateChange)="closeOpenMonthViewDay(); saveDate($event.toLocaleDateString())"
         >
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
             </svg>
         </div>
-        <div role="button" class=" text-center w-56 text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
-            <h3>{{ viewDate | calendarDate:(view + 'ViewTitle'):'fr' }}</h3>
+        <div class="w-full grid grid-cols-3 text-center justify-self-center self-center text-white bg-blue-500 font-medium rounded-lg text-sm px-5 py-1 dark:bg-blue-600">
+            <div class="justify-self-center self-center col-span-2"> <h3> {{ viewDate | calendarDate:(view + 'ViewTitle'):'fr' }} </h3></div>
+          <div class="justify-self-center m-0">
+            <input matInput [matDatepicker]="picker" [matDatepickerFilter]="filtreDatePicker" (dateChange)="changeDay($event.value); saveDate($event.value?.toLocaleDateString())" [hidden]="true">
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </div>
+
         </div>
         <div role="button"
-                class="text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                class="justify-self-start w-1/5 self-center text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-4 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
                 mwlCalendarNextView
                 [view]="view"
                 [(viewDate)]="viewDate"
-                (viewDateChange)="closeOpenMonthViewDay()"
+                (viewDateChange)="closeOpenMonthViewDay(); saveDate($event.toLocaleDateString())"
         >
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
             </svg>
         </div>
-    </div>
-    <div class="flex flex-wrap gap-1">
-      <div class="px-14 py-2.5 mb-2">
 
-      </div>
+    <div class="flex flex-wrap gap-1 justify-self-center col-span-3">
       <div role="button"
-              class="justify-self-center text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+              class="justify-self-center text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 outline-none"
               mwlCalendarToday
               [(viewDate)]="viewDate"
+              (viewDateChange)="saveDate($event.toLocaleDateString())"
       >
           Aujourd'hui
       </div>
-
     </div>
-</div>
+    </div>
 <br />
 
 <div [ngSwitch]="view">
@@ -81,16 +92,18 @@
             [viewDate]="viewDate"
             [refresh]="refreshCalendar"
             [dayStartHour]="8"
-            [dayEndHour]="20"
+            [dayEndHour]="19"
             [hourSegments]="3"
             [hourDuration]="30"
             [excludeDays]="[0,6]"
             [events]="events"
-            (eventTimesChanged)="eventTimesChanged($event)"
+            (eventTimesChanged)="eventDropped($event)"
             (hourSegmentClicked)="setView(CalendarView.Day, $event.date)"
-            [hourSegmentHeight]="13"
+            (dayHeaderClicked)="setView(CalendarView.Day, $event.day.date)"
             [currentTimeMarkerTemplate]="currentTimeMarkerTemplate"
             [snapDraggedEvents]="false"
+            [hourSegmentHeight]="13"
+            [eventTemplate]="eventTemplateCustom"
     >
     </mwl-calendar-week-view>
     <mwl-calendar-day-view
@@ -98,19 +111,24 @@
             [viewDate]="viewDate"
             [refresh]="refreshCalendar"
             [dayStartHour]="8"
-            [dayEndHour]="20"
+            [dayEndHour]="19"
             [hourSegments]="3"
             [hourDuration]="30"
             [events]="events"
-            (eventTimesChanged)="eventTimesChanged($event)"
+            (eventTimesChanged)="eventDropped($event)"
             (hourSegmentClicked)="setView(CalendarView.Week, $event.date)"
-            [hourSegmentHeight]="13"
             [currentTimeMarkerTemplate]="currentTimeMarkerTemplate"
             [snapDraggedEvents]="false"
+            [hourSegmentHeight]="13"
+            [eventTemplate]="eventTemplateCustom"
+
 
     >
     </mwl-calendar-day-view>
+<!--  si besoin de changer la hauteur :  [hourSegmentHeight]="10"
+      si besoin d'un event custom  :             [eventTemplate]="eventTemplateCustom"
 
+-->
 
 
 </div>

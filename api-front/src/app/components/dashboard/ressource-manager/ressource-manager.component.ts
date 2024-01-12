@@ -85,7 +85,7 @@ export class RessourceManagerComponent {
   }
 
   changerRessource(){
-    console.log("changing yee")
+    
     const nomRessource : any = document.getElementById('modifNomRessource')
     const numeroRessource : any = document.getElementById('modifNumeroRessource')
     const nbrHeureRessource : any  = document.getElementById('modiftNbrHeureRessource')

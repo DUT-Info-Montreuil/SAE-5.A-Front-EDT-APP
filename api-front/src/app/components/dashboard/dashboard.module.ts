@@ -10,6 +10,7 @@ import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { RoomManagerComponent } from './room-manager/room-manager.component';
 import { RessourceManagerComponent } from './ressource-manager/ressource-manager.component';
 import { GroupManagerComponent } from './group-manager/group-manager.component';
+import { SemestreComponent } from './semestre/semestre.component';
 @NgModule({
   declarations: [
     DashboardComponent,
@@ -17,7 +18,8 @@ import { GroupManagerComponent } from './group-manager/group-manager.component';
     CalendarComponent,
     RoomManagerComponent,
     RessourceManagerComponent,
-    GroupManagerComponent
+    GroupManagerComponent,
+    SemestreComponent
   ],
   imports: [
     CommonModule,

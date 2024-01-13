@@ -73,11 +73,16 @@
               <label for="3" class="block cursor-pointer select-none rounded-xl p-2 text-center peer-checked:bg-blue-500 peer-checked:font-bold peer-checked:text-white">prof</label>
             </div>
           </div>
-          <div class="overflow-auto max-h-96 min-h-fit relative max-w-sm mx-auto bg-white dark:bg-slate-800 dark:highlight-white/5 ring-1 ring-black/5 rounded-xl flex flex-col divide-y dark:divide-slate-200/5 mt-2 place-items-center select-none border-blue-500">
+          <div id="coursDragList" (cdkDropListDropped)="drop($event)" cdkDropList class="overflow-auto max-h-96 min-h-fit relative max-w-sm mx-auto bg-white dark:bg-slate-800 dark:highlight-white/5 ring-1 ring-black/5 rounded-xl flex flex-col divide-y dark:divide-slate-200/5 mt-2 place-items-center select-none border-blue-500">
 
-            <figure class="cours rounded-2xl m-1 p-5 w-fit bg-white shadow-lg ring-1 ring-gray-900/5 text-center justify-self-center hover:cursor-grab" *ngFor="let cours of externalEvents" mwlDraggable [dropData]="{event: event}" dragActiveClass="drag-active">
-                <p>{{cours.title}}</p>
-            </figure>
+
+              @for (cours of externalEvents; track cours){
+                <figure [cdkDragData]="cours" class="cours rounded-2xl m-1 p-5 w-fit bg-white shadow-lg ring-1 ring-gray-900/5 text-center justify-self-center hover:cursor-grab" cdkDrag>
+                  <p>{{cours.title}}</p>
+                </figure>
+              }
+
+
           </div>
 
         </div>

@@ -17,6 +17,8 @@ import {DatePipe, formatDate} from "@angular/common";
 import {SidebarComponent} from "../sidebar/sidebar.component";
 import {da} from "date-fns/locale";
 import {resolve} from "@angular/compiler-cli";
+import {CdkDragDrop} from "@angular/cdk/drag-drop";
+
 
 
 
@@ -156,12 +158,29 @@ export class ScheduleComponent{
     this.viewDate = date;
   }
 
-  getCours() {
+  getProfesseur(){
     const token = localStorage.getItem('token');
     const headers = { 'Authorization': `Bearer ${token}` , 'Content-Type': 'application/json'};
 
     this.http.get('http://localhost:5050/cours/get/null', {headers}).subscribe({
       next: async (data: any) => {
+        console.log("data: " + JSON.stringify(data))
+        this.events = await this.jsonToEvent(data);
+      },
+      error: (error: any) => {
+        console.log(error);
+        return {}
+      }
+    });
+  }
+
+  getCours() {
+    const token = localStorage.getItem('token');
+    const headers = { 'Authorization': `Bearer ${token}` , 'Content-Type': 'application/json'};
+
+    this.http.get('http://localhost:5050/cours/get/all', {headers}).subscribe({
+      next: async (data: any) => {
+        console.log("data: " + JSON.stringify(data))
         this.events = await this.jsonToEvent(data);
       },
       error: (error: any) => {
@@ -198,9 +217,11 @@ export class ScheduleComponent{
     const headers = { 'Authorization': `Bearer ${token}` , 'Content-Type': 'application/json'};
     this.http.get('http://localhost:5050/ressource/get/'+idCours, {headers}).subscribe({
       next: (data: any) => {
+        console.log(JSON.stringify(data[0]))
         console.log("topto: " +  data[0].titre)
         titre = data[0].titre;
         resolve(titre)
+
       },
       error: (error: any) => {
         reject("toto")
@@ -262,5 +283,10 @@ export class ScheduleComponent{
 
   getEventTitle(event: any) {
     console.log(event);
+  }
+
+  drop(event: CdkDragDrop<{title: string;}[]>) {
+    console.log("event2: " + event.item.data.title)
+    console.log("html2: " + event.dropPoint)
   }
 }

@@ -26,6 +26,7 @@ import {
 } from "angular-calendar";
 import { ScheduleReadonlyComponent } from './components/schedule/schedule-readonly/schedule-readonly.component';
 import { ScheduleEditComponent } from './components/schedule/schedule-edit/schedule-edit.component';
+import {CdkDrag, CdkDropList} from "@angular/cdk/drag-drop";
 registerLocaleData(localeFr)
 
 @Injectable()
@@ -73,15 +74,17 @@ class CustomDateFormatter extends CalendarNativeDateFormatter {
     MatDatepickerModule,
     MatNativeDateModule,
     CalendarModule.forRoot({
-      provide: DateAdapter,
-      useFactory: adapterFactory,
-    },
+        provide: DateAdapter,
+        useFactory: adapterFactory,
+      },
       {
         dateFormatter: {
           provide: CalendarDateFormatter,
           useClass: CustomDateFormatter
         }
       }),
+    CdkDrag,
+    CdkDropList,
   ],
   providers: [
     {provide: LOCALE_ID, useValue:'fr-FR'},

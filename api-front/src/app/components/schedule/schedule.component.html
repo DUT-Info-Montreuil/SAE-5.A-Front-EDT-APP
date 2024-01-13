@@ -14,6 +14,11 @@
      <div class="bg-red-500 w-fit text-xs">{{ nowTime }}</div>
     </div>
 </ng-template>
+<!--<mat-autocomplete #auto="matAutocomplete">-->
+<!--  @for (professeur of professeurs; track professeur) {-->
+<!--    <mat-option [value]="professeur">{{professeur}}</mat-option>-->
+<!--  }-->
+<!--</mat-autocomplete>-->
 
 
 <ng-template
@@ -104,6 +109,8 @@
             [snapDraggedEvents]="false"
             [hourSegmentHeight]="13"
             [eventTemplate]="eventTemplateCustom"
+            cdkDropList
+            (cdkDropListDropped)="drop($event)"
     >
     </mwl-calendar-week-view>
     <mwl-calendar-day-view

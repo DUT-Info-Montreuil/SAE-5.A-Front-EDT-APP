@@ -11,6 +11,8 @@ import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatInputModule} from "@angular/material/input";
 import {MatCardModule} from "@angular/material/card";
+import {MatAutocompleteModule} from "@angular/material/autocomplete";
+import {CdkDropList} from "@angular/cdk/drag-drop";
 @NgModule({
   declarations: [
     DashboardComponent,
@@ -31,7 +33,9 @@ import {MatCardModule} from "@angular/material/card";
     MatFormFieldModule,
     MatDatepickerModule,
     MatInputModule,
-    MatCardModule
+    MatCardModule,
+    MatAutocompleteModule,
+    CdkDropList
   ]
 })
 export class DashboardModule { }

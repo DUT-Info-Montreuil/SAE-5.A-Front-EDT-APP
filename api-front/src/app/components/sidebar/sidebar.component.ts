@@ -5,6 +5,7 @@ import {ActivatedRoute} from "@angular/router";
 import {ScheduleComponent} from "../schedule/schedule.component";
 import {ScheduleEditComponent} from "../schedule/schedule-edit/schedule-edit.component";
 import {CalendarEvent} from "angular-calendar";
+import {CdkDragDrop, moveItemInArray, transferArrayItem} from "@angular/cdk/drag-drop";
 
 @Component({
   selector: 'app-sidebar',
@@ -72,26 +73,18 @@ export class SidebarComponent {
     "cours3",
   ];
 
-  externalEvents: CalendarEvent[] = [
+  externalEvents = [
     {
-      title: "cours1",
-      start: new Date(),
-      draggable: true,
+      title: "cours1"
     },
     {
-      title: "cours2",
-      start: new Date(),
-      draggable: true,
+      title: "cours2"
     },
     {
-      title: "cours3",
-      start: new Date(),
-      draggable: true,
+      title: "cours3"
     },
     {
-      title: "cours4",
-      start: new Date(),
-      draggable: true,
+      title: "cours4"
     },
   ];
 
@@ -119,6 +112,11 @@ export class SidebarComponent {
 
   }
   protected readonly event = event;
+
+  drop(event: CdkDragDrop<{title: string;}[]>) {
+    console.log("event: " + event.item.data.title)
+    console.log("html: " + event.dropPoint)
+  }
 }
 
 

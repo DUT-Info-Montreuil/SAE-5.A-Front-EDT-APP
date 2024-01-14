@@ -35,6 +35,7 @@ export class CreateUsersComponent {
       next: (data: any) => {
         console.log(data);
         this.groupes = data;
+        return data;
       },
       error: (error: any) => {
         console.log(error);

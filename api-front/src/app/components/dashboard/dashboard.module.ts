@@ -11,6 +11,7 @@ import { RoomManagerComponent } from './room-manager/room-manager.component';
 import { RessourceManagerComponent } from './ressource-manager/ressource-manager.component';
 import { GroupManagerComponent } from './group-manager/group-manager.component';
 import { SemestreComponent } from './semestre/semestre.component';
+import { EquipementManagerComponent } from './equipement-manager/equipement-manager.component';
 @NgModule({
   declarations: [
     DashboardComponent,
@@ -19,7 +20,8 @@ import { SemestreComponent } from './semestre/semestre.component';
     RoomManagerComponent,
     RessourceManagerComponent,
     GroupManagerComponent,
-    SemestreComponent
+    SemestreComponent,
+    EquipementManagerComponent
   ],
   imports: [
     CommonModule,

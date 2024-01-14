@@ -25,6 +25,9 @@ export class RessourceManagerComponent {
 
   toggleCreateRessource(){
     this.showModalCreateRessource = !this.showModalCreateRessource;
+    if (this.showModalCreateRessource == true) {
+      this.loadSemestre();
+    }
   }
 
   toggleModalModifRessource(){
@@ -45,8 +48,10 @@ export class RessourceManagerComponent {
     this.showModifRessource();
     //time out pour attendre que le modal soit afficher
     this.idChangeRessource = id;
-     setTimeout(() => {
-     
+    this.loadSemestre() ; 
+
+    setTimeout(() => {
+    
       const ressource : any = this.ressources.find((r : any) => r.idressource == id);
       
       const nomRessource : any = document.getElementById('modifNomRessource')
@@ -54,7 +59,7 @@ export class RessourceManagerComponent {
       const nbrHeureRessource : any  = document.getElementById('modiftNbrHeureRessource')
       const ressourceSelect : any  = document.getElementById('modifRessourceSelect')
       const ColorRessource : any  = document.getElementById('modifColorRessource')
-     nomRessource.setAttribute('value', ressource.titre);
+      nomRessource.setAttribute('value', ressource.titre);
       numeroRessource.setAttribute('value', ressource.numero);
       nbrHeureRessource.setAttribute('value', ressource.nbrheuresemestre);
       ressourceSelect.value = ressource.idsemestre;
@@ -62,7 +67,10 @@ export class RessourceManagerComponent {
       
 
 
-     } , 0  );
+      } , 0  );
+
+
+     
     
   }
 
@@ -95,12 +103,7 @@ export class RessourceManagerComponent {
     const headers = { 'Authorization': `Bearer ${token}` };
       const body = { Titre: nomRessource.value, Numero: numeroRessource.value, NbrHeureSemestre: nbrHeureRessource.value, IdSemestre: ressourceSelect.value, CodeCouleur: ColorRessource.value };
       return this.http.put('http://localhost:5050/ressource/update/'+this.idChangeRessource , body , {headers}).subscribe(()=> { 
-        this.loadRessources().subscribe(
-          (data : any) => { 
-            
-
-            this.ressources = data ;
-            this.searchRessources = data })});
+        this.loadRessources() });
 
 
 
@@ -112,14 +115,14 @@ export class RessourceManagerComponent {
   loadSemestre(){
     const token = localStorage.getItem('token');
     const headers = { 'Authorization': `Bearer ${token}` };
-    return this.http.get('http://localhost:5050/semestre/getAll', { headers })
+    return this.http.get('http://localhost:5050/semestre/getAll', { headers }).subscribe((res: any) =>{this.semestres = res});
 
   }
 
   loadRessources() :any {
     const token = localStorage.getItem('token');
     const headers = { 'Authorization': `Bearer ${token}` };
-    return this.http.get('http://localhost:5050/ressource/getAll', { headers })
+    return this.http.get('http://localhost:5050/ressource/getAll', { headers }).subscribe((res: any) =>{this.ressources = res , this.searchRessources = res});
 
 
 
@@ -132,22 +135,11 @@ export class RessourceManagerComponent {
     //this.initializeForm();
     //this.loadGroupes();
     //charger les salles au chargeement de la page
-    this.loadRessources().subscribe(
-      (data: any) => {
-      this.ressources = data
-      this.searchRessources = data;
-      
-   
-      
-      }
+    this.loadRessources();
 
-    );
-    this.loadSemestre().subscribe(
-      (data: any) => {
-      this.semestres = data
-      
-      }
-    );
+    
+    this.loadSemestre()
+  
       
       //cree un interval pour recharger les salles toutes les 2 minutes
     this.idInetval = setInterval(() => {
@@ -159,12 +151,7 @@ export class RessourceManagerComponent {
         }
       
       );
-      this.loadSemestre().subscribe(
-        (data: any) => {
-        this.semestres = data
-        
-        }
-      );
+      this.loadSemestre();
 
       
 

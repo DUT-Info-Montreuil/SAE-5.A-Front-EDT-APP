@@ -25,10 +25,24 @@
     #eventTemplateCustom
     let-weekEvent="weekEvent"
     let-tooltipAppendToBody="tooltipAppendToBody">
-  <div class="cal-event text-center m-0 mb-0">
-    <div class="h-1/6">
-      {{ weekEvent.event.title}}
+  <div class="cal-event m-0 mb-0">
+    <div class="grid grid-cols-3 h-1/6">
+      <div>
+
+      </div>
+      <div class="text-center">
+        {{ weekEvent.event.title}}
+      </div>
+      <div>
+        <div class="mb-0.5 rounded-3xl place-items-end ml-auto justify-self-end text-indigo-100 transition-colors duration-150 bg-red-600 focus:shadow-outline hover:bg-red-600 ng-tns-c2656273316-0 max-h-[30px] max-w-[25px]" *ngIf="isInEditionMod()" role="button" (click)="removeCours(weekEvent.event)">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+          </svg>
+
+        </div>
+      </div>
     </div>
+
     <div class="h-3/6">
     </div>
     <div class="flex h-2/6 place-items-end">
@@ -91,13 +105,14 @@
     </div>
     </div>
     <div>
+
       <mat-form-field>
         <mat-label>groupe</mat-label>
-        <mat-select [(value)]="defaultSelectedGroupe" [(ngModel)]="selectedGroupe" (selectionChange)="getCoursGroupe(selectedGroupe); window.localStorage.setItem('currentIdGroupe',selectedGroupe.toString());">
+        <mat-select [(value)]="defaultSelectedGroupe" [(ngModel)]="selectedGroupe" (selectionChange)="getCoursGroupe(selectedGroupe); window.localStorage.setItem('currentIdGroupe',selectedGroupe.toString()); console.log(groupesList)">
           @for (groupe of groupesList; track groupe) {
             <mat-optgroup [label]="groupe.name">
             @for (subgroupe of groupe.subGroupes; track subgroupe){
-              <mat-option [value]="subgroupe.IdGroupe">{{subgroupe.Nom}}</mat-option>
+              <mat-option [value]="subgroupe.idGroupe">{{subgroupe.name}}</mat-option>
             }
             </mat-optgroup>
           }

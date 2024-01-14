@@ -10,7 +10,7 @@ import {
 import {CalendarEvent, CalendarEventTimesChangedEvent, CalendarView} from 'angular-calendar';
 import {getHours, isSameDay, isSameMonth, setHours, setMinutes} from 'date-fns';
 import {flatMap, map, share, Subject, Subscription, timer} from "rxjs";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Event} from "@angular/router";
 import {changePage} from "../../../main";
 import {HttpClient} from "@angular/common/http";
 import {DatePipe, formatDate} from "@angular/common";
@@ -48,14 +48,25 @@ function getDisplayDate() {
 
 function getDisplayGroupe() {
   let groupe = window.localStorage.getItem("currentIdGroupe")
-  if(groupe){
-    return Number(groupe)
+  try {
+    if(groupe){
+      return Number(groupe)
+    }
+    else {
+      return 1
+    }
   }
-  else {
+  catch(e){
     return 1
   }
 }
+interface MyEvent extends CalendarEvent {
+  idCours: string;
+}
 
+interface MyCalendarEventTimesChangedEvent extends CalendarEventTimesChangedEvent{
+  myEvent: MyEvent
+}
 @Component({
   selector: 'app-schedule',
   templateUrl: './schedule.component.html',
@@ -192,7 +203,7 @@ export class ScheduleComponent{
     const token = localStorage.getItem('token');
     const headers = { 'Authorization': `Bearer ${token}` , 'Content-Type': 'application/json'};
 
-    this.http.get('http://localhost:5050/groupe/getGroupeCours/'+idGroupe, {headers}).subscribe({
+    this.http.get('http://localhost:5050/groupe/getCoursGroupe/'+idGroupe, {headers}).subscribe({
       next: async (data: any) => {
         // console.log("data: " + JSON.stringify(data))
         this.loadingCalendar = true
@@ -216,11 +227,12 @@ export class ScheduleComponent{
       let heureDebutList = result.HeureDebut.split(':')
       let nombreHeureList = result.NombreHeure.split(':')
       let date = new Date(result.Jour);
-      let titre = await this.updateRessource(result.idCours)
+      let ressource = await this.updateRessource(result.idCours)
       bdEvent.push({
         start: setHours(setMinutes(date, heureDebutList[1]), heureDebutList[0]),
         end: setHours(setMinutes(date, Number(nombreHeureList[1]) + Number(heureDebutList[1])), Number(nombreHeureList[0]) + Number(heureDebutList[0])),
-        title: titre,
+        title: ressource[0].titre,
+        id: result.idCours,
         resizable: this.getResizable(),
         draggable: this.isInEditionMod()
       })
@@ -228,7 +240,7 @@ export class ScheduleComponent{
     return bdEvent
   }
 
-  updateRessource(idCours: Number) : Promise<string>{
+  updateRessource(idCours: Number) : Promise<any[]>{
     return new Promise((resolve, reject) => {
     let titre = "tota"
     const token = localStorage.getItem('token');
@@ -237,8 +249,7 @@ export class ScheduleComponent{
       next: (data: any) => {
         // console.log(JSON.stringify(data[0]))
         // console.log("topto: " +  data[0].titre)
-        titre = data[0].titre;
-        resolve(titre)
+        resolve(data)
       },
       error: (error: any) => {
         reject("toto")
@@ -255,8 +266,9 @@ export class ScheduleComponent{
                  event,
                  newStart,
                  newEnd,
-                 allDay,
+                 allDay
                }: CalendarEventTimesChangedEvent): void {
+    console.log(event.id)
     const externalIndex = this.externalEvents.indexOf(event);
     if (typeof allDay !== 'undefined') {
       event.allDay = allDay;
@@ -265,7 +277,20 @@ export class ScheduleComponent{
       this.externalEvents.splice(externalIndex, 1);
       this.events.push(event);
     }
-    event.start = newStart;
+    if(newStart){
+      if(newStart !== event.start){
+        this.deplacerCours(event.id, newStart)
+      }
+      else{
+        if (newEnd) {
+          if(newEnd !== event.end){
+            this.modifierCours(event.id, newStart, newEnd)
+          }
+          event.end = newEnd;
+        }
+      }
+      event.start = newStart;
+    }
     if (newEnd) {
       event.end = newEnd;
     }
@@ -274,7 +299,7 @@ export class ScheduleComponent{
       this.activeDayIsOpen = true;
     }
     this.events = [...this.events];
-    // console.log("titi")
+
   }
 
   externalDrop(event: CalendarEvent) {
@@ -324,6 +349,7 @@ export class ScheduleComponent{
       next: async (data: any) => {
         // console.log("data: " + JSON.stringify(data))
         this.groupesList = this.orderedGroupeList(data);
+        console.log(JSON.stringify(this.orderedGroupeList(data)))
       },
       error: (error: any) => {
         // console.log(error);
@@ -339,18 +365,78 @@ export class ScheduleComponent{
         listGroupe.push({
           idGroupe: groupe.IdGroupe,
           name: groupe.Nom,
-          subGroupes: []
+          subGroupes: this.getLowestSubGroupes(groupe.IdGroupe, data)
         })
-      }
-      else {
-        let parentGroupe = listGroupe.find(g => g.idGroupe === groupe.idGroupe_parent);
-        if(parentGroupe){
-          parentGroupe.subGroupes.push(groupe);
-        }
       }
     }
     return listGroupe;
   }
 
+  private getLowestSubGroupes(idGroupe: any, data: any[]): any[] {
+    let subGroupes: any[] = [];
+    for(let groupe of data){
+      if(groupe.idGroupe_parent === idGroupe){
+        let lowestSubGroupes = this.getLowestSubGroupes(groupe.IdGroupe, data);
+        if(lowestSubGroupes.length > 0) {
+          subGroupes.push(...lowestSubGroupes);
+        } else {
+          subGroupes.push({
+            idGroupe: groupe.IdGroupe,
+            name: groupe.Nom
+          });
+        }
+      }
+    }
+    return subGroupes;
+  }
+
+
   protected readonly window = window;
+
+  removeCours(event: CalendarEvent) {
+    const token = localStorage.getItem('token');
+    const headers = { 'Authorization': `Bearer ${token}` , 'Content-Type': 'application/json'};
+
+    this.http.delete('http://localhost:5050/cours/delete/'+event.id, {headers}).subscribe({
+      next: async (data: any) => {
+        delete this.events[this.events.indexOf(event)]
+        this.refreshCalendar.next()
+      },
+      error: (error: any) => {
+      }
+    });
+  }
+
+  private deplacerCours(id: string | number | undefined, date: Date) {
+    const token = localStorage.getItem('token');
+    const headers = { 'Authorization': `Bearer ${token}` , 'Content-Type': 'application/json'};
+    console.log(date.toLocaleDateString())
+    let body = {"HeureDebut":date.toLocaleTimeString(), "Jour": date.toLocaleDateString()}
+    this.http.put('http://localhost:5050/cours/deplacer/'+id, body,{headers}).subscribe({
+      next: async (data: any) => {
+        this.refreshCalendar.next()
+      },
+      error: (error: any) => {
+      }
+    });
+  }
+
+  private modifierCours(id: string | number | undefined, start: Date, end: Date) {
+    const token = localStorage.getItem('token');
+    const headers = { 'Authorization': `Bearer ${token}` , 'Content-Type': 'application/json'};
+    let diffInMs = end.getTime() - start.getTime();
+
+    let diffInSeconds = Math.floor(diffInMs / 1000);
+    let diffInMinutes = Math.floor(diffInSeconds / 60);
+    let diffInHours = Math.floor(diffInMinutes / 60);
+
+    let body = {"NombreHeure":diffInHours+":"+diffInMinutes%60+":"+diffInSeconds%60}
+    this.http.put('http://localhost:5050/cours/modifierCours/'+id, body,{headers}).subscribe({
+      next: async (data: any) => {
+        this.refreshCalendar.next()
+      },
+      error: (error: any) => {
+      }
+    });
+  }
 }

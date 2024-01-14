@@ -88,6 +88,7 @@ export class SidebarComponent {
     },
   ];
 
+
   get isSideBarOpen() {
       return this.isOpen ? "open" : "closed";
   }

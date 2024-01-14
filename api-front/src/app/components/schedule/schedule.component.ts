@@ -29,7 +29,7 @@ function getHoursMinutes(timeList: String[]) {
 
 function getDisplayDate() {
   try {
-    console.log("date: " + window.localStorage.getItem("calendarDateView"))
+    // console.log("date: " + window.localStorage.getItem("calendarDateView"))
     let dayview = window.localStorage.getItem("calendarDateView")
     if(dayview !== null){
       return new Date(dayview)
@@ -46,6 +46,16 @@ function getDisplayDate() {
 
 }
 
+function getDisplayGroupe() {
+  let groupe = window.localStorage.getItem("currentIdGroupe")
+  if(groupe){
+    return Number(groupe)
+  }
+  else {
+    return 1
+  }
+}
+
 @Component({
   selector: 'app-schedule',
   templateUrl: './schedule.component.html',
@@ -54,16 +64,13 @@ function getDisplayDate() {
 })
 
 export class ScheduleComponent{
-
-  selected: Date | null = new Date();
-
-
+  defaultSelectedGroupe: number = getDisplayGroupe();
+  selectedGroupe: number = getDisplayGroupe();
 
 
   view: CalendarView = CalendarView.Week;
 
   CalendarView = CalendarView;
-
   viewDate = getDisplayDate();
   timeList =  new Date().toLocaleTimeString().split(':')
   nowTime = getHoursMinutes(this.timeList);
@@ -73,9 +80,10 @@ export class ScheduleComponent{
   dayEndHour = Math.min(23, getHours(new Date()) + 5);
 
   refreshCalendar = new Subject<void>();
+  loadingCalendar: boolean = false;
 
   activeDayIsOpen: boolean = true;
-  coursList: any[] = []
+  groupesList: {idGroupe: any, name: any, subGroupes: any[]}[] = []
 
   ressource: string = "";
   filtreDatePicker = (d: Date | null): boolean => {
@@ -98,9 +106,15 @@ export class ScheduleComponent{
   events: CalendarEvent[] = [
   ];
 
+  droppedElement: any;
+
+
   constructor(private route: ActivatedRoute, private http: HttpClient, private elementRef: ElementRef) {
     getDisplayDate();
-    this.getCours();
+    getDisplayGroupe();
+    this.getGroupes();
+    this.getCoursGroupe(this.defaultSelectedGroupe);
+
     // setInterval(() => {
     //     const currentDate = new Date()
     //     this.nowTime = getHoursMinutes(new Date().toLocaleTimeString().split(':'));
@@ -154,7 +168,7 @@ export class ScheduleComponent{
 
 
   changeDay(date: any) {
-    console.log("picked: " + date)
+    // console.log("picked: " + date)
     this.viewDate = date;
   }
 
@@ -164,7 +178,7 @@ export class ScheduleComponent{
 
     this.http.get('http://localhost:5050/cours/get/null', {headers}).subscribe({
       next: async (data: any) => {
-        console.log("data: " + JSON.stringify(data))
+        // console.log("data: " + JSON.stringify(data))
         this.events = await this.jsonToEvent(data);
       },
       error: (error: any) => {
@@ -174,17 +188,21 @@ export class ScheduleComponent{
     });
   }
 
-  getCours() {
+  getCoursGroupe(idGroupe: number) {
     const token = localStorage.getItem('token');
     const headers = { 'Authorization': `Bearer ${token}` , 'Content-Type': 'application/json'};
 
-    this.http.get('http://localhost:5050/cours/get/all', {headers}).subscribe({
+    this.http.get('http://localhost:5050/groupe/getGroupeCours/'+idGroupe, {headers}).subscribe({
       next: async (data: any) => {
-        console.log("data: " + JSON.stringify(data))
+        // console.log("data: " + JSON.stringify(data))
+        this.loadingCalendar = true
         this.events = await this.jsonToEvent(data);
+        this.loadingCalendar = false
+        this.refreshCalendar.next()
       },
       error: (error: any) => {
         console.log(error);
+        this.events = [];
         return {}
       }
     });
@@ -193,7 +211,7 @@ export class ScheduleComponent{
     let bdEvent: CalendarEvent[] = []
     for (let result of results) {
       if (result != null) {
-        console.log("result: " + result)
+        // console.log("result: " + JSON.stringify(result))
       }
       let heureDebutList = result.HeureDebut.split(':')
       let nombreHeureList = result.NombreHeure.split(':')
@@ -217,11 +235,10 @@ export class ScheduleComponent{
     const headers = { 'Authorization': `Bearer ${token}` , 'Content-Type': 'application/json'};
     this.http.get('http://localhost:5050/ressource/get/'+idCours, {headers}).subscribe({
       next: (data: any) => {
-        console.log(JSON.stringify(data[0]))
-        console.log("topto: " +  data[0].titre)
+        // console.log(JSON.stringify(data[0]))
+        // console.log("topto: " +  data[0].titre)
         titre = data[0].titre;
         resolve(titre)
-
       },
       error: (error: any) => {
         reject("toto")
@@ -257,7 +274,7 @@ export class ScheduleComponent{
       this.activeDayIsOpen = true;
     }
     this.events = [...this.events];
-    console.log("titi")
+    // console.log("titi")
   }
 
   externalDrop(event: CalendarEvent) {
@@ -289,4 +306,51 @@ export class ScheduleComponent{
     console.log("event2: " + event.item.data.title)
     console.log("html2: " + event.dropPoint)
   }
+
+  private elementDroppedToEvent(elementDropped: any) {
+    this.events.push({
+        start: new Date('01/12/2024'),
+        title: elementDropped.title,
+        resizable: this.getResizable(),
+        draggable: this.isInEditionMod()
+      }
+    )
+  }
+  getGroupes() {
+    const token = localStorage.getItem('token');
+    const headers = { 'Authorization': `Bearer ${token}` , 'Content-Type': 'application/json'};
+
+    this.http.get('http://localhost:5050/groupe/getAll', {headers}).subscribe({
+      next: async (data: any) => {
+        // console.log("data: " + JSON.stringify(data))
+        this.groupesList = this.orderedGroupeList(data);
+      },
+      error: (error: any) => {
+        // console.log(error);
+        return {}
+      }
+    });
+  }
+
+  private orderedGroupeList(data: any[]) {
+    let listGroupe: {idGroupe: any, name: any, subGroupes: any[]}[] = []
+    for(let groupe of data){
+      if(!groupe.idGroupe_parent){
+        listGroupe.push({
+          idGroupe: groupe.IdGroupe,
+          name: groupe.Nom,
+          subGroupes: []
+        })
+      }
+      else {
+        let parentGroupe = listGroupe.find(g => g.idGroupe === groupe.idGroupe_parent);
+        if(parentGroupe){
+          parentGroupe.subGroupes.push(groupe);
+        }
+      }
+    }
+    return listGroupe;
+  }
+
+  protected readonly window = window;
 }

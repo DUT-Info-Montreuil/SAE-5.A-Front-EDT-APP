@@ -13,6 +13,8 @@ import {MatInputModule} from "@angular/material/input";
 import {MatCardModule} from "@angular/material/card";
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
 import {CdkDropList} from "@angular/cdk/drag-drop";
+import {MatSelectModule} from "@angular/material/select";
+import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 @NgModule({
   declarations: [
     DashboardComponent,
@@ -35,7 +37,9 @@ import {CdkDropList} from "@angular/cdk/drag-drop";
     MatInputModule,
     MatCardModule,
     MatAutocompleteModule,
-    CdkDropList
+    CdkDropList,
+    MatSelectModule,
+    MatProgressSpinnerModule
   ]
 })
 export class DashboardModule { }

@@ -143,14 +143,7 @@ export class RessourceManagerComponent {
       
       //cree un interval pour recharger les salles toutes les 2 minutes
     this.idInetval = setInterval(() => {
-      this.loadRessources().subscribe(
-        (data: any) => {
-        this.ressources = data
-        this.searchRessources = data;
-        
-        }
-      
-      );
+      this.loadRessources();
       this.loadSemestre();
 
       

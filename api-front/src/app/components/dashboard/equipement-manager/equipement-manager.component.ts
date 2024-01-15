@@ -14,6 +14,7 @@ import { validateEvents } from 'angular-calendar/modules/common/util/util';
 })
 export class EquipementManagerComponent {
   allEquipements: any ;
+  showModalCreateEquipement : boolean = false;
   
   
   constructor( private http: HttpClient ) {}
@@ -32,11 +33,26 @@ export class EquipementManagerComponent {
   chargerEquipement(id: any):any {
   }
 
-  toggleCreateEquipement():any {}
+  toggleCreateEquipement():any {
+    this.showModalCreateEquipement = !this.showModalCreateEquipement;
+  }
 
 
   ngOnInit(): void {
     this.loadEquipements();
+  } 
+
+
+  createEquipement():any {
+    const token = localStorage.getItem('token');
+    const headers = { 'Authorization': `Bearer ${token}` };
+    const nom = document.getElementById("inputNomEquipement") as HTMLInputElement;
+    console.log(nom.value)
+    this.http.post("http://localhost:5050/equipement/add", {"data" : [{"Nom" : nom.value}]}, { headers }).subscribe((res: any) => 
+    {
+      this.loadEquipements();
+      
+    });
   }
 
 }

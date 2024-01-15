@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import {CalendarEvent, CalendarEventTimesChangedEvent, CalendarView} from 'angular-calendar';
 import {getHours, isSameDay, isSameMonth, setHours, setMinutes} from 'date-fns';
-import {flatMap, map, share, Subject, Subscription, timer} from "rxjs";
+import {map, Observable, share, startWith, Subject, Subscription, timer} from "rxjs";
 import {ActivatedRoute, Event} from "@angular/router";
 import {changePage} from "../../../main";
 import {HttpClient} from "@angular/common/http";
@@ -18,9 +18,15 @@ import {SidebarComponent} from "../sidebar/sidebar.component";
 import {da} from "date-fns/locale";
 import {resolve} from "@angular/compiler-cli";
 import {CdkDragDrop} from "@angular/cdk/drag-drop";
+import {FormControl} from "@angular/forms";
 
 
-
+function getFullProfString(prof: Prof | null){
+  if(!prof){
+    return "";
+  }
+  return prof.FirstName +' '+ prof.LastName + ' (' + prof.Initiale + ')';
+}
 
 function getHoursMinutes(timeList: String[]) {
   timeList.pop();
@@ -61,11 +67,20 @@ function getDisplayGroupe() {
   }
 }
 interface MyEvent extends CalendarEvent {
-  idCours: string;
+  initialeProf: string;
 }
 
 interface MyCalendarEventTimesChangedEvent extends CalendarEventTimesChangedEvent{
   myEvent: MyEvent
+}
+
+export interface Prof {
+  idProf: number,
+  Initiale: string,
+  idSalle: number,
+  FirstName: string,
+  LastName: string,
+  idUtilisateur: number
 }
 @Component({
   selector: 'app-schedule',
@@ -80,21 +95,26 @@ export class ScheduleComponent{
 
 
   view: CalendarView = CalendarView.Week;
-
+  profSelected: Prof | null = null;
+  assignProfSelected: Prof | null = null;
   CalendarView = CalendarView;
   viewDate = getDisplayDate();
   timeList =  new Date().toLocaleTimeString().split(':')
   nowTime = getHoursMinutes(this.timeList);
+  assignProfModal : boolean = false;
   //
   dayStartHour = Math.max(0, getHours(new Date()) - 6);
 
   dayEndHour = Math.min(23, getHours(new Date()) + 5);
-
+  eventOfModal: CalendarEvent | null =  null;
   refreshCalendar = new Subject<void>();
   loadingCalendar: boolean = false;
 
   activeDayIsOpen: boolean = true;
-  groupesList: {idGroupe: any, name: any, subGroupes: any[]}[] = []
+  groupesList: {idGroupe: any, name: any, subGroupes: any[]}[] = [];
+  profList: Prof[] = [];
+  filteredProfList: Observable<Prof[]>;
+  searchBarControl = new FormControl<string | Prof>('');
 
   ressource: string = "";
   filtreDatePicker = (d: Date | null): boolean => {
@@ -121,10 +141,18 @@ export class ScheduleComponent{
 
 
   constructor(private route: ActivatedRoute, private http: HttpClient, private elementRef: ElementRef) {
+    this.geAllProf();
     getDisplayDate();
     getDisplayGroupe();
     this.getGroupes();
     this.getCoursGroupe(this.defaultSelectedGroupe);
+    this.filteredProfList = this.searchBarControl.valueChanges.pipe(
+      startWith(''),
+      map(value => {
+        const option = typeof value === 'string' ? value : getFullProfString(value);
+        return option ? this._filter(option as string) : this.profList.slice();
+      }),
+    );
 
     // setInterval(() => {
     //     const currentDate = new Date()
@@ -219,7 +247,7 @@ export class ScheduleComponent{
     });
   }
   async jsonToEvent(results: any[]) {
-    let bdEvent: CalendarEvent[] = []
+    let bdEvent: MyEvent[] = []
     for (let result of results) {
       if (result != null) {
         // console.log("result: " + JSON.stringify(result))
@@ -228,13 +256,15 @@ export class ScheduleComponent{
       let nombreHeureList = result.NombreHeure.split(':')
       let date = new Date(result.Jour);
       let ressource = await this.updateRessource(result.idCours)
+      //let prof = await  this.getProfCours(result.idCours)
       bdEvent.push({
         start: setHours(setMinutes(date, heureDebutList[1]), heureDebutList[0]),
         end: setHours(setMinutes(date, Number(nombreHeureList[1]) + Number(heureDebutList[1])), Number(nombreHeureList[0]) + Number(heureDebutList[0])),
         title: ressource[0].titre,
         id: result.idCours,
         resizable: this.getResizable(),
-        draggable: this.isInEditionMod()
+        draggable: this.isInEditionMod(),
+        initialeProf: "AR"
       })
     }
     return bdEvent
@@ -259,6 +289,7 @@ export class ScheduleComponent{
   }
 
   addProf(event: Event){
+    this.assignProfModal = true;
     console.log("addprof");
   }
 
@@ -439,4 +470,107 @@ export class ScheduleComponent{
       }
     });
   }
+
+
+  geAllProf(){
+    const token = localStorage.getItem('token');
+    const headers = { 'Authorization': `Bearer ${token}` , 'Content-Type': 'application/json'};
+
+    this.http.get('http://localhost:5050/utilisateurs/getProfE', {headers}).subscribe({
+      next: async (data: any) => {
+        console.log("data: " + JSON.stringify(data))
+       this.profList = data;
+      },
+      error: (error: any) => {
+        console.log(error);
+        this.profList = [{'idProf':0,
+          'Initiale':"",
+          'idSalle':0,
+          'FirstName':"",
+          'LastName':"",
+          'idUtilisateur':0}];
+      }
+    });
+  }
+
+  displayInit(prof: Prof): string {
+    let fullProf = getFullProfString(prof)
+    return prof && fullProf ? fullProf : '';
+  }
+
+
+  private _filter(initiale: string) {
+    console.log("initial:" + typeof initiale)
+    const filterValue = initiale?.toLowerCase();
+
+    return this.profList.filter(option => getFullProfString(option).toLowerCase().includes(filterValue));
+  }
+
+  setProfSelected(value: Prof | null) {
+    if(value){
+      this.profSelected = value;
+    }
+    else{
+      this.profSelected = null;
+    }
+    console.log('value:'+ JSON.stringify(value))
+
+  }
+
+  getFullProfString(prof: Prof | null){
+    if(!prof){
+      return "";
+    }
+    return prof.FirstName +' '+ prof.LastName + ' (' + prof.Initiale + ')';
+  }
+
+
+  setAssignProfSelected(value: Prof | null){
+    if(value){
+      this.assignProfSelected = value;
+    }
+    else{
+      this.assignProfSelected = null;
+    }
+  }
+
+  assignerProf(){
+    const token = localStorage.getItem('token');
+    const headers = { 'Authorization': `Bearer ${token}` , 'Content-Type': 'application/json'};
+
+    let body = {"idProf":this.assignProfSelected?.idProf};
+
+    this.http.put('http://localhost:5050/cours/assignerProf/'+this.eventOfModal?.id, body,{headers}).subscribe({
+      next: async (data: any) => {
+        this.refreshCalendar.next();
+      },
+      error: (error: any) => {
+      }
+    })
+  }
+  initialProfCours: any = ""
+  getProfCours(id: number): Promise<any[]> {
+    return new Promise((resolve, reject) => {
+      const token = localStorage.getItem('token');
+      const headers = {'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json'};
+
+      const timeout = setTimeout(() => {
+        reject(new Error('Request timed out'));
+      }, 1000);
+
+      this.http.get('http://localhost:5050/cours/getProfCours/' + id, {headers}).subscribe({
+        next: async (data: any) => {
+          clearTimeout(timeout);
+          resolve(data)
+          console.log("toto")
+        },
+        error: (error: any) => {
+          clearTimeout(timeout);
+          reject(error)
+        },
+      })
+    });
+  }
+
+  protected readonly JSON = JSON;
 }

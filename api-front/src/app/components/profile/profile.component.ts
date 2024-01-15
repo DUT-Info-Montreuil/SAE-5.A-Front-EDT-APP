@@ -8,26 +8,65 @@ import { HttpClient } from '@angular/common/http';
 })
 export class ProfileComponent {
 
-    user: any = {};
-    role :any = {};
+    user = {
+      FirstName: '',
+      LastName: '',
+      Username: '',
+      idUtilisateur: '',
+      role: {
+        bureau: '',
+        id: '',
+        initiale: '',
+        type: '',
+        groupe: '',
+      }
+    };
+    //role :any = {};
+    monthlyWorkedHours: any = {};
     
     constructor(private http: HttpClient) { 
-        this.getLoggedUser();
+      this.getLoggedUser().then((data: any) => {
+        this.user = data;
+        console.log(this.user);
+        this.getMonthlyWorkedHours();
+      }
+      );
+        
+        //this.getMonthlyWorkedHours();
     }
 
 
-    getLoggedUser(): any {
+    async getLoggedUser(): Promise<void> {
+      return new Promise<void>((resolve, reject) => { 
         const token = localStorage.getItem('token');
         const headers = { 'Authorization': `Bearer ${token}` };
         this.http.get('http://localhost:5050/utilisateurs/getLoggedUser', { headers }).subscribe({
           next: (data: any) => {
-            this.user = data;
-            this.role = data.role;
-            console.log(data);
+            resolve(data);
           },
           error: (error: any) => {
             console.log(error);
           }
         });
+      });
+        
       }
+
+  getMonthlyWorkedHours(): any {
+    const token = localStorage.getItem('token');
+    const headers = { 'Authorization': `Bearer ${token}` };
+    const id = this.user.role.id;
+    const body = { 
+      mois: "2024-01"
+     };
+    this.http.post('http://localhost:5050/utilisateurs/getTeacherHoursInMonth/' + id, body, { headers }).subscribe({
+      next: (data: any) => {
+        this.monthlyWorkedHours = data;
+        console.log("data" + data);
+      },
+      error: (error: any) => {
+        console.log(error);
+      }
+    });
+  }
 }

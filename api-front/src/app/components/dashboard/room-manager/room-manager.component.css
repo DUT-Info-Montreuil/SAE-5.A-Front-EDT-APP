@@ -1,10 +1,6 @@
-#roomCoponant {
-  
-  margin-right: 30cm;
-  margin-left: 10px;
-  
-  padding: 20px;
-  border: 1px solid #ffffff;
-  border-radius: 5px;
-  background-color: #fff;
+
+
+.cross{
+  height: 30px;
+  width: 30px;
 }

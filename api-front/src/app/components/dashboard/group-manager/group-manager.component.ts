@@ -21,7 +21,29 @@ export class GroupManagerComponent {
   ModalCreateGroup : boolean = false;
   showModalModifGroupe : boolean = false;
   idModifGroupe : any = 0;
+  showSuprGroup : boolean = false;
+  idSuprGroup : any = 0;
+  NameSuprGroup : any ;
 
+  delGroup(){
+    const token = localStorage.getItem('token');
+    const headers = { 'Authorization': `Bearer ${token}` };
+    this.http.delete("http://localhost:5050/groupe/delete/" + this.idSuprGroup, { headers }).subscribe((res: any) => 
+    {
+      this.loadGroups();
+    });
+
+
+  }
+
+  toggleSuprGroup(id? : any){
+    this.showSuprGroup = !this.showSuprGroup;
+    if (this.showSuprGroup){
+      this.idSuprGroup = id;
+      this.NameSuprGroup = this.allGroups.find((g : any) => g.IdGroupe == id).Nom;
+    }
+
+  }
 
 
 
@@ -58,7 +80,11 @@ export class GroupManagerComponent {
 }
 
 toggleModalModifGroupe(){
-  this.showModalModifGroupe = !this.showModalModifGroupe;
+  if(this.showSuprGroup == false){
+    this.showModalModifGroupe = !this.showModalModifGroupe;
+
+  }
+  
 }
 
 ngOnInit(): void {

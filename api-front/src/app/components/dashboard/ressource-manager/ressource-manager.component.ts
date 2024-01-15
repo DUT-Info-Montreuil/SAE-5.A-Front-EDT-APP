@@ -21,6 +21,31 @@ export class RessourceManagerComponent {
   showModalCreateRessource = false;
   showModalModifressource = false;
   idChangeRessource : any;
+  showSuprRessource = false;
+  idSuprRessource : any;
+  NameSuprRessource : any;
+
+
+
+  delRessource(){
+    const token = localStorage.getItem('token');
+    const headers = { 'Authorization': `Bearer ${token}` };
+    return this.http.delete('http://localhost:5050/ressource/delete/'+this.idSuprRessource , {headers}).subscribe(()=> { 
+      this.loadRessources() });
+  }
+
+
+  toggleSuprRessource(id? : any){
+    this.showSuprRessource = !this.showSuprRessource;
+    if (this.showSuprRessource){
+      this.idSuprRessource = id;
+      const ressource : any = this.ressources.find((r : any) => r.idressource == id);
+      this.NameSuprRessource = ressource.titre;
+    }
+    
+
+
+  }
 
 
   toggleCreateRessource(){
@@ -31,11 +56,17 @@ export class RessourceManagerComponent {
   }
 
   toggleModalModifRessource(){
+    if(this.showSuprRessource==false){
     this.showModalModifressource = !this.showModalModifressource;
+    }
+    
   }
 
   showModifRessource(){
+    if(this.showSuprRessource==false){
     this.showModalModifressource = true;
+
+    }
 
   }
 

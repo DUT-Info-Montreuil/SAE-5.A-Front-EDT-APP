@@ -18,11 +18,30 @@ export class SemestreComponent {
   showModalCreateSemestre : boolean = false;
   showModalModifSemestre : boolean = false;
   idChangeSemestre : any;
+  showSuprSemestre : boolean = false;
+  idSuprSemestre : any;
+  NameSuprSemestre : any;
 
   constructor( private http: HttpClient ) {}
 
 
+  delSemestre(){
 
+
+  }
+
+
+  toggleSuprSemestre(id? : any){
+    this.showSuprSemestre = !this.showSuprSemestre;
+    if (this.showSuprSemestre){
+      this.idSuprSemestre = id;
+      const s : any = this.allSemestres.find((r : any) => r.IdSemestre == id);
+      this.NameSuprSemestre = s.Numero;
+    }
+
+
+
+  }
 
   loadSemestre() {
     const token = localStorage.getItem('token');
@@ -79,7 +98,11 @@ export class SemestreComponent {
   }
 
   toggleModalModifSemestre(){
-    this.showModalModifSemestre = !this.showModalModifSemestre;
+    if (this.showSuprSemestre == false){
+      this.showModalModifSemestre = !this.showModalModifSemestre;
+
+    }
+
   }
 
   ngOnInit(): void {

@@ -21,19 +21,43 @@ export class RoomManagerComponent implements OnInit, AfterViewInit{
   idItervalsearchSalle : any;
   searchRoom : any;
   idSalle : any;
+  showModalSuprSalle = false;
+  idSuprSalle : any;
+  NameSuprSalle : any;
   @ViewChild('inputNomChangeRoom', { static: true }) inputNomChangeRoom! : ElementRef;
   
+  delRoom(){
+    const token = localStorage.getItem('token');
+    const headers = { 'Authorization': `Bearer ${token}` };
+    this.http.delete('http://localhost:5050/salle/delete/'+this.idSuprSalle, { headers }).subscribe(() => { this.loadSalles().subscribe((data : any) => {this.searchRoom =  data ; this.salles = data; });});
+
+
+  }
+
+
+  toggleSuprSalle(id? : any){
+
+    this.showModalSuprSalle = !this.showModalSuprSalle;
+    if (this.showModalSuprSalle) {
+      this.idSuprSalle = id;
+      this.NameSuprSalle = this.salles.filter((salle: any) => {return salle.idSalle == this.idSuprSalle})[0].Numero;
+
+    }
+  }
+
+
   toggleModal(){
     this.showModal = !this.showModal;
   }
  
   toggleModalModifSalle(id : any){
-    console.log("id : "+id);
+    if(this.showModalSuprSalle != true){
     this.showModalModifSalle = !this.showModalModifSalle;
     if (this.showModalModifSalle) {
       this.chargeRoom(id);
     }
   }
+}
 
   closeModalModifSalle() {
     this.showModalModifSalle = false;

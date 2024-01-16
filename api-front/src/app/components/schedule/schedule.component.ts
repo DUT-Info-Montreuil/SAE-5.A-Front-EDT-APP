@@ -178,8 +178,8 @@ export class ScheduleComponent{
 
 
 
-  getResizable() {
-    if (this.isInEditionMod()) {
+  async getResizable() {
+    if (await this.isInEditionMod()) {
       return {
         afterEnd: true,
         beforeStart: true
@@ -189,9 +189,9 @@ export class ScheduleComponent{
     return {}
   }
 
-  isInEditionMod() {
-
-    return this.route.snapshot.component?.name == "_ScheduleEditComponent"
+  async isInEditionMod() {
+    let role = await this.getRole()
+    return role === "Administrateur" || role === "Manager"
   }
   eventTimesChanged({
                       event,
@@ -200,7 +200,6 @@ export class ScheduleComponent{
                     }: CalendarEventTimesChangedEvent): void {
     event.start = newStart;
     event.end = newEnd;
-    this.refreshCalendar.next()
   }
 
 
@@ -237,7 +236,6 @@ export class ScheduleComponent{
         this.loadingCalendar = true
         this.events = await this.jsonToEvent(data);
         this.loadingCalendar = false
-        this.refreshCalendar.next()
       },
       error: (error: any) => {
         console.log(error);
@@ -256,15 +254,18 @@ export class ScheduleComponent{
       let nombreHeureList = result.NombreHeure.split(':')
       let date = new Date(result.Jour);
       let ressource = await this.updateRessource(result.idCours)
-      //let prof = await  this.getProfCours(result.idCours)
+      let prof = await this.getProfCours(result.idCours)
+      let resizable = await this.getResizable()
+
+      let draggable = await this.isInEditionMod()
       bdEvent.push({
         start: setHours(setMinutes(date, heureDebutList[1]), heureDebutList[0]),
         end: setHours(setMinutes(date, Number(nombreHeureList[1]) + Number(heureDebutList[1])), Number(nombreHeureList[0]) + Number(heureDebutList[0])),
         title: ressource[0].titre,
         id: result.idCours,
-        resizable: this.getResizable(),
-        draggable: this.isInEditionMod(),
-        initialeProf: "AR"
+        resizable: resizable,
+        draggable: draggable,
+        initialeProf: prof[0].Initiale
       })
     }
     return bdEvent
@@ -363,12 +364,14 @@ export class ScheduleComponent{
     console.log("html2: " + event.dropPoint)
   }
 
-  private elementDroppedToEvent(elementDropped: any) {
+  private async elementDroppedToEvent(elementDropped: any) {
+    let resizable = await this.getResizable()
+    let draggable = await this.isInEditionMod()
     this.events.push({
         start: new Date('01/12/2024'),
         title: elementDropped.title,
-        resizable: this.getResizable(),
-        draggable: this.isInEditionMod()
+        resizable: resizable,
+        draggable: draggable
       }
     )
   }
@@ -431,7 +434,6 @@ export class ScheduleComponent{
     this.http.delete('http://localhost:5050/cours/delete/'+event.id, {headers}).subscribe({
       next: async (data: any) => {
         delete this.events[this.events.indexOf(event)]
-        this.refreshCalendar.next()
       },
       error: (error: any) => {
       }
@@ -445,7 +447,6 @@ export class ScheduleComponent{
     let body = {"HeureDebut":date.toLocaleTimeString(), "Jour": date.toLocaleDateString()}
     this.http.put('http://localhost:5050/cours/deplacer/'+id, body,{headers}).subscribe({
       next: async (data: any) => {
-        this.refreshCalendar.next()
       },
       error: (error: any) => {
       }
@@ -464,7 +465,6 @@ export class ScheduleComponent{
     let body = {"NombreHeure":diffInHours+":"+diffInMinutes%60+":"+diffInSeconds%60}
     this.http.put('http://localhost:5050/cours/modifierCours/'+id, body,{headers}).subscribe({
       next: async (data: any) => {
-        this.refreshCalendar.next()
       },
       error: (error: any) => {
       }
@@ -542,7 +542,6 @@ export class ScheduleComponent{
 
     this.http.put('http://localhost:5050/cours/assignerProf/'+this.eventOfModal?.id, body,{headers}).subscribe({
       next: async (data: any) => {
-        this.refreshCalendar.next();
       },
       error: (error: any) => {
       }
@@ -554,23 +553,35 @@ export class ScheduleComponent{
       const token = localStorage.getItem('token');
       const headers = {'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json'};
 
-      const timeout = setTimeout(() => {
-        reject(new Error('Request timed out'));
-      }, 1000);
 
       this.http.get('http://localhost:5050/cours/getProfCours/' + id, {headers}).subscribe({
         next: async (data: any) => {
-          clearTimeout(timeout);
           resolve(data)
           console.log("toto")
         },
         error: (error: any) => {
-          clearTimeout(timeout);
           reject(error)
         },
       })
     });
   }
 
-  protected readonly JSON = JSON;
+  getRole() {
+    return new Promise((resolve, reject) => {
+      const token = localStorage.getItem('token');
+      const headers = {'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json'};
+
+
+      this.http.get('http://localhost:5050/utilisateurs/getLoggedUser', {headers}).subscribe({
+        next: async (data: any) => {
+          console.log("data: " + JSON.stringify(data))
+          resolve(data.role.type)
+          console.log("toto")
+        },
+        error: (error: any) => {
+          reject(error)
+        },
+      })
+    });
+  }
 }

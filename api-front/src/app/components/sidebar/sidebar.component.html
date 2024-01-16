@@ -1,6 +1,6 @@
 <script src="../dashboard/dashboard.component.ts"></script>
 <div class="grid min-h-100hv grid-cols-[auto_1fr] justify-center gap-4 z-50">
-  <aside class="self-start sticky top-0 col-span-1 min-h-fit">
+  <aside class="self-start top-0 col-span-1 min-h-fit bg-transparent relative">
     <div role="button" class=" mt-14 place-items-center flex-col flex-shrink-0 rounded-r-full text-indigo-100 max-w-[56px] max-h-[50px] p-4 shadow-xl shadow-blue-gray-900/5 transition-colors duration-150 bg-blue-500 focus:shadow-outline hover:bg-blue-600" (click)="toggleSideBar()" [@openClose2]="isSideBarOpen">
         <div role="button" >
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -107,7 +107,7 @@
       </div>
     </div>
   </aside>
-  <main class="m-4">
+  <main class="m-4 overflow-auto">
     <router-outlet (activate)="onRouterOutletActivate($event)"></router-outlet>
   </main>
 

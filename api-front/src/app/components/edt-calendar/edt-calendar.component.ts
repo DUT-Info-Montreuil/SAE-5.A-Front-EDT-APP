@@ -6,7 +6,12 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 
-import {CalendarEvent, CalendarEventTitleFormatter, CalendarView} from 'angular-calendar';
+import {
+  CalendarEvent,
+  CalendarEventTimesChangedEvent,
+  CalendarEventTitleFormatter,
+  CalendarView
+} from 'angular-calendar';
 import { WeekViewHourSegment } from 'calendar-utils';
 import { fromEvent } from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
@@ -108,6 +113,8 @@ export class EdtCalendarComponent {
       id: this.events.length,
       title: 'New event',
       start: segment.date,
+      draggable: this.isInEditMode,
+      resizable: this.getResizable(),
       meta: {
         tmpEvent: true,
       },
@@ -167,11 +174,6 @@ export class EdtCalendarComponent {
     // console.log("dateString: " + date)
     // console.log("new date" + dateList[1]+"/"+dateList[0]+"/"+dateList[2])
     window.localStorage.setItem("calendarDateView", dateList[1]+"/"+dateList[0]+"/"+dateList[2])
-  }
-
-  private refresh() {
-    this.events = [...this.events];
-    this.cdr.detectChanges();
   }
 
   closeOpenMonthViewDay() {
@@ -252,8 +254,99 @@ export class EdtCalendarComponent {
   }
 
 
+  eventChanged({
+                 event,
+                 newStart,
+                 newEnd,
+                 allDay
+               }: CalendarEventTimesChangedEvent): void {
+    console.log("log: " + this.isInEditMode)
+    console.log(event.id)
+    const externalIndex = this.events.indexOf(event);
+    if (typeof allDay !== 'undefined') {
+      event.allDay = allDay;
+    }
+    if (externalIndex > -1) {
+      this.events.splice(externalIndex, 1);
+      this.events.push(event);
+    }
+    if(newStart){
+      if(newStart !== event.start){
+        this.deplacerCours(event.id, newStart)
+      }
+      else{
+        if (newEnd) {
+          if(newEnd !== event.end){
+            this.modifierCours(event.id, newStart, newEnd)
+          }
+          event.end = newEnd;
+        }
+      }
+      event.start = newStart;
+    }
+    if (newEnd) {
+      event.end = newEnd;
+    }
+    if (this.view === 'month') {
+      this.viewDate = newStart;
+      this.activeDayIsOpen = true;
+    }
+    this.events = [...this.events];
 
+  }
+
+  private modifierCours(id: string | number | undefined, start: Date, end: Date) {
+    const token = localStorage.getItem('token');
+    const headers = { 'Authorization': `Bearer ${token}` , 'Content-Type': 'application/json'};
+    let diffInMs = end.getTime() - start.getTime();
+
+    let diffInSeconds = Math.floor(diffInMs / 1000);
+    let diffInMinutes = Math.floor(diffInSeconds / 60);
+    let diffInHours = Math.floor(diffInMinutes / 60);
+
+    let body = {"NombreHeure":diffInHours+":"+diffInMinutes%60+":"+diffInSeconds%60}
+    this.http.put('http://localhost:5050/cours/modifierCours/'+id, body,{headers}).subscribe({
+      next: (data: any) => {
+      },
+      error: (error: any) => {
+      }
+    });
+  }
+
+  private deplacerCours(id: string | number | undefined, date: Date) {
+    const token = localStorage.getItem('token');
+    const headers = { 'Authorization': `Bearer ${token}` , 'Content-Type': 'application/json'};
+    console.log(date.toLocaleDateString())
+    let body = {"HeureDebut":date.toLocaleTimeString(), "Jour": date.toLocaleDateString()}
+    this.http.put('http://localhost:5050/cours/deplacer/'+id, body,{headers}).subscribe({
+      next: (data: any) => {
+      },
+      error: (error: any) => {
+      }
+    });
+  }
+  getResizable() {
+    if (this.isInEditMode) {
+      return {
+        afterEnd: true,
+        beforeStart: true
+
+      }
+    }
+    return {}
+  }
+
+  setEditMod(isInEditMod: boolean) {
+    this.isInEditMode=isInEditMod;
+    for (let oneEvent of this.events){
+      oneEvent.draggable = isInEditMod;
+      oneEvent.resizable = this.getResizable();
+    }
+
+  }
 }
+
+
 
 interface customeCoursEvent extends CalendarEvent {
 

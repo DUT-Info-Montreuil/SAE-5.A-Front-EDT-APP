@@ -1,7 +1,7 @@
 
 <div
     class="justify-self-end self-center text-white bg-red-500 hover:bg-red-600 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm w-fit h-fit px-5 py-4 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800 outline-none m-1"
-role="button" *ngIf="isInEditMode" (click)="isInEditMode=false">
+role="button" *ngIf="isInEditMode" (click)="setEditMod(false)">
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
     <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
   </svg>
@@ -9,7 +9,7 @@ role="button" *ngIf="isInEditMode" (click)="isInEditMode=false">
 </div>
 <div
     class="justify-self-end self-center font-medium w-fit h-fit px-5 py-4 border  text-sm rounded-lg outline-none m-1 text-white bg-gray-500 dark:hover:bg-gray-700 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 dark:bg-gray-500 dark:focus:ring-gray-700 dark:border-gray-400"
-    role="button" *ngIf="!isInEditMode" (click)="isInEditMode=true">
+    role="button" *ngIf="!isInEditMode" (click)="setEditMod(true)">
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
     <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
   </svg>
@@ -180,6 +180,7 @@ role="button" *ngIf="isInEditMode" (click)="isInEditMode=false">
       *ngSwitchCase="CalendarView.Week"
       [viewDate]="viewDate"
       [events]="events"
+      (eventTimesChanged)="eventChanged($event)"
       [hourSegmentTemplate]="weekViewHourSegmentTemplate"
       (hourSegmentClicked)="setViewClick(CalendarView.Day, $event.date)"
       (dayHeaderClicked)="setViewClick(CalendarView.Day, $event.day.date)"
@@ -196,6 +197,7 @@ role="button" *ngIf="isInEditMode" (click)="isInEditMode=false">
         [hourSegmentTemplate]="weekViewHourSegmentTemplate"
         [dayStartHour]="dayStartHour"
         [dayEndHour]="dayEndHour"
+        (eventTimesChanged)="eventChanged($event)"
         (hourSegmentClicked)="setViewClick(CalendarView.Week, $event.date)"
     >
     </mwl-calendar-day-view>

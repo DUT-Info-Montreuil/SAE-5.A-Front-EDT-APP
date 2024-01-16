@@ -26,7 +26,11 @@ export class SemestreComponent {
 
 
   delSemestre(){
-
+    const token = localStorage.getItem('token');
+    const header = { 'Authorization': `Bearer ${token}` };
+    this.http.delete('http://localhost:5050/semestre/delete/'+this.idSuprSemestre,{ headers: header }).subscribe((res: any) => {
+      this.loadSemestre();
+    });
 
   }
 
@@ -35,7 +39,9 @@ export class SemestreComponent {
     this.showSuprSemestre = !this.showSuprSemestre;
     if (this.showSuprSemestre){
       this.idSuprSemestre = id;
+      
       const s : any = this.allSemestres.find((r : any) => r.IdSemestre == id);
+      
       this.NameSuprSemestre = s.Numero;
     }
 
@@ -69,9 +75,12 @@ export class SemestreComponent {
 
 
   chargerRessource(id : any){
+    
     this.toggleModalModifSemestre();
-    //time out pour attendre que le modal soit afficher
-    this.idChangeSemestre = id;
+
+    if(this.showSuprSemestre == false){
+
+      this.idChangeSemestre = id;
      setTimeout(() => {
      
       const s : any = this.allSemestres.find((r : any) => r.IdSemestre == id);
@@ -84,6 +93,9 @@ export class SemestreComponent {
 
 
      } , 0  );
+    }
+    //time out pour attendre que le modal soit afficher
+    
     
   }
 
@@ -108,6 +120,11 @@ export class SemestreComponent {
   ngOnInit(): void {
     this.loadSemestre();
   }
+
+
+
+
+  
 
   
 

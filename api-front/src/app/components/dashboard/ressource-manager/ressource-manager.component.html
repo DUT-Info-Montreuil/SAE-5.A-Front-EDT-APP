@@ -86,7 +86,7 @@
           </div>
           <label for="countries" class="block mb-2 text-sm font-medium text-gray-900 ">selectioner un semestre </label>
                 <select id="ressourceSelect" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
-                <option selected>selectioner un semestre</option>
+                <option hidden>selectioner un semestre</option>
                 <option *ngFor="let s of semestres" value="{{s.IdSemestre}}">{{s.Numero}}</option>
 
                 </select>
@@ -145,7 +145,7 @@
           </div>
           <label for="countries" class="block mb-2 text-sm font-medium text-gray-900 ">selectioner un semestre </label>
                 <select id="modifRessourceSelect" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
-                <option selected>selectioner un semestre</option>
+                
                 <option *ngFor="let s of semestres" value="{{s.IdSemestre}}">{{s.Numero}}</option>
 
                 </select>

@@ -115,8 +115,8 @@ export class RessourceManagerComponent {
       const ColorRessource : any  = document.getElementById('inputColorRessource')
       const token = localStorage.getItem('token');
       const headers = { 'Authorization': `Bearer ${token}` };
-      const body = { Titre: nomRessource.value, Numero: numeroRessource.value, NbrHeureSemestre: nbrHeureRessource.value, IdSemestre: ressourceSelect.value, CodeCouleur: ColorRessource.value };
-      return this.http.post('http://localhost:5050/ressource/add' ,body ,  {headers} ).subscribe(()=> { this.loadRessources().subscribe((data : any) => { this.ressources = data , this.searchRessources = data })});
+      const body = { Titre: nomRessource.value, Numero: numeroRessource.value, NbrHeureSemestre: this.intToTime(nbrHeureRessource.value), IdSemestre: parseInt(ressourceSelect.value), CodeCouleur: ColorRessource.value };
+      return this.http.post('http://localhost:5050/ressource/add' ,body ,  {headers} ).subscribe(()=> { this.loadRessources()});
     
     
 
@@ -132,7 +132,7 @@ export class RessourceManagerComponent {
     const ColorRessource : any  = document.getElementById('modifColorRessource')
     const token = localStorage.getItem('token');
     const headers = { 'Authorization': `Bearer ${token}` };
-      const body = { Titre: nomRessource.value, Numero: numeroRessource.value, NbrHeureSemestre: nbrHeureRessource.value, IdSemestre: ressourceSelect.value, CodeCouleur: ColorRessource.value };
+      const body = { Titre: nomRessource.value, Numero: numeroRessource.value, NbrHeureSemestre: this.intToTime(nbrHeureRessource.value), IdSemestre: ressourceSelect.value, CodeCouleur: ColorRessource.value };
       return this.http.put('http://localhost:5050/ressource/update/'+this.idChangeRessource , body , {headers}).subscribe(()=> { 
         this.loadRessources() });
 
@@ -146,14 +146,24 @@ export class RessourceManagerComponent {
   loadSemestre(){
     const token = localStorage.getItem('token');
     const headers = { 'Authorization': `Bearer ${token}` };
-    return this.http.get('http://localhost:5050/semestre/getAll', { headers }).subscribe((res: any) =>{this.semestres = res});
+    return this.http.get('http://localhost:5050/semestre/getAll', { headers }).subscribe((res: any) =>{
+      this.semestres = res
+    
+    });
 
   }
 
   loadRessources() :any {
     const token = localStorage.getItem('token');
     const headers = { 'Authorization': `Bearer ${token}` };
-    return this.http.get('http://localhost:5050/ressource/getAll', { headers }).subscribe((res: any) =>{this.ressources = res , this.searchRessources = res});
+    return this.http.get('http://localhost:5050/ressource/getAll', { headers }).subscribe((res: any) =>{
+      for (let i = 0; i < res.length; i++) {
+        res[i].nbrheuresemestre = this.timeToInt(res[i].nbrheuresemestre);
+      }
+
+
+      
+    this.ressources = res , this.searchRessources = res});
 
 
 
@@ -206,7 +216,40 @@ export class RessourceManagerComponent {
   }
 
   
+  intToTime(hour : number){
 
+    //input 1.5
+    let hours = Math.floor(hour); // Get the whole hours
+   let minutes = (hour % 1) * 60; // Get the minutes (as a percentage of the hour)
+   minutes = Math.round(minutes); // Round to the nearest whole number
+
+   // Pad with leading zeros if necessary
+   let hoursStr = hours.toString().padStart(2, '0');
+   let minutesStr = minutes.toString().padStart(2, '0');
+
+   
+
+   return `${hoursStr}:${minutesStr}:00`;
+    
+
+
+    //output 01:30:00
+
+  }
+
+  timeToInt(time : any){
+    
+    console.log("input :"+time);
+
+    let h = time.split(':')[0];
+    let m = time.split(':')[1];
+    let s = time.split(':')[2];
+    
+
+    let i : number = parseInt(h) + parseInt(m)/60 + parseInt(s)/3600;
+    
+    return i;
+  }
   
   
 

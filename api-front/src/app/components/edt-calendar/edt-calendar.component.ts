@@ -1,9 +1,9 @@
 import {
-    ChangeDetectionStrategy,
-    ChangeDetectorRef,
-    Component,
-    Injectable,
-    ViewEncapsulation,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  Injectable,
+  ViewEncapsulation,
 } from '@angular/core';
 
 import {CalendarEvent, CalendarEventTitleFormatter, CalendarView} from 'angular-calendar';
@@ -11,6 +11,7 @@ import { WeekViewHourSegment } from 'calendar-utils';
 import { fromEvent } from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
 import { addDays, addMinutes, endOfWeek } from 'date-fns';
+import {is} from "date-fns/locale";
 import { HttpClient } from '@angular/common/http';
 
 function floorToNearest(amount: number, precision: number) {
@@ -70,7 +71,7 @@ export class CustomEventTitleFormatter extends CalendarEventTitleFormatter {
     ],
     styles: [
         '.disable-hover { pointer-events: none; }',
-    ],  
+    ],
     encapsulation: ViewEncapsulation.None,
 })
 export class EdtCalendarComponent {
@@ -90,32 +91,34 @@ export class EdtCalendarComponent {
     salles: any[] = [];
     teachers: any[] = [];
 
+  isInEditMode = false;
   view: CalendarView = CalendarView.Week;
   private activeDayIsOpen: boolean = true;
-  
+  CalendarView = CalendarView;
+
   constructor(private cdr: ChangeDetectorRef, private http: HttpClient) { }
 
-    startDragToCreate(
-        segment: WeekViewHourSegment,
-        mouseDownEvent: MouseEvent,
-        segmentElement: HTMLElement
-    ) {
 
-        const dragToSelectEvent: CalendarEvent = {
-            id: this.events.length,
-            title: '',
-            start: segment.date,
-            meta: {
-                tmpEvent: true,
-            },
-        };
-
-        this.events = [...this.events, dragToSelectEvent];
-        const segmentPosition = segmentElement.getBoundingClientRect();
-        this.dragToCreateActive = true;
-        const endOfView = endOfWeek(this.viewDate, {
-            weekStartsOn: this.weekStartsOn,
-        });
+  startDragToCreate(
+    segment: WeekViewHourSegment,
+    mouseDownEvent: MouseEvent,
+    segmentElement: HTMLElement
+  ) {
+    const dragToSelectEvent: CalendarEvent = {
+      id: this.events.length,
+      title: 'New event',
+      start: segment.date,
+      meta: {
+        tmpEvent: true,
+      },
+    };
+    if(this.isInEditMode){
+      this.events = [...this.events, dragToSelectEvent];
+      const segmentPosition = segmentElement.getBoundingClientRect();
+      this.dragToCreateActive = true;
+      const endOfView = endOfWeek(this.viewDate, {
+        weekStartsOn: this.weekStartsOn,
+      });
 
         fromEvent(document, 'mousemove')
             .pipe(
@@ -153,6 +156,7 @@ export class EdtCalendarComponent {
                 }
                 this.refresh();
             });
+        }
 
     }
 
@@ -187,7 +191,17 @@ export class EdtCalendarComponent {
     return day !== 0 && day !== 6;
   }
 
+  setView(view: CalendarView) {
+    this.view = view;
+  }
 
+  setViewClick(view: CalendarView, date: Date) {
+    if(!this.isInEditMode){
+      this.view = view;
+      this.viewDate = date;
+    }
+
+  }
     private refresh() {
         this.events = [...this.events];
         this.cdr.detectChanges();

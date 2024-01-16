@@ -1,45 +1,81 @@
-<div class="w-1/2 grid grid-cols-4 grid-rows-2 content-evenly flex-wrap gap-1">
-  <div
-      role="button"
-      class="justify-self-end w-1/2 self-center text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-4 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 outline-none"
-      mwlCalendarPreviousView
-      [view]="view"
-      [(viewDate)]="viewDate"
-      (viewDateChange)="closeOpenMonthViewDay(); saveDate($event.toLocaleDateString())"
-  >
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-      <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
-    </svg>
-  </div>
-  <div class="w-full col-span-2 grid grid-cols-3 text-center justify-self-center self-center text-white bg-blue-500 font-medium rounded-lg text-sm px-5 py-1 dark:bg-blue-600">
-    <div class="justify-self-center self-center col-span-2"> <h3> {{ viewDate | calendarDate:(view + 'ViewTitle'):'fr' }} </h3></div>
-    <div class="justify-self-center m-0">
-      <input matInput [matDatepicker]="picker" [matDatepickerFilter]="filtreDatePicker" (dateChange)="changeDay($event.value); saveDate($event.value?.toLocaleDateString())" [hidden]="true">
-      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-      <mat-datepicker #picker></mat-datepicker>
+
+<div
+    class="justify-self-end self-center text-white bg-red-500 hover:bg-red-600 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm w-fit h-fit px-5 py-4 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800 outline-none m-1"
+role="button" *ngIf="isInEditMode" (click)="isInEditMode=false">
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+  </svg>
+
+</div>
+<div
+    class="justify-self-end self-center font-medium w-fit h-fit px-5 py-4 border  text-sm rounded-lg outline-none m-1 text-white bg-gray-500 dark:hover:bg-gray-700 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 dark:bg-gray-500 dark:focus:ring-gray-700 dark:border-gray-400"
+    role="button" *ngIf="!isInEditMode" (click)="isInEditMode=true">
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+    <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+  </svg>
+</div>
+<div class="grid grid-cols-2 w-full">
+  <div class="w-1/2 grid grid-cols-4 grid-rows-2 content-evenly flex-wrap gap-1">
+    <div
+        role="button"
+        class="justify-self-end w-1/2 self-center text-white font-medium rounded-lg text-sm px-5 py-4 bg-gray-500 dark:hover:bg-gray-700 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 dark:bg-gray-500 dark:focus:ring-gray-700 dark:border-gray-400 outline-none"
+        mwlCalendarPreviousView
+        [view]="view"
+        [(viewDate)]="viewDate"
+        (viewDateChange)="closeOpenMonthViewDay(); saveDate($event.toLocaleDateString())"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+      </svg>
+    </div>
+    <div class="w-full col-span-2 grid grid-cols-3 text-center justify-self-center self-center font-medium rounded-lg text-sm px-5 py-1  bg-gray-500 focus:outline-none focus:ring-4 focus:ring-gray-300 dark:bg-gray-500 dark:focus:ring-gray-700 dark:border-gray-400 text-white">
+      <div class="justify-self-center self-center col-span-2"> <h3> {{ viewDate | calendarDate:(view + 'ViewTitle'):'fr' }} </h3></div>
+      <div class="justify-self-center m-0e">
+        <input matInput [matDatepicker]="picker" [matDatepickerFilter]="filtreDatePicker" (dateChange)="changeDay($event.value); saveDate($event.value?.toLocaleDateString())" [hidden]="true">
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </div>
+
+    </div>
+    <div role="button"
+         class="justify-self-start w-1/2 self-center font-medium rounded-lg text-sm px-5 py-4  bg-gray-500 focus:outline-none focus:ring-4 focus:ring-gray-300 dark:bg-gray-500 dark:focus:ring-gray-700 dark:border-gray-400 text-white outline-none dark:hover:bg-gray-700 hover:bg-gray-900"
+         mwlCalendarNextView
+         [view]="view"
+         [(viewDate)]="viewDate"
+         (viewDateChange)="closeOpenMonthViewDay(); saveDate($event.toLocaleDateString())"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+      </svg>
     </div>
 
+    <div class="flex flex-wrap gap-1 justify-self-center col-span-4 h-1/6">
+      <div role="button"
+           class="justify-self-center font-medium rounded-lg text-sm px-5 py-2.5 mb-2 bg-gray-500 focus:outline-none focus:ring-4 focus:ring-gray-300 dark:bg-gray-500 dark:focus:ring-gray-700 dark:border-gray-400 text-white outline-none dark:hover:bg-gray-700 hover:bg-gray-900 select-none"
+           mwlCalendarToday
+           [(viewDate)]="viewDate"
+           (viewDateChange)="saveDate($event.toLocaleDateString())"
+      >
+        Aujourd'hui
+      </div>
+    </div>
   </div>
-  <div role="button"
-       class="justify-self-start w-1/2 self-center text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-4 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 outline-none"
-       mwlCalendarNextView
-       [view]="view"
-       [(viewDate)]="viewDate"
-       (viewDateChange)="closeOpenMonthViewDay(); saveDate($event.toLocaleDateString())"
-  >
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-      <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
-    </svg>
-  </div>
-
-  <div class="flex flex-wrap gap-1 justify-self-center col-span-4 h-1/6">
-    <div role="button"
-         class="justify-self-center text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 outline-none select-none"
-         mwlCalendarToday
-         [(viewDate)]="viewDate"
-         (viewDateChange)="saveDate($event.toLocaleDateString())"
+  <div class="grid grid-cols-2" *ngIf="isInEditMode">
+    <div
+        type="button"
+        class="justify-self-end self-center font-medium border-e-2 border-blue-50 rounded-s-lg text-sm w-fit h-fit px-5 py-4 bg-gray-500 focus:outline-none focus:ring-4 focus:ring-gray-300 dark:bg-gray-500 dark:focus:ring-gray-700 dark:border-gray-400 text-white outline-none dark:hover:bg-gray-700 hover:bg-gray-900 select-none"
+        (click)="setView(CalendarView.Week)"
+        [class.active]="view === CalendarView.Week"
     >
-      Aujourd'hui
+      semaine
+    </div>
+    <div
+        type="button"
+        class="justify-self-start self-center font-medium rounded-e-lg text-sm w-fit h-fit px-5 py-4 bg-gray-500 focus:outline-none focus:ring-4 focus:ring-gray-300 dark:bg-gray-500 dark:focus:ring-gray-700 dark:border-gray-400 text-white outline-none dark:hover:bg-gray-700 hover:bg-gray-900 select-none"
+        (click)="setView(CalendarView.Day)"
+        [class.active]="view === CalendarView.Day"
+    >
+      jour
     </div>
   </div>
 </div>
@@ -66,7 +102,7 @@
                         <label for="category" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Ressources</label>
                         <select id="category" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                             <option *ngFor="let ressource of ressouces" [value]="ressource.idressource">{{ressource.titre}} - {{ressource.numero}}</option>
-                            
+
                         </select>
                     </div>
                     <div>
@@ -137,17 +173,33 @@
       </div>
     </div>
   </ng-template>
-  
+
+  <div [ngSwitch]="view">
+
   <mwl-calendar-week-view
     [viewDate]="viewDate"
     [events]="events"
     [hourSegmentTemplate]="weekViewHourSegmentTemplate"
+    (hourSegmentClicked)="setViewClick(CalendarView.Day, $event.date)"
+    (dayHeaderClicked)="setViewClick(CalendarView.Day, $event.day.date)"
     [dayStartHour]="dayStartHour"
     [dayEndHour]="dayEndHour"
     [excludeDays]="[0,6]"
-   
+
 
     
   >
   </mwl-calendar-week-view>
-  
+
+
+    <mwl-calendar-day-view
+        *ngSwitchCase="CalendarView.Day"
+        [viewDate]="viewDate"
+        [events]="events"
+        [hourSegmentTemplate]="weekViewHourSegmentTemplate"
+        [dayStartHour]="dayStartHour"
+        [dayEndHour]="dayEndHour"
+        (hourSegmentClicked)="setViewClick(CalendarView.Week, $event.date)"
+    >
+    </mwl-calendar-day-view>
+  </div>

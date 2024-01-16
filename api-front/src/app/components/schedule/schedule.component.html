@@ -96,20 +96,20 @@
 </div>
 <div class="grid grid-cols-2">
 
-    <div class="w-1/2 grid grid-cols-4 grid-rows-2 content-evenly flex-wrap gap-1">
+    <div class="grid grid-cols-4 grid-rows-2 content-evenly gap-1">
         <div
                 role="button"
-                class="justify-self-end w-1/2 self-center text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-4 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 outline-none"
+                class="flex self-center md:justify-self-normal justify-self-center md:col-span-1 md:h-auto h-10 col-span-4 lg:justify-self-end text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 outline-none"
                 mwlCalendarPreviousView
                 [view]="view"
                 [(viewDate)]="viewDate"
                 (viewDateChange)="closeOpenMonthViewDay(); saveDate($event.toLocaleDateString())"
         >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="md:h-8 sm:h-6 m-1 flex-auto">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
             </svg>
         </div>
-        <div class="w-full col-span-2 grid grid-cols-3 text-center justify-self-center self-center text-white bg-blue-500 font-medium rounded-lg text-sm px-5 py-1 dark:bg-blue-600">
+        <div class="w-full md:col-span-2 col-span-4 grid grid-cols-3 text-center justify-self-center self-center text-white bg-blue-500 font-medium rounded-lg text-sm p-1 dark:bg-blue-600">
             <div class="justify-self-center self-center col-span-2"> <h3> {{ viewDate | calendarDate:(view + 'ViewTitle'):'fr' }} </h3></div>
           <div class="justify-self-center m-0">
             <input matInput [matDatepicker]="picker" [matDatepickerFilter]="filtreDatePicker" (dateChange)="changeDay($event.value); saveDate($event.value?.toLocaleDateString())" [hidden]="true">
@@ -119,13 +119,13 @@
 
         </div>
         <div role="button"
-                class="justify-self-start w-1/2 self-center text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-4 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 outline-none"
+                class="flex self-center md:justify-self-normal justify-self-center md:col-span-1 md:h-auto h-10 col-span-4 lg:justify-self-end text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 outline-none"
                 mwlCalendarNextView
                 [view]="view"
                 [(viewDate)]="viewDate"
                 (viewDateChange)="closeOpenMonthViewDay(); saveDate($event.toLocaleDateString())"
         >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="md:h-8 sm:h-6 m-1 flex-auto">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
             </svg>
         </div>

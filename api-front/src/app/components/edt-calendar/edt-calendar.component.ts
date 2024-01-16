@@ -6,7 +6,7 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 
-import { CalendarEvent, CalendarEventTitleFormatter } from 'angular-calendar';
+import {CalendarEvent, CalendarEventTitleFormatter, CalendarView} from 'angular-calendar';
 import { WeekViewHourSegment } from 'calendar-utils';
 import { fromEvent } from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
@@ -18,6 +18,25 @@ function floorToNearest(amount: number, precision: number) {
 
 function ceilToNearest(amount: number, precision: number) {
   return Math.ceil(amount / precision) * precision;
+}
+
+function getDisplayDate() {
+  try {
+    // console.log("date: " + window.localStorage.getItem("calendarDateView"))
+    let dayview = window.localStorage.getItem("calendarDateView")
+    if(dayview !== null){
+      return new Date(dayview)
+    }
+    else {
+      return new Date()
+    }
+
+  }
+  catch(e){
+    return new Date()
+  }
+
+
 }
 
 @Injectable()
@@ -54,13 +73,14 @@ export class CustomEventTitleFormatter extends CalendarEventTitleFormatter {
   encapsulation: ViewEncapsulation.None,
 })
 export class EdtCalendarComponent {
-  viewDate = new Date();
+  viewDate = getDisplayDate();
   events: CalendarEvent[] = [];
   dragToCreateActive = false;
   weekStartsOn: 0 = 0;
   dayStartHour: number = 8;
   dayEndHour: number = 19;
-
+  view: CalendarView = CalendarView.Week;
+  private activeDayIsOpen: boolean = true;
   constructor(private cdr: ChangeDetectorRef) {}
 
   startDragToCreate(
@@ -114,8 +134,35 @@ export class EdtCalendarComponent {
       });
   }
 
+  saveDate(date: any) {
+    if(date == null){
+      date = new Date().toLocaleDateString();
+    }
+    let dateList = date.split('/')
+    // console.log("dateString: " + date)
+    // console.log("new date" + dateList[1]+"/"+dateList[0]+"/"+dateList[2])
+    window.localStorage.setItem("calendarDateView", dateList[1]+"/"+dateList[0]+"/"+dateList[2])
+  }
+
   private refresh() {
     this.events = [...this.events];
     this.cdr.detectChanges();
   }
+
+  closeOpenMonthViewDay() {
+    this.activeDayIsOpen = false;
+  }
+
+  changeDay(date: any) {
+    // console.log("picked: " + date)
+    this.viewDate = date;
+  }
+
+  filtreDatePicker = (d: Date | null): boolean => {
+    const day = (d || new Date()).getDay();
+    // Prevent Saturday and Sunday from being selected.
+    return day !== 0 && day !== 6;
+  }
+
+
 }

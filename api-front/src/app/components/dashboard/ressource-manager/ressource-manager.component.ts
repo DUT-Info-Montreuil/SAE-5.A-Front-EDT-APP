@@ -6,6 +6,12 @@ import { th } from 'date-fns/locale';
 import { set } from 'date-fns';
 import { timeout } from 'rxjs';
 import { SearchService } from '../services/search.service';
+import {Observable} from 'rxjs';
+import {map, startWith} from 'rxjs/operators';
+import {AsyncPipe} from '@angular/common';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import {MatInputModule} from '@angular/material/input';
+import {MatFormFieldModule} from '@angular/material/form-field';
 
 
 @Component({
@@ -17,13 +23,15 @@ export class RessourceManagerComponent {
   ressources: any ;
   searchRessources : any;
   semestres: any;
+  allProf : any;
   idInetval : any;
   showModalCreateRessource = false;
   showModalModifressource = false;
   idChangeRessource : any;
   showSuprRessource = false;
   idSuprRessource : any;
-  NameSuprRessource : any;
+  NameSuprRessource : any;  
+  ControlProf : any;
 
 
 
@@ -49,15 +57,18 @@ export class RessourceManagerComponent {
 
 
   toggleCreateRessource(){
+
     this.showModalCreateRessource = !this.showModalCreateRessource;
     if (this.showModalCreateRessource == true) {
       this.loadSemestre();
+      this.loadProf();
     }
   }
 
   toggleModalModifRessource(){
     if(this.showSuprRessource==false){
     this.showModalModifressource = !this.showModalModifressource;
+    
     }
     
   }
@@ -71,15 +82,20 @@ export class RessourceManagerComponent {
   }
 
 
-  changeRessource(){
-    
+  loadProf():any {
+    const token = localStorage.getItem('token');
+    const headers = { 'Authorization': `Bearer ${token}` };
+    return this.http.get('http://localhost:5050/utilisateurs/getProf', { headers }).subscribe((res: any) => {
+      this.allProf = res;
+    });
   }
-
+  
   chargerRessource(id : any){
     this.showModifRessource();
     //time out pour attendre que le modal soit afficher
     this.idChangeRessource = id;
     this.loadSemestre() ; 
+    this.loadProf();
 
     setTimeout(() => {
     
@@ -177,8 +193,6 @@ export class RessourceManagerComponent {
     //this.loadGroupes();
     //charger les salles au chargeement de la page
     this.loadRessources();
-
-    
     this.loadSemestre()
   
       
@@ -205,6 +219,12 @@ export class RessourceManagerComponent {
       
 
     });
+
+
+
+
+    this.ControlProf = new FormControl();
+
 
   }
 

@@ -34,13 +34,16 @@ export class EquipementManagerComponent {
   }
 
   toogleSuprEquipement(id? : any){
+    console.log(id);
     this.showSuprEquipement = !this.showSuprEquipement;
     if (this.showSuprEquipement){
       this.idSuprEquipement = id;
-      
-      const s : any = this.allEquipements.find((r : any) => r.IdEquipement == id);
-      
-      this.NameSuprEquipement = s.Nom;
+      console.log(this.allEquipements);
+
+      for (let s of this.allEquipements)
+        if (s.idEquipement == id)
+          
+          this.NameSuprEquipement = s.Nom;
     }
     
   }

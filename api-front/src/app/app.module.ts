@@ -9,6 +9,7 @@ import { FormsModule,ReactiveFormsModule } from '@angular/forms';
 import { ConnexionComponent } from './components/connexion/connexion.component';
 import { DashboardModule } from './components/dashboard/dashboard.module';
 
+
 @NgModule({
   declarations: [
     AppComponent,

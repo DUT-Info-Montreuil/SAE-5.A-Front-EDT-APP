@@ -12,6 +12,14 @@ import { RessourceManagerComponent } from './ressource-manager/ressource-manager
 import { GroupManagerComponent } from './group-manager/group-manager.component';
 import { SemestreComponent } from './semestre/semestre.component';
 import { EquipementManagerComponent } from './equipement-manager/equipement-manager.component';
+
+import {Component, OnInit} from '@angular/core';
+import {Observable} from 'rxjs';
+import {map, startWith} from 'rxjs/operators';
+import {AsyncPipe} from '@angular/common';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import {MatInputModule} from '@angular/material/input';
+import {MatFormFieldModule} from '@angular/material/form-field';
 @NgModule({
   declarations: [
     DashboardComponent,
@@ -30,7 +38,15 @@ import { EquipementManagerComponent } from './equipement-manager/equipement-mana
       useFactory: adapterFactory,
     }),
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatAutocompleteModule,
+    MatInputModule,
+    MatFormFieldModule,
+    AsyncPipe,
+  
+
+
+
   ]
 })
 export class DashboardModule { }

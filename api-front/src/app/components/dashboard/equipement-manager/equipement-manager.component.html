@@ -25,13 +25,13 @@
                 </tr>
             </thead>
             <tbody>
-                <tr class="bg-white border-b   hover:bg-gray-50 " *ngFor="let r of allEquipements" (click)="chargerEquipement(r.IdSemestre)"   >
+                <tr class="bg-white border-b   hover:bg-gray-50 " *ngFor="let r of allEquipements"    >
                    
                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
                         {{r.Nom}}
                     </th>
                     <td>
-                      <img class="cross" (click)="toogleSuprEquipement(r.IdEquipement)" src="../../../../assets/betterCross.svg"/>
+                      <img class="cross" (click)="toogleSuprEquipement(r.idEquipement)" src="../../../../assets/betterCross.svg"/>
                     </td>
                 </tr>
             </tbody>

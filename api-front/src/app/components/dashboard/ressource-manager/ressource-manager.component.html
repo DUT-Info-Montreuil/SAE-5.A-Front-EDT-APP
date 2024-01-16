@@ -149,7 +149,27 @@
                 <option *ngFor="let s of semestres" value="{{s.IdSemestre}}">{{s.Numero}}</option>
 
                 </select>
-
+                
+                <label for="small-input" class="block mb-2 text-sm font-medium text-gray-900 ">Choisir un prof</label>
+                <form class="example-form">
+                  <mat-form-field class="example-full-width">
+                    <mat-label>Number</mat-label>
+                    <input type="text"
+                           placeholder="Pick one"
+                           aria-label="Number"
+                           
+                           matInput
+                           class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 "
+                           [formControl]="ControlProf"
+                           [matAutocomplete]="auto">
+                    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+                      @for (option of allProf ; track option) {
+                        <mat-option [value]="option.idUtilisateur">{{option.Nom}}</mat-option>
+                      }
+                    </mat-autocomplete>
+                  </mat-form-field>
+                </form>
+                
 
                 <div>
                   <label for="small-input" class="block mb-2 text-sm font-medium text-gray-900 ">Nombre d'heure de la ressource</label>

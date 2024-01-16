@@ -14,6 +14,7 @@ import { th } from 'date-fns/locale';
 })
 export class RoomManagerComponent implements OnInit, AfterViewInit{
   salles: any ;
+  allEquipement: any;
   roomsDisplay:string = "";
   showModal = false;
   idInetval : any;
@@ -24,6 +25,8 @@ export class RoomManagerComponent implements OnInit, AfterViewInit{
   showModalSuprSalle = false;
   idSuprSalle : any;
   NameSuprSalle : any;
+  showDropDown = false;
+
   @ViewChild('inputNomChangeRoom', { static: true }) inputNomChangeRoom! : ElementRef;
   
   delRoom(){
@@ -34,6 +37,16 @@ export class RoomManagerComponent implements OnInit, AfterViewInit{
 
   }
 
+  loadEquipement(): any {
+    const token = localStorage.getItem('token');
+    const headers = { 'Authorization': `Bearer ${token}` };
+    return this.http.get('http://localhost:5050/equipement/getAll', { headers }).subscribe((data : any) => {this.allEquipement = data});
+  }
+
+
+  toggleDropDown(){
+    this.showDropDown = !this.showDropDown;
+  }
 
   toggleSuprSalle(id? : any){
 
@@ -48,8 +61,11 @@ export class RoomManagerComponent implements OnInit, AfterViewInit{
 
   toggleModal(){
     this.showModal = !this.showModal;
+    if(this.showModal == true){
+      this.loadEquipement();
+    }
   }
- 
+ //document .querry selectorall la class  as htmlinoinput element
   toggleModalModifSalle(id : any){
     if(this.showModalSuprSalle != true){
     this.showModalModifSalle = !this.showModalModifSalle;

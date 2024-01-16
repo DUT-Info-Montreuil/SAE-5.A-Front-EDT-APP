@@ -11,6 +11,7 @@ import { WeekViewHourSegment } from 'calendar-utils';
 import { fromEvent } from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
 import { addDays, addMinutes, endOfWeek } from 'date-fns';
+import {is} from "date-fns/locale";
 
 function floorToNearest(amount: number, precision: number) {
   return Math.floor(amount / precision) * precision;
@@ -73,6 +74,7 @@ export class CustomEventTitleFormatter extends CalendarEventTitleFormatter {
   encapsulation: ViewEncapsulation.None,
 })
 export class EdtCalendarComponent {
+  isInEditMode = false;
   viewDate = getDisplayDate();
   events: CalendarEvent[] = [];
   dragToCreateActive = false;
@@ -81,6 +83,7 @@ export class EdtCalendarComponent {
   dayEndHour: number = 19;
   view: CalendarView = CalendarView.Week;
   private activeDayIsOpen: boolean = true;
+  CalendarView = CalendarView;
   constructor(private cdr: ChangeDetectorRef) {}
 
   startDragToCreate(
@@ -96,42 +99,44 @@ export class EdtCalendarComponent {
         tmpEvent: true,
       },
     };
-    this.events = [...this.events, dragToSelectEvent];
-    const segmentPosition = segmentElement.getBoundingClientRect();
-    this.dragToCreateActive = true;
-    const endOfView = endOfWeek(this.viewDate, {
-      weekStartsOn: this.weekStartsOn,
-    });
-
-    fromEvent(document, 'mousemove')
-      .pipe(
-        finalize(() => {
-          delete dragToSelectEvent.meta.tmpEvent;
-          this.dragToCreateActive = false;
-          this.refresh();
-        }),
-        takeUntil(fromEvent(document, 'mouseup'))
-      )
-      .subscribe((mouseMoveEvent: Event) => {
-        const mouseEvent = mouseMoveEvent as MouseEvent;
-
-        const minutesDiff = ceilToNearest(
-          mouseEvent.clientY - segmentPosition.top,
-          30
-        );
-
-        const daysDiff =
-          floorToNearest(
-            mouseEvent.clientX - segmentPosition.left,
-            segmentPosition.width
-          ) / segmentPosition.width;
-
-        const newEnd = addDays(addMinutes(segment.date, minutesDiff), daysDiff);
-        if (newEnd > segment.date && newEnd < endOfView) {
-          dragToSelectEvent.end = newEnd;
-        }
-        this.refresh();
+    if(this.isInEditMode){
+      this.events = [...this.events, dragToSelectEvent];
+      const segmentPosition = segmentElement.getBoundingClientRect();
+      this.dragToCreateActive = true;
+      const endOfView = endOfWeek(this.viewDate, {
+        weekStartsOn: this.weekStartsOn,
       });
+
+      fromEvent(document, 'mousemove')
+        .pipe(
+          finalize(() => {
+            delete dragToSelectEvent.meta.tmpEvent;
+            this.dragToCreateActive = false;
+            this.refresh();
+          }),
+          takeUntil(fromEvent(document, 'mouseup'))
+        )
+        .subscribe((mouseMoveEvent: Event) => {
+          const mouseEvent = mouseMoveEvent as MouseEvent;
+
+          const minutesDiff = ceilToNearest(
+            mouseEvent.clientY - segmentPosition.top,
+            30
+          );
+
+          const daysDiff =
+            floorToNearest(
+              mouseEvent.clientX - segmentPosition.left,
+              segmentPosition.width
+            ) / segmentPosition.width;
+
+          const newEnd = addDays(addMinutes(segment.date, minutesDiff), daysDiff);
+          if (newEnd > segment.date && newEnd < endOfView) {
+            dragToSelectEvent.end = newEnd;
+          }
+          this.refresh();
+        });
+    }
   }
 
   saveDate(date: any) {
@@ -164,5 +169,15 @@ export class EdtCalendarComponent {
     return day !== 0 && day !== 6;
   }
 
+  setView(view: CalendarView) {
+    this.view = view;
+  }
 
+  setViewClick(view: CalendarView, date: Date) {
+    if(!this.isInEditMode){
+      this.view = view;
+      this.viewDate = date;
+    }
+
+  }
 }

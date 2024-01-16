@@ -27,6 +27,7 @@ import {
 import { ScheduleReadonlyComponent } from './components/schedule/schedule-readonly/schedule-readonly.component';
 import { ScheduleEditComponent } from './components/schedule/schedule-edit/schedule-edit.component';
 import {CdkDrag, CdkDropList} from "@angular/cdk/drag-drop";
+import { EdtCalendarComponent } from './components/edt-calendar/edt-calendar.component';
 registerLocaleData(localeFr)
 
 @Injectable()
@@ -58,6 +59,7 @@ class CustomDateFormatter extends CalendarNativeDateFormatter {
     HomeComponent,
     ScheduleReadonlyComponent,
     ScheduleEditComponent,
+    EdtCalendarComponent,
   ],
   imports: [
     BrowserAnimationsModule,
@@ -85,6 +87,7 @@ class CustomDateFormatter extends CalendarNativeDateFormatter {
       }),
     CdkDrag,
     CdkDropList,
+    
   ],
   providers: [
     {provide: LOCALE_ID, useValue:'fr-FR'},

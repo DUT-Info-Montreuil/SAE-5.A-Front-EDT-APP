@@ -9,6 +9,7 @@ import { HomeComponent } from './components/home/home.component';
 import {ScheduleComponent} from "./components/schedule/schedule.component";
 import {ScheduleEditComponent} from "./components/schedule/schedule-edit/schedule-edit.component";
 import {ScheduleReadonlyComponent} from "./components/schedule/schedule-readonly/schedule-readonly.component";
+import { EdtCalendarComponent } from "./components/edt-calendar/edt-calendar.component";
 
 
 export const appRoutes: Routes = [
@@ -19,7 +20,8 @@ export const appRoutes: Routes = [
   { path: 'sidebar', component: SidebarComponent },
   { path: 'schedule', component: ScheduleComponent},
   { path: 'schedule/edit', component: ScheduleEditComponent},
-  { path: 'schedule/readonly', component: ScheduleReadonlyComponent}
+  { path: 'schedule/readonly', component: ScheduleReadonlyComponent},
+  { path: 'edt-calendar', component: EdtCalendarComponent}
 ];
 
 @NgModule({

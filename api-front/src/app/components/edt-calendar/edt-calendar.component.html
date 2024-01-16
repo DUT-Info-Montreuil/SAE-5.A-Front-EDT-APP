@@ -176,21 +176,18 @@ role="button" *ngIf="isInEditMode" (click)="isInEditMode=false">
 
   <div [ngSwitch]="view">
 
-  <mwl-calendar-week-view
-    [viewDate]="viewDate"
-    [events]="events"
-    [hourSegmentTemplate]="weekViewHourSegmentTemplate"
-    (hourSegmentClicked)="setViewClick(CalendarView.Day, $event.date)"
-    (dayHeaderClicked)="setViewClick(CalendarView.Day, $event.day.date)"
-    [dayStartHour]="dayStartHour"
-    [dayEndHour]="dayEndHour"
-    [excludeDays]="[0,6]"
-
-
-    
-  >
-  </mwl-calendar-week-view>
-
+    <mwl-calendar-week-view
+      *ngSwitchCase="CalendarView.Week"
+      [viewDate]="viewDate"
+      [events]="events"
+      [hourSegmentTemplate]="weekViewHourSegmentTemplate"
+      (hourSegmentClicked)="setViewClick(CalendarView.Day, $event.date)"
+      (dayHeaderClicked)="setViewClick(CalendarView.Day, $event.day.date)"
+      [dayStartHour]="dayStartHour"
+      [dayEndHour]="dayEndHour"
+      [excludeDays]="[0,6]"
+    >
+    </mwl-calendar-week-view>
 
     <mwl-calendar-day-view
         *ngSwitchCase="CalendarView.Day"

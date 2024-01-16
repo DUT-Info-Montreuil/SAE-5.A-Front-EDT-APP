@@ -9,7 +9,6 @@ import { changePage } from '../../../main';
   styleUrl: './connexion.component.css',
 })
 export class ConnexionComponent {
-
   protected loginForm = new FormGroup({
     Username: new FormControl('', [
       Validators.required,
@@ -20,20 +19,29 @@ export class ConnexionComponent {
       Validators.minLength(1),
     ]),
   });
-  constructor(private http: HttpClient, ) {
+  constructor(private http: HttpClient) {
     this.loginForm.valid;
   }
 
   connexion() {
     this.http
       .post('http://localhost:5050/utilisateurs/auth', this.loginForm.value, {
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization:
+            'Basic ' +
+            btoa(
+              this.loginForm.value.Username +
+                ':' +
+                this.loginForm.value.Password
+            ),
+        },
       })
       .subscribe({
         next: (data: any) => {
           let token = data.accessToken;
           let firstLogin = data.fistLogin;
-          this.setToken(token)
+          this.setToken(token);
           if (firstLogin) {
             // TODO: redirect to page first login
             console.log('redirect to page for first login');
@@ -43,7 +51,7 @@ export class ConnexionComponent {
       });
   }
 
-  setToken(token:string) {
+  setToken(token: string) {
     window.localStorage.setItem('token', token);
   }
 }

@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, Inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { changePage } from '../../../main';
+import { th } from 'date-fns/locale';
 
 @Component({
   selector: 'app-connexion',
@@ -9,6 +10,8 @@ import { changePage } from '../../../main';
   styleUrl: './connexion.component.css',
 })
 export class ConnexionComponent {
+  showErrorMessage = false;
+
   protected loginForm = new FormGroup({
     Username: new FormControl('', [
       Validators.required,
@@ -43,13 +46,19 @@ export class ConnexionComponent {
       .subscribe({
         next: (data: any) => {
           let token = data.accessToken;
-          let firstLogin = data.fistLogin;
+          let firstLogin = data.firstLogin;
+          
           this.setToken(token);
           if (firstLogin) {
-            // TODO: redirect to page first login
-            console.log('redirect to page for first login');
+            
+            
+            changePage('/first-login');
+            return;
           }
           changePage('/home');
+        },
+        error: (error) => {
+          this.showErrorMessage = true;
         },
       });
   }

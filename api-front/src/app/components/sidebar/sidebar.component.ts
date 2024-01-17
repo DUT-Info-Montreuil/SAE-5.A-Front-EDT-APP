@@ -1,6 +1,8 @@
 import {Component} from '@angular/core';
 import {animate, state, style, transition, trigger} from "@angular/animations";
 import {ConnexionComponent} from "../connexion/connexion.component";
+import { first } from 'rxjs';
+import { FirstLoginComponent } from '../first-login/first-login.component';
 
 @Component({
   selector: 'app-sidebar',
@@ -67,7 +69,8 @@ export class SidebarComponent {
   }
 
   onRouterOutletActivate(event: any) {
-    this.isConnection = event instanceof ConnexionComponent;
+    this.isConnection = (event instanceof ConnexionComponent) || (event instanceof FirstLoginComponent);
+    
     SidebarComponent.isConnection = this.isConnection;
 
   }

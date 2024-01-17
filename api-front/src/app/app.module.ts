@@ -12,6 +12,7 @@ import { HomeComponent } from './components/home/home.component';
 import { DashboardModule } from './components/dashboard/dashboard.module';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { ProfileModule } from './components/profile/profile.module';
+import { FirstLoginComponent } from './components/first-login/first-login.component';
 
 
 @NgModule({
@@ -21,6 +22,7 @@ import { ProfileModule } from './components/profile/profile.module';
     SidebarComponent,
     NavbarComponent,
     HomeComponent,
+    FirstLoginComponent,
 
   ],
   imports: [

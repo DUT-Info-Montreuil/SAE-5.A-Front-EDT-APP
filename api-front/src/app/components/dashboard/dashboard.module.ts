@@ -3,8 +3,7 @@ import { CommonModule } from '@angular/common';
 import { DashboardComponent } from './dashboard.component';
 import { CreateUsersComponent } from './create-users/create-users.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ScheduleComponent } from '../schedule/schedule.component';
-
+import { EdtCalendarComponent } from '../edt-calendar/edt-calendar.component';
 import  { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import {MatFormFieldModule} from "@angular/material/form-field";
@@ -19,10 +18,10 @@ import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
   declarations: [
     DashboardComponent,
     CreateUsersComponent,
-    ScheduleComponent
+    EdtCalendarComponent
   ],
   exports: [
-    ScheduleComponent
+    EdtCalendarComponent
   ],
   imports: [
     CommonModule,

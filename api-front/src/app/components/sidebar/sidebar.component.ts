@@ -2,10 +2,9 @@ import {Component, OnInit} from '@angular/core';
 import {animate, state, style, transition, trigger} from "@angular/animations";
 import {ConnexionComponent} from "../connexion/connexion.component";
 import {ActivatedRoute} from "@angular/router";
-import {ScheduleComponent} from "../schedule/schedule.component";
-import {ScheduleEditComponent} from "../schedule/schedule-edit/schedule-edit.component";
 import {CalendarEvent} from "angular-calendar";
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from "@angular/cdk/drag-drop";
+import { EdtCalendarComponent } from '../edt-calendar/edt-calendar.component';
 
 @Component({
   selector: 'app-sidebar',
@@ -102,8 +101,8 @@ export class SidebarComponent {
     if(event  instanceof ConnexionComponent){
       this.componentName = "ConnexionComponent";
     }
-    else if (event instanceof ScheduleEditComponent){
-      this.componentName = "ScheduleEditComponent";
+    else if (event instanceof EdtCalendarComponent){
+      this.componentName = "EdtCalendarComponent";
     }
     else{
       this.componentName = "None";

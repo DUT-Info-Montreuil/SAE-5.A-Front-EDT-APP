@@ -188,7 +188,7 @@
                     *ngFor="let groupe of groupes"
                     [value]="groupe.idGroupe"
                   >
-                    {{ groupe.Nom }}
+                    {{ groupeComposeName(groupe) }}
                   </option>
                 </select>
               </td>

@@ -91,7 +91,7 @@ export class CreateUsersComponent {
       }
     });
 
-    const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcwMjU1ODA5NiwianRpIjoiNzk5MTBmYTEtZTE4Ny00ZjljLWIwNjgtOGI5NTI3ZmYxM2NkIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6MiwibmJmIjoxNzAyNTU4MDk2LCJleHAiOjE3MDI1NTg5OTZ9.HoGBLbY39DdJ34Crbct6CUUGEHkjM7fV-6efcTLW94w";
+    const token = localStorage.getItem('token');
     const headers = { 'Authorization': `Bearer ${token}` };
     const body = this.mainForm.value;
     this.http.post('http://localhost:5050/utilisateurs/add', body, { headers }).subscribe({

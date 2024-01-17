@@ -2,7 +2,8 @@ import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angula
 import { CommonModule } from '@angular/common';
 import { FormGroup, FormBuilder, FormArray, Validators, AbstractControl, FormControl } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-import { th } from 'date-fns/locale';
+import { da, th } from 'date-fns/locale';
+import { timeout } from 'rxjs';
 
 
 
@@ -21,13 +22,17 @@ export class RoomManagerComponent implements OnInit, AfterViewInit{
   showModalModifSalle = false;
   idItervalsearchSalle : any;
   searchRoom : any;
-  idSalle : any;
+  idModifSalle : any;
   showModalSuprSalle = false;
   idSuprSalle : any;
   NameSuprSalle : any;
   showDropDown = false;
+  showDropDownModifEquip = false;
+  
 
   @ViewChild('inputNomChangeRoom', { static: true }) inputNomChangeRoom! : ElementRef;
+
+  checkBoxes : HTMLInputElement[] = [];
   
   delRoom(){
     const token = localStorage.getItem('token');
@@ -43,17 +48,67 @@ export class RoomManagerComponent implements OnInit, AfterViewInit{
     return this.http.get('http://localhost:5050/equipement/getAll', { headers }).subscribe((data : any) => {this.allEquipement = data});
   }
 
+  getEquipementRoom(id : any): any {
+    const token = localStorage.getItem('token');
+    const headers = { 'Authorization': `Bearer ${token}` };
+    return this.http.get('http://localhost:5050/salle/get/equipement/'+id, { headers });
+  }
 
   toggleDropDown(){
     this.showDropDown = !this.showDropDown;
+    if (this.showDropDown) {
+      setTimeout(() => {
+      
+      this.checkBoxes = document.querySelectorAll('.getInfo') as HTMLInputElement[] | any;
+      
+
+      ;} , 0 )
+      
+    }
+
   }
+
+  toggleDropDownModifEquip(){
+    this.showDropDownModifEquip = !this.showDropDownModifEquip;
+    if (this.showDropDownModifEquip) {
+      this.loadEquipement();
+      setTimeout(() => {
+      
+      this.checkBoxes = document.querySelectorAll('.setInfo') as HTMLInputElement[] | any;
+
+      
+
+      this.getEquipementRoom(this.idModifSalle).subscribe((data : any) => {
+
+       
+        for (let i = 0; i < this.checkBoxes.length; i++) {
+          for (let j = 0; j < this.allEquipement.length; j++) {
+            
+            if (this.checkBoxes[i].id == data[j].idEquipement) {
+                  this.checkBoxes[i].checked = true;
+                  console.log("fucking true")
+            }
+            
+          }
+        }
+      });
+      
+      
+
+      ;} , 0 )
+      
+    }
+
+
+  }
+
 
   toggleSuprSalle(id? : any){
 
     this.showModalSuprSalle = !this.showModalSuprSalle;
     if (this.showModalSuprSalle) {
       this.idSuprSalle = id;
-      this.NameSuprSalle = this.salles.filter((salle: any) => {return salle.idSalle == this.idSuprSalle})[0].Numero;
+      this.NameSuprSalle = this.salles.filter((salle: any) => {return salle.idSalle == this.idSuprSalle})[0].Nom;
 
     }
   }
@@ -65,12 +120,13 @@ export class RoomManagerComponent implements OnInit, AfterViewInit{
       this.loadEquipement();
     }
   }
- //document .querry selectorall la class  as htmlinoinput element
+ 
   toggleModalModifSalle(id : any){
     if(this.showModalSuprSalle != true){
     this.showModalModifSalle = !this.showModalModifSalle;
     if (this.showModalModifSalle) {
       this.chargeRoom(id);
+      
     }
   }
 }
@@ -92,13 +148,42 @@ export class RoomManagerComponent implements OnInit, AfterViewInit{
     //this.initializeForm();
     //this.loadGroupes();
     //charger les salles au chargeement de la page
-    this.loadSalles().subscribe((data : any) => {this.searchRoom =  data ; this.salles = data; });
+    this.loadSalles().subscribe((data : any) => {
+      
+      for (let i = 0; i < data.length; i++) {
+        
+        this.getEquipementRoom(data[i].idSalle).subscribe((data2 : any) => {data[i].equipement = data2})
+        
+          
+      };
+      
+      this.salles = data;
+      this.searchRoom = data  ; 
+
+      for (let i = 0; i < this.salles.length; i++) {
+        console.log(this.salles[i]);
+        
+      }
+      
+    
+    });
     
   
       
       //cree un interval pour recharger les salles toutes les 2 minutes
     this.idInetval = setInterval(() => {
-      this.loadSalles().subscribe((data : any) => {this.searchRoom =  data ; this.salles = data; });
+      this.loadSalles().subscribe((data : any) => {
+        for (let i = 0; i < data.length; i++) {
+          
+          this.getEquipementRoom(data[i].idSalle).subscribe((data2 : any) => {data[i].equipement = data2})
+          
+            
+        };
+        
+        this.salles = data;
+        this.searchRoom = data  ; 
+        
+      });
         
     }, 1000*60*2);
 
@@ -109,7 +194,7 @@ export class RoomManagerComponent implements OnInit, AfterViewInit{
         const searchString = e.target.value.toLowerCase();
         
   
-      this.searchRoom = this.salles.filter((salle: any) => {return salle.Numero.toLowerCase().startsWith(searchString)});
+      this.searchRoom = this.salles.filter((salle: any) => {return salle.Nom.toLowerCase().startsWith(searchString)});
       
     }else {
       this.searchRoom = this.salles;
@@ -117,6 +202,9 @@ export class RoomManagerComponent implements OnInit, AfterViewInit{
    
 
     })
+
+    
+
 
   }
 
@@ -148,7 +236,7 @@ export class RoomManagerComponent implements OnInit, AfterViewInit{
     console.log("charge room");
     const data  = this.salles.filter((salle: any) => {return salle.idSalle == id})[0];
     console.log(data);
-    this.idSalle = data.idSalle;
+    this.idModifSalle = data.idSalle;
     //wait 0.1 seconde
     setTimeout(() => {  if (document.getElementById('inputNomChangeRoom') != null && document.getElementById('inputCapChangeRoom') != null) {
       
@@ -156,7 +244,7 @@ export class RoomManagerComponent implements OnInit, AfterViewInit{
       var capElement = document.getElementById('inputCapChangeRoom');
       
       if (nomElement != null) {
-          nomElement.setAttribute("value", data != null ? data.Numero : '');
+          nomElement.setAttribute("value", data != null ? data.Nom : '');
       }
   
       if (capElement != null) {
@@ -168,6 +256,13 @@ export class RoomManagerComponent implements OnInit, AfterViewInit{
   
   }
        
+  addEquipementToRoom(idList : any[], idSalle : any): void {
+    const token = localStorage.getItem('token');
+    const headers = { 'Authorization': `Bearer ${token}` };
+    this.http.post('http://localhost:5050/salle/add/equipement/'+idSalle, { "idEquipement": idList }, { headers }).subscribe();
+
+
+  }
         
     
     
@@ -181,22 +276,46 @@ export class RoomManagerComponent implements OnInit, AfterViewInit{
     console.log("le numero est : "+Numero.value);
     console.log("la capacite est : "+cap.value);
     const headers = { 'Authorization': `Bearer ${token}` };
-    return this.http.put('http://localhost:5050/salle/update', { "Numero": Numero.value , "Capacite": cap.value , "idSalle": this.idSalle  }, { headers }).subscribe(() => {  this.loadSalles().subscribe((data : any) => {this.searchRoom =  data ; this.salles = data; })});
+    return this.http.put('http://localhost:5050/salle/update', { "Nom": Numero.value , "Capacite": cap.value , "idSalle": this.idModifSalle  }, { headers }).subscribe(() => {  this.loadSalles().subscribe((data : any) => {this.searchRoom =  data ; this.salles = data; })});
  
   }
 
 
   //ajouter une salle
   addRoom(): void {
-    console.log("add room");
+    let check : any[] = [];
+    console.log(this.checkBoxes);
+    for (let i = 0; i < this.checkBoxes.length; i++) {
+      console.log(this.checkBoxes[i].checked);
+      if (this.checkBoxes[i].checked) {
+        check.push(this.checkBoxes[i].id);
+      }
+    }
+    console.log(check);
     
     const token = localStorage.getItem('token');
     const Numero : any = document.getElementById('inputNom');
     const cap : any = document.getElementById('inputCap');
-    console.log("le numero est : "+Numero.value);
-    console.log("la capacite est : "+cap.value);
+
     const headers = { 'Authorization': `Bearer ${token}` };
-    this.http.post('http://localhost:5050/salle/add', { "Numero": Numero.value , "Capacite": cap.value }, { headers }).subscribe(() => { console.log("sub") ; this.loadSalles().subscribe((data : any) => {this.searchRoom =  data ; this.salles = data; });});
+    this.http.post('http://localhost:5050/salle/add', { "Nom": Numero.value , "Capacite": cap.value }, { headers }).subscribe((salle : any) => { 
+      this.loadSalles().subscribe((data : any) => {
+        for (let i = 0; i < data.length; i++) {
+          console.log(data[i].idSalle);
+          this.getEquipementRoom(data[i].idSalle).subscribe((data2 : any) => {data[i].equipement = data2})
+          
+            
+        };
+        
+        this.salles = data;
+        this.searchRoom = data  ; 
+
+
+      });
+      console.log(check);
+      this.addEquipementToRoom(check , salle.idSalle);
+    
+    });
   }
   
 

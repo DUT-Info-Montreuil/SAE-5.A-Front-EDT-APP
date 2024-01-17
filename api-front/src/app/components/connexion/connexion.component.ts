@@ -24,8 +24,11 @@ export class ConnexionComponent {
   }
 
   connexion() {
-    this.http
-      .post('http://localhost:5050/utilisateurs/auth', this.loginForm.value, {
+ 
+
+
+    console.log(this.loginForm.value);
+    this.http.post('http://localhost:5050/utilisateurs/auth', {} ,{
         headers: {
           'Content-Type': 'application/json',
           Authorization:
@@ -50,6 +53,8 @@ export class ConnexionComponent {
         },
       });
   }
+
+
 
   setToken(token: string) {
     window.localStorage.setItem('token', token);

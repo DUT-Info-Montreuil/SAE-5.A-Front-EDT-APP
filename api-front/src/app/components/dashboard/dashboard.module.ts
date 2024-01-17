@@ -20,6 +20,7 @@ import {AsyncPipe} from '@angular/common';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
+import { UserManagerComponent } from './user-manager/user-manager.component';
 @NgModule({
   declarations: [
     DashboardComponent,
@@ -29,7 +30,8 @@ import {MatFormFieldModule} from '@angular/material/form-field';
     RessourceManagerComponent,
     GroupManagerComponent,
     SemestreComponent,
-    EquipementManagerComponent
+    EquipementManagerComponent,
+    UserManagerComponent
   ],
   imports: [
     CommonModule,

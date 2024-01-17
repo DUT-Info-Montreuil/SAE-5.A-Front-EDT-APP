@@ -30,7 +30,7 @@
             <label
               class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
               for="file_input"
-              >Upload file</label
+              >Importer un utilisateur</label
             >
             <input
               (change)="onFileSelected($event)"
@@ -42,7 +42,7 @@
               class="mt-1 text-sm text-gray-500 dark:text-gray-300"
               id="file_input_help"
             >
-              SVG, PNG, JPG or GIF (MAX. 800x400px).
+              fichier .csv
             </p>
           </div>
         </div>
@@ -170,7 +170,7 @@
                     --Choisir une salle--
                   </option>
                   <option *ngFor="let salle of salles" [value]="salle.idSalle">
-                    {{ salle.Numero }}
+                    {{ salle.Nom }}
                   </option>
                   <option value="0">Aucun bureau</option>
                 </select>
@@ -349,5 +349,5 @@
       </button>
     </ng-container>
   </div>
-  <p>{{ mainForm.value | json }}</p>
+  
 </form>

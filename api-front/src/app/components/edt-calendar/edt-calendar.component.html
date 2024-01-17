@@ -63,38 +63,37 @@ role="button" *ngIf="isInEditMode" (click)="setEditMod(false)">
       </div>
     </div>
   </div>
-  <div class="grid grid-cols-2" *ngIf="isInEditMode">
-    <div
-        type="button"
-        class="justify-self-end self-center font-medium border-e-2 border-blue-50 rounded-s-lg text-sm w-fit h-fit px-5 py-4 bg-gray-500 focus:outline-none focus:ring-4 focus:ring-gray-300 dark:bg-gray-500 dark:focus:ring-gray-700 dark:border-gray-400 text-white outline-none dark:hover:bg-gray-700 hover:bg-gray-900 select-none"
-        (click)="setView(CalendarView.Week)"
-        [class.active]="view === CalendarView.Week"
-    >
-      semaine
-    </div>
-    <div
-        type="button"
-        class="justify-self-start self-center font-medium rounded-e-lg text-sm w-fit h-fit px-5 py-4 bg-gray-500 focus:outline-none focus:ring-4 focus:ring-gray-300 dark:bg-gray-500 dark:focus:ring-gray-700 dark:border-gray-400 text-white outline-none dark:hover:bg-gray-700 hover:bg-gray-900 select-none"
-        (click)="setView(CalendarView.Day)"
-        [class.active]="view === CalendarView.Day"
-    >
-      jour
-    </div>
-  </div>
-  <div class="grid grid-cols-3">
-    <div class="col-span-2">
+  <div class="grid grid-cols-2 grid-rows-none items-center gap-0">
+    <div class="">
       <mat-form-field>
         <mat-label>groupe</mat-label>
         <mat-select [(value)]="selectedGroupe" [(ngModel)]="selectedGroupe" (selectionChange)="getAllCoursInfo(selectedGroupe, getMonday(viewDate), getSunday(viewDate)); window.localStorage.setItem('currentIdGroupe',selectedGroupe.toString());">
           @for (groupe of groupesList; track groupe) {
-                <mat-option [value]="groupe.idGroupe">{{groupe.name}}</mat-option>
+            <mat-option [value]="groupe.idGroupe">{{groupe.name}}</mat-option>
           }
         </mat-select>
       </mat-form-field>
     </div>
+    <div class="grid grid-cols-2" *ngIf="isInEditMode">
+      <div
+          type="button"
+          class="justify-self-end self-center font-medium border-e-2 border-blue-50 rounded-s-lg text-sm w-fit h-fit px-5 py-4 bg-gray-500 focus:outline-none focus:ring-4 focus:ring-gray-300 dark:bg-gray-500 dark:focus:ring-gray-700 dark:border-gray-400 text-white outline-none dark:hover:bg-gray-700 hover:bg-gray-900 select-none"
+          (click)="setView(CalendarView.Week)"
+          [class.active]="view === CalendarView.Week"
+      >
+        semaine
+      </div>
+      <div
+          type="button"
+          class="justify-self-start self-center font-medium rounded-e-lg text-sm w-fit h-fit px-5 py-4 bg-gray-500 focus:outline-none focus:ring-4 focus:ring-gray-300 dark:bg-gray-500 dark:focus:ring-gray-700 dark:border-gray-400 text-white outline-none dark:hover:bg-gray-700 hover:bg-gray-900 select-none"
+          (click)="setView(CalendarView.Day)"
+          [class.active]="view === CalendarView.Day"
+      >
+        jour
+      </div>
+    </div>
 </div>
 </div>
-  <br />
 
 <div *ngIf="showSuprRessource"
     class="overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none justify-center items-center flex">

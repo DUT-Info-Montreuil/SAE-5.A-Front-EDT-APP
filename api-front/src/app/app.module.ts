@@ -10,6 +10,8 @@ import { ConnexionComponent } from './components/connexion/connexion.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { DashboardModule } from './components/dashboard/dashboard.module';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
+import { ProfileModule } from './components/profile/profile.module';
+
 import {registerLocaleData} from "@angular/common";
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import localeFr from '@angular/common/locales/fr';
@@ -54,7 +56,7 @@ class CustomDateFormatter extends CalendarNativeDateFormatter {
     ConnexionComponent,
     SidebarComponent,
     NavbarComponent,
-    
+
   ],
   imports: [
     BrowserAnimationsModule,
@@ -65,6 +67,7 @@ class CustomDateFormatter extends CalendarNativeDateFormatter {
     HttpClientModule,
     FormsModule,
     DashboardModule,
+    ProfileModule,
     CalendarModule,
     MatFormFieldModule,
     MatInputModule,

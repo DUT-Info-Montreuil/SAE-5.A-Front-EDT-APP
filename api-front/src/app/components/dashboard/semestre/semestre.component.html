@@ -1,0 +1,156 @@
+<p>semestre works!</p>
+
+<div id="ressourceComponant">
+    <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+        <div class="flex flex-column sm:flex-row flex-wrap space-y-4 sm:space-y-0 items-center justify-between pb-4">
+            <div>
+                <button (click)="toggleCreateSemestre()" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center " type="button">+</button>
+              </div>
+              
+            <label for="table-search" class="sr-only">Search</label>
+           
+        </div>
+        <table class="w-full text-sm text-left rtl:text-right text-gray-500 ">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50 ">
+                <tr>
+                    
+                    <th scope="col" class="px-6 py-3">
+                        numero du semestre
+                    </th>
+                    <th>
+
+                    </th>
+                    
+                   
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="bg-white border-b   hover:bg-gray-50 " *ngFor="let r of allSemestres" (click)="chargerRessource(r.IdSemestre)"   >
+                   
+                    <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
+                        {{r.Numero}}
+                    </td>
+                    <td >
+                      <img class="cross" (click)="toggleSuprSemestre(r.IdSemestre)" src="../../../../assets/betterCross.svg"/>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+<!-- modal create ressource -->
+<div *ngIf="showModalCreateSemestre" class="overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none justify-center items-center flex">
+    <div class="relative w-auto my-6 mx-auto max-w-6xl">
+      <!--content-->
+      <div class="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+        <!--header-->
+        <div class="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
+          <h3 class="text-3xl font-semibold">
+            Cree un semestre
+          </h3>
+          <button class="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none" (click)="toggleCreateSemestre()">
+            <span class="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
+              ×
+            </span>
+          </button>
+        </div>
+        <!--body-->
+        <div class="relative p-6 flex-auto">
+          <div>
+              <label for="small-input" class="block mb-2 text-sm font-medium text-gray-900 ">Nom du semestre </label>
+              <input type="text" id="imputNumeroSemestre" class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 ">
+          </div>
+          
+        </div>
+        <!--footer-->
+        <div class="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
+          <button class="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" (click)="toggleCreateSemestre()">
+            Close
+          </button>
+          <button (click)="addSemestre()" class="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" (click)="toggleCreateSemestre()">
+            Save 
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="showModalCreateSemestre" class="opacity-25 fixed inset-0 z-40 bg-black"></div>`
+  <!-- modal create ressource -->
+
+
+
+
+  <!-- modal modif ressource -->
+  <div *ngIf="showModalModifSemestre" class="overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none justify-center items-center flex">
+    <div class="relative w-auto my-6 mx-auto max-w-6xl">
+      <!--content-->
+      <div class="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+        <!--header-->
+        <div class="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
+          <h3 class="text-3xl font-semibold">
+            Modal Title
+          </h3>
+          <button class="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none" (click)="toggleModalModifSemestre()">
+            <span class="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
+              ×
+            </span>
+          </button>
+        </div>
+        <!--body-->
+        <div class="relative p-6 flex-auto">
+          <div>
+              <label for="small-input" class="block mb-2 text-sm font-medium text-gray-900 ">Nom de la ressource </label>
+              <input type="text" id="modifierNumero" class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 ">
+          </div>
+          
+        </div>
+        <!--footer-->
+        <div class="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
+          <button class="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" (click)="toggleModalModifSemestre()">
+            Close
+          </button>
+          <button (click)="changerRessource()" class="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" (click)="toggleModalModifSemestre()">
+            Save 
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="showModalModifSemestre" class="opacity-25 fixed inset-0 z-40 bg-black"></div>
+
+
+  <!-- modal supr semestre -->
+  <div *ngIf="showSuprSemestre" class="overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none justify-center items-center flex">
+    <div class="relative w-auto my-6 mx-auto max-w-6xl">
+      <!--content-->
+      <div class="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+        <!--header-->
+        <div class="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
+          <h3 class="text-3xl font-semibold">
+            Voulez vous supprmier la ressource {{NameSuprSemestre}} ?
+          </h3>
+          <button class="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none" (click)="toggleSuprSemestre()">
+            <span class="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
+              ×
+            </span>
+          </button>
+        </div>
+        <!--body-->
+        
+        <!--footer-->
+        <div class="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
+          <button class="text-emerald-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" (click)="toggleSuprSemestre()">
+            Anuler
+          </button>
+          <button (click)="delSemestre()" class="bg-red-500 text-white active:bg-red-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" (click)="toggleSuprSemestre()">
+            SUPPRIMER 
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="showSuprSemestre" class="opacity-25 fixed inset-0 z-40 bg-black"></div>
+  <!-- modal supr semestre -->

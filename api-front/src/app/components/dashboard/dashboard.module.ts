@@ -14,11 +14,26 @@ import {MatAutocompleteModule} from "@angular/material/autocomplete";
 import {CdkDropList} from "@angular/cdk/drag-drop";
 import {MatSelectModule} from "@angular/material/select";
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
+import { RoomManagerComponent } from './room-manager/room-manager.component';
+import { RessourceManagerComponent } from './ressource-manager/ressource-manager.component';
+import { GroupManagerComponent } from './group-manager/group-manager.component';
+import { SemestreComponent } from './semestre/semestre.component';
+import { EquipementManagerComponent } from './equipement-manager/equipement-manager.component';
+
+import {Component, OnInit} from '@angular/core';
+import {Observable} from 'rxjs';
+import {map, startWith} from 'rxjs/operators';
+import {AsyncPipe} from '@angular/common';
 @NgModule({
   declarations: [
     DashboardComponent,
     CreateUsersComponent,
-    EdtCalendarComponent
+    EdtCalendarComponent,
+    RoomManagerComponent,
+    RessourceManagerComponent,
+    GroupManagerComponent,
+    SemestreComponent,
+    EquipementManagerComponent
   ],
   exports: [
     EdtCalendarComponent
@@ -38,7 +53,16 @@ import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
     MatAutocompleteModule,
     CdkDropList,
     MatSelectModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    ReactiveFormsModule,
+    MatAutocompleteModule,
+    MatInputModule,
+    MatFormFieldModule,
+    AsyncPipe,
+
+
+
+
   ]
 })
 export class DashboardModule { }

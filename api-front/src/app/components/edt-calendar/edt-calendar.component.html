@@ -1,38 +1,25 @@
 <div class="row">
     <div class="col-md-6">
-      <div class="btn-group">
-        <div
-          class="btn btn-primary"
-          mwlCalendarPreviousView
-          [view]="'week'"
-          [(viewDate)]="viewDate"
-        >
-          Previous
+        <div class="btn-group">
+            <div class="btn btn-primary" mwlCalendarPreviousView [view]="'week'" [(viewDate)]="viewDate">
+                Previous
+            </div>
+            <div class="btn btn-outline-secondary" mwlCalendarToday [(viewDate)]="viewDate">
+                Today
+            </div>
+            <div class="btn btn-primary" mwlCalendarNextView [view]="'week'" [(viewDate)]="viewDate">
+                Next
+            </div>
         </div>
-        <div
-          class="btn btn-outline-secondary"
-          mwlCalendarToday
-          [(viewDate)]="viewDate"
-        >
-          Today
-        </div>
-        <div
-          class="btn btn-primary"
-          mwlCalendarNextView
-          [view]="'week'"
-          [(viewDate)]="viewDate"
-        >
-          Next
-        </div>
-      </div>
     </div>
     <div class="col-md-6 text-right">
-      <h3>{{ viewDate | calendarDate:('weekViewTitle') }}</h3>
+        <h3>{{ viewDate | calendarDate:('weekViewTitle') }}</h3>
     </div>
-  </div>
-  <br />
+</div>
+<br />
 
-  <div *ngIf="showSuprRessource" class="overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none justify-center items-center flex">
+<div *ngIf="showSuprRessource"
+    class="overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none justify-center items-center flex">
     <div class="relative p-4 w-full max-w-2xl h-full md:h-auto">
         <!-- Modal content -->
         <div class="relative p-4 bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">
@@ -41,8 +28,15 @@
                 <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
                     Créer un cours
                 </h3>
-                <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="updateProductModal">
-                    <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                <button type="button"
+                    class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                    (click)="toggleSuprRessource()">
+                    <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd"
+                            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                            clip-rule="evenodd"></path>
+                    </svg>
                     <span class="sr-only">Close modal</span>
                 </button>
             </div>
@@ -50,91 +44,95 @@
             <form action="#">
                 <div class="grid gap-4 mb-4 sm:grid-cols-2">
                     <div>
-                        <label for="category" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Ressources</label>
-                        <select id="category" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                            <option *ngFor="let ressource of ressouces" [value]="ressource.idressource">{{ressource.titre}} - {{ressource.numero}}</option>
-                            
+                        <label for="category"
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Ressources</label>
+                        <select id="category"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                            (change)="onRessourceChange($event)"
+                            >
+                            <option *ngFor="let ressource of ressouces" [value]="ressource.idressource">
+                                {{ressource.titre}} -
+                                {{ressource.numero}}</option>
                         </select>
                     </div>
                     <div>
-                        <label for="category" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Salles</label>
-                        <select id="category" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                            <option selected="">Electronics</option>
-                            <option value="TV">TV/Monitors</option>
-                            <option value="PC">PC</option>
-                            <option value="GA">Gaming/Console</option>
-                            <option value="PH">Phones</option>
+                        <label for="category"
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Professeur</label>
+                        <select id="category"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                            (change)="onTeacherChange($event)">
+                            <option *ngFor="let teacher of teachers" [value]="teacher.idProf">{{teacher.nom}}
+                                {{teacher.prenom}}
+                                [{{teacher.Initiale}}]</option>
                         </select>
                     </div>
                     <div>
-                        <label for="category" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Professeur</label>
-                        <select id="category" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                            <option selected="">Electronics</option>
-                            <option value="TV">TV/Monitors</option>
-                            <option value="PC">PC</option>
-                            <option value="GA">Gaming/Console</option>
-                            <option value="PH">Phones</option>
+                        <label for="category"
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Salles</label>
+                        <select id="category"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                            (change)="onSalleChange($event)">
+                            <option *ngFor="let salle of salles" [value]="salle.idSalle">{{salle.Nom}}
+                                ({{salle.Capacite}} places)
+                            </option>
                         </select>
                     </div>
                     <div>
-                        <label for="category" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Groupe</label>
-                        <select id="category" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                            <option selected="">Electronics</option>
-                            <option value="TV">TV/Monitors</option>
-                            <option value="PC">PC</option>
-                            <option value="GA">Gaming/Console</option>
-                            <option value="PH">Phones</option>
+                        <label for="category" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Type de cours</label>
+                        <select id="category" name="selectedType"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                            (change)="onTypeChange($event)"
+                            [(ngModel)]="selectedType">
+                            <option *ngFor="let typeArray of types" [value]="typeArray[0]">{{typeArray[0]}}</option>
+                        </select>
+
+                    </div>
+
+                    <div>
+                        <label for="category"
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Groupe</label>
+                        <select id="category"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                            (change)="onGroupeChange($event)">
+                            <option *ngFor="let groupe of groupes" [value]="groupe.IdGroupe">{{groupe.Nom}}</option>
                         </select>
                     </div>
 
                 </div>
                 <div class="flex items-center space-x-4">
-                    <button type="submit" class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
-                        Update product
+                    <button type="submit"
+                        class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800" 
+                        (click)="initiateCoursCreation()">
+                        Créer le cours
                     </button>
-                    <button type="button" class="text-red-600 inline-flex items-center hover:text-white border border-red-600 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">
-                        <svg class="mr-1 -ml-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
+                    <button type="button"
+                        class="text-red-600 inline-flex items-center hover:text-white border border-red-600 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">
+                        <svg class="mr-1 -ml-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd"
+                                d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                                clip-rule="evenodd"></path>
+                        </svg>
                         Delete
                     </button>
                 </div>
             </form>
         </div>
     </div>
-  </div>
-  <div *ngIf="showSuprRessource" class="opacity-25 fixed inset-0 z-40 bg-black"></div>
-  
-  <ng-template
-    #weekViewHourSegmentTemplate
-    let-segment="segment"
-    let-locale="locale"
-    let-segmentHeight="segmentHeight"
-    let-isTimeLabel="isTimeLabel"
-  >
-    <div
-      #segmentElement
-      class="cal-hour-segment"
-      [style.height.px]="segmentHeight"
-      [class.cal-hour-start]="segment.isStart"
-      [class.cal-after-hour-start]="!segment.isStart"
-      [ngClass]="segment.cssClass"
-      (mousedown)="startDragToCreate(segment, $event, segmentElement)"
-    >
-      <div class="cal-time" *ngIf="isTimeLabel">
-        {{ segment.date | calendarDate:'weekViewHour':locale }}
-      </div>
-    </div>
-  </ng-template>
-  
-  <mwl-calendar-week-view
-    [viewDate]="viewDate"
-    [events]="events"
-    [hourSegmentTemplate]="weekViewHourSegmentTemplate"
-    [dayStartHour]="dayStartHour"
-    [dayEndHour]="dayEndHour"
-    [excludeDays]="[0,6]"
-   
+</div>
+<div *ngIf="showSuprRessource" class="opacity-25 fixed inset-0 z-40 bg-black"></div>
 
-    
-  >
-  </mwl-calendar-week-view>
-  
+<ng-template #weekViewHourSegmentTemplate let-segment="segment" let-locale="locale" let-segmentHeight="segmentHeight"
+    let-isTimeLabel="isTimeLabel">
+    <div #segmentElement class="cal-hour-segment" [style.height.px]="segmentHeight"
+        [class.cal-hour-start]="segment.isStart" [class.cal-after-hour-start]="!segment.isStart"
+        [ngClass]="segment.cssClass" (mousedown)="startDragToCreate(segment, $event, segmentElement)">
+        <div class="cal-time" *ngIf="isTimeLabel">
+            {{ segment.date | calendarDate:'weekViewHour':locale }}
+        </div>
+    </div>
+</ng-template>
+
+<mwl-calendar-week-view [viewDate]="viewDate" [events]="events" [hourSegmentTemplate]="weekViewHourSegmentTemplate"
+    [dayStartHour]="dayStartHour" [dayEndHour]="dayEndHour" [excludeDays]="[0,6]">
+</mwl-calendar-week-view>

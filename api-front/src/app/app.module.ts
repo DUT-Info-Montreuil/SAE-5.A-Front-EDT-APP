@@ -8,7 +8,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule,ReactiveFormsModule } from '@angular/forms';
 import { ConnexionComponent } from './components/connexion/connexion.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
-import { HomeComponent } from './components/home/home.component';
 import { DashboardModule } from './components/dashboard/dashboard.module';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import {registerLocaleData} from "@angular/common";
@@ -24,8 +23,6 @@ import {
   CalendarNativeDateFormatter, DateAdapter,
   DateFormatterParams
 } from "angular-calendar";
-import { ScheduleReadonlyComponent } from './components/schedule/schedule-readonly/schedule-readonly.component';
-import { ScheduleEditComponent } from './components/schedule/schedule-edit/schedule-edit.component';
 import {CdkDrag, CdkDropList} from "@angular/cdk/drag-drop";
 import { EdtCalendarComponent } from './components/edt-calendar/edt-calendar.component';
 import {MatSelectModule} from "@angular/material/select";
@@ -57,10 +54,7 @@ class CustomDateFormatter extends CalendarNativeDateFormatter {
     ConnexionComponent,
     SidebarComponent,
     NavbarComponent,
-    HomeComponent,
-    ScheduleReadonlyComponent,
-    ScheduleEditComponent,
-    EdtCalendarComponent,
+    
   ],
   imports: [
     BrowserAnimationsModule,

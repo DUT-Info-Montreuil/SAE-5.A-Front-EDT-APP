@@ -38,7 +38,7 @@ export class ConnexionComponent {
             // TODO: redirect to page first login
             console.log('redirect to page for first login');
           }
-          changePage('/home');
+          changePage('/edt-calendar');
         },
       });
   }

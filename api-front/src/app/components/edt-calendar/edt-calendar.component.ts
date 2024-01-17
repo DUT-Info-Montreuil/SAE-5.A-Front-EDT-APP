@@ -45,10 +45,12 @@ function ceilToNearest(amount: number, precision: number) {
     encapsulation: ViewEncapsulation.None,
 })
 export class EdtCalendarComponent {
-    toggleSuprRessource() {
-        this.showSuprRessource = !this.showSuprRessource;
+    closeModal() {
+        this.toggleModal = !this.toggleModal;
+        this.events.splice(this.events.length - 1, 1);
+        this.refresh();
     }
-    showSuprRessource = false;
+    toggleModal = false;
     viewDate = new Date();
     events: CalendarEvent[] = [];
     dragToCreateActive = false;
@@ -88,11 +90,14 @@ export class EdtCalendarComponent {
     segment: WeekViewHourSegment,
     mouseDownEvent: MouseEvent,
     segmentElement: HTMLElement
+    
   ) {
+    
     const dragToSelectEvent: CalendarEvent = {
       id: this.events.length,
       title: '',
       start: segment.date,
+      end: addMinutes(segment.date, 30),
       draggable: this.isInEditMode,
       resizable: this.getResizable(),
       meta: {
@@ -156,6 +161,9 @@ export class EdtCalendarComponent {
 
   closeOpenMonthViewDay() {
     this.activeDayIsOpen = false;
+    //remove last event
+    
+
   }
 
   changeDay(date: any) {
@@ -387,7 +395,7 @@ export class EdtCalendarComponent {
 
 
         console.log('initCoursModal');
-        this.showSuprRessource = true;
+        this.toggleModal = true;
     }
 
     createCours(body:any):Promise<any>{
@@ -494,7 +502,7 @@ export class EdtCalendarComponent {
 
         await this.assignSalle(bodyAssignSalle, idCours);
 
-        this.showSuprRessource = false;
+        this.toggleModal = false;
         this.refresh();
         this.updateEvent(event);
 
@@ -636,6 +644,7 @@ export class EdtCalendarComponent {
     this.http.post('http://localhost:5050/cours/getCoursGroupeExtended/'+idGroupe, body, {headers}).subscribe({
       next: async (data: any) => {
         console.log("data: " + JSON.stringify(data))
+        
         this.events = this.jsonToEvent(data);
         console.log("events : " + JSON.stringify(this.events))
         this.refreshCalendar.next()
@@ -649,8 +658,8 @@ export class EdtCalendarComponent {
 
   }
 
-  jsonToEvent(results: any[]) {
-    let bdEvent: CalendarEvent[] = []
+  jsonToEvent(results: any[]): CalendarEvent[] {
+    let bdEvents: CalendarEvent[] = []
     for (let result of results) {
       if (result != null) {
         // console.log("result: " + JSON.stringify(result))
@@ -661,21 +670,31 @@ export class EdtCalendarComponent {
       let ressource = result.titre
       console.log(ressource)
       let initprof = result.Initiale
+      let ressouceColor = result.codecouleur
+      console.log("ressourceColor: " + ressouceColor)
       let resizable = this.getResizable()
       console.log("heuredébut : " + setHours(setMinutes(date, heureDebutList[1]), heureDebutList[0]))
       console.log("heurefin : " + setHours(setMinutes(date, Number(nombreHeureList[1]) + Number(heureDebutList[1])), Number(nombreHeureList[0]) + Number(heureDebutList[0])))
       let draggable = this.isInEditMode
-      bdEvent.push({
+      
+      let bdEvent:CalendarEvent = {
         start: setHours(setMinutes(date, heureDebutList[1]), heureDebutList[0]),
         end: setHours(setMinutes(date, Number(nombreHeureList[1]) + Number(heureDebutList[1])), Number(nombreHeureList[0]) + Number(heureDebutList[0])),
         title: ressource,
         id: result.idCours,
         resizable: resizable,
         draggable: draggable,
-      })
+        color:{
+          primary: ressouceColor,
+          secondary: ressouceColor,
+        },
+      }
+
+      console.log(bdEvent)
+      bdEvents.push(bdEvent)
     }
-    console.log("bdEvent: " + JSON.stringify(bdEvent))
-    return bdEvent
+    console.log("bdEvents: " + JSON.stringify(bdEvents))
+    return bdEvents
   }
 
   getGroupes() {

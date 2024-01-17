@@ -88,11 +88,14 @@ export class EdtCalendarComponent {
     segment: WeekViewHourSegment,
     mouseDownEvent: MouseEvent,
     segmentElement: HTMLElement
+    
   ) {
+    
     const dragToSelectEvent: CalendarEvent = {
       id: this.events.length,
       title: '',
       start: segment.date,
+      end: addMinutes(segment.date, 30),
       draggable: this.isInEditMode,
       resizable: this.getResizable(),
       meta: {

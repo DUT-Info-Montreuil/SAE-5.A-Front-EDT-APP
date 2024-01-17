@@ -17,7 +17,7 @@ import localeFr from '@angular/common/locales/fr';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
-import {MatNativeDateModule} from '@angular/material/core';
+import {MatNativeDateModule, MatOptionModule} from '@angular/material/core';
 import {
   CalendarDateFormatter,
   CalendarModule,
@@ -28,6 +28,7 @@ import { ScheduleReadonlyComponent } from './components/schedule/schedule-readon
 import { ScheduleEditComponent } from './components/schedule/schedule-edit/schedule-edit.component';
 import {CdkDrag, CdkDropList} from "@angular/cdk/drag-drop";
 import { EdtCalendarComponent } from './components/edt-calendar/edt-calendar.component';
+import {MatSelectModule} from "@angular/material/select";
 registerLocaleData(localeFr)
 
 @Injectable()
@@ -87,7 +88,9 @@ class CustomDateFormatter extends CalendarNativeDateFormatter {
       }),
     CdkDrag,
     CdkDropList,
-    
+    MatOptionModule,
+    MatSelectModule,
+
   ],
   providers: [
     {provide: LOCALE_ID, useValue:'fr-FR'},

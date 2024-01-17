@@ -92,14 +92,15 @@ export class EdtCalendarComponent {
   CalendarView = CalendarView;
 
   constructor(private cdr: ChangeDetectorRef, private http: HttpClient, private route: ActivatedRoute) {
+    console.log("isInEditMode: " + this.isInEditMode)
   }
 
   ngOnInit(): void {
-    this.geAllProf();
     this.route.queryParams.subscribe(params => {
       let edit = params['edit'];
       this.isInEditMode = !!edit;
     });
+    this.geAllProf();
     console.log("isInEditMode: " + this.isInEditMode)
     this.getGroupes();
     this.filteredProfList = this.searchBarControl.valueChanges.pipe(
@@ -478,11 +479,11 @@ export class EdtCalendarComponent {
         });
     }
 
-    assignGroupe(body:any):Promise<any>{
+    assignGroupe(body:any, idCours:number):Promise<any>{
         const token = localStorage.getItem('token');
         const headers = { 'Authorization': `Bearer ${token}` };
         return new Promise((resolve, reject) => {
-            this.http.post('http://localhost:5050/groupe/ajouterCours/' + this.selectedGroupe, body, { headers }).subscribe({
+            this.http.post('http://localhost:5050/cours/ajouterGroupe/' + idCours, body, { headers }).subscribe({
                 next: (data: any) => {
                     resolve(data);
                 },
@@ -525,6 +526,7 @@ export class EdtCalendarComponent {
             'idRessource': this.selectedRessource,
             'typeCours': this.selectedType,
         };
+        console.log(body);
         let idCours = 0;
 
         await this.createCours(body).then((data)=>{
@@ -541,9 +543,9 @@ export class EdtCalendarComponent {
 
 
         const bodyAssignGroupe = {
-            'idCours': idCours,
+            'idGroupe': this.selectedGroupe,
         };
-        await this.assignGroupe(bodyAssignGroupe);
+        await this.assignGroupe(bodyAssignGroupe, idCours);
 
         const bodyAssignSalle = {
             'idSalle': this.selectedSalle,
@@ -660,7 +662,7 @@ export class EdtCalendarComponent {
     const token = localStorage.getItem('token');
     const headers = { 'Authorization': `Bearer ${token}` , 'Content-Type': 'application/json'};
     console.log(date.toLocaleDateString())
-    let body = {"HeureDebut":date.toLocaleTimeString(), "Jour": date.toLocaleDateString()}
+    let body = {"HeureDebut":date.toLocaleTimeString(), "Jour": date.toLocaleDateString().split('/').reverse().join('-')}
     this.http.put('http://localhost:5050/cours/deplacer/'+id, body,{headers}).subscribe({
       next: (data: any) => {
       },

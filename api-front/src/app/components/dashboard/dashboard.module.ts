@@ -24,6 +24,8 @@ import {Component, OnInit} from '@angular/core';
 import {Observable} from 'rxjs';
 import {map, startWith} from 'rxjs/operators';
 import {AsyncPipe} from '@angular/common';
+
+
 @NgModule({
   declarations: [
     DashboardComponent,
@@ -33,7 +35,8 @@ import {AsyncPipe} from '@angular/common';
     RessourceManagerComponent,
     GroupManagerComponent,
     SemestreComponent,
-    EquipementManagerComponent
+    EquipementManagerComponent,
+    UserManagerComponent
   ],
   exports: [
     EdtCalendarComponent

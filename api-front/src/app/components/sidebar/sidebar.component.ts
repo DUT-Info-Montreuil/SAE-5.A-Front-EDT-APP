@@ -1,10 +1,15 @@
 import {Component, OnInit} from '@angular/core';
 import {animate, state, style, transition, trigger} from "@angular/animations";
 import {ConnexionComponent} from "../connexion/connexion.component";
+
+import { first } from 'rxjs';
+import { FirstLoginComponent } from '../first-login/first-login.component';
+
 import {ActivatedRoute} from "@angular/router";
 import {CalendarEvent} from "angular-calendar";
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from "@angular/cdk/drag-drop";
 import { EdtCalendarComponent } from '../edt-calendar/edt-calendar.component';
+
 
 @Component({
   selector: 'app-sidebar',
@@ -98,6 +103,11 @@ export class SidebarComponent {
 
 
   onRouterOutletActivate(event: any) {
+
+    this.isConnection = (event instanceof ConnexionComponent) || (event instanceof FirstLoginComponent);
+    
+    SidebarComponent.isConnection = this.isConnection;
+
     if(event  instanceof ConnexionComponent){
       this.componentName = "ConnexionComponent";
     }
@@ -112,6 +122,7 @@ export class SidebarComponent {
 
   }
   protected readonly event = event;
+
 
   drop(event: CdkDragDrop<{title: string;}[]>) {
     console.log("event: " + event.item.data.title)

@@ -103,12 +103,13 @@ chargerGroupe(id : any)
   const group : any = this.allGroups.find((g : any) => g.IdGroupe == id);
   
   const nomGroup : any = document.getElementById('changerNomGroupe')
-  const annee : any = document.getElementById('changerAnneeGroupe')
+  /*  const annee : any = document.getElementById('changerAnneeGroupe')
   const anneeScolaire : any  = document.getElementById('changerAnneeSco')
   
-  nomGroup.setAttribute('value', group.Nom);
-  annee.setAttribute('value', group.Annee);
   anneeScolaire.setAttribute('value', group.AnneeScolaire);
+  
+  annee.setAttribute('value', group.Annee);*/
+  nomGroup.setAttribute('value', group.Nom);
   
   
 
@@ -122,11 +123,12 @@ chargerGroupe(id : any)
 
 changerGroupe(){
   const nomGroup : any = document.getElementById('changerNomGroupe')
+  /*
   const annee : any = document.getElementById('changerAnneeGroupe')
-  const anneeScolaire : any  = document.getElementById('changerAnneeSco')
+  const anneeScolaire : any  = document.getElementById('changerAnneeSco')*/
   const token = localStorage.getItem('token');
   const headers = { 'Authorization': `Bearer ${token}` };
-  const body = { "Nom" : nomGroup.value, "Annee"  : annee.value, "AnneeScolaire" : anneeScolaire.value };
+  const body = { "Nom" : nomGroup.value };
 
   this.http.put("http://localhost:5050/groupe/update/" + this.idModifGroupe, body, { headers }).subscribe((res: any) => 
   {
@@ -180,14 +182,14 @@ showModalCreateGroup()
 
 addGroupe(){
   const nom = (<HTMLInputElement>document.getElementById("inputNomGroupe")).value;
-  const annee = (<HTMLInputElement>document.getElementById("inputAnneeGroupe")).value;
-  const anneeScolaire = (<HTMLInputElement>document.getElementById("inputAnneeSco")).value;
+  /*const annee = (<HTMLInputElement>document.getElementById("inputAnneeGroupe")).value;
+  const anneeScolaire = (<HTMLInputElement>document.getElementById("inputAnneeSco")).value;*/
   const token = localStorage.getItem('token');
   const headers = { 'Authorization': `Bearer ${token}` };
-  const body = { "Nom" : nom, "Annee"  : annee, "AnneeScolaire" : anneeScolaire , "idGroupe_parent" :-1};
+  const body = { "Nom" : nom,  "idGroupeParent" :-1};
   if (this.SousGroupeActuel.length > 0)
   {
-    body["idGroupe_parent"] = this.SousGroupeActuel[this.SousGroupeActuel.length - 1];
+    body["idGroupeParent"] = this.SousGroupeActuel[this.SousGroupeActuel.length - 1];
   }
   this.http.post("http://localhost:5050/groupe/add", body, { headers }).subscribe((res: any) => 
   {

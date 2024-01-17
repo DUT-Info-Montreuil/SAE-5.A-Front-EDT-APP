@@ -11,6 +11,7 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { DashboardModule } from './components/dashboard/dashboard.module';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { ProfileModule } from './components/profile/profile.module';
+import { FirstLoginComponent } from './components/first-login/first-login.component';
 
 import {registerLocaleData} from "@angular/common";
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
@@ -56,6 +57,9 @@ class CustomDateFormatter extends CalendarNativeDateFormatter {
     ConnexionComponent,
     SidebarComponent,
     NavbarComponent,
+    HomeComponent,
+    FirstLoginComponent,
+
 
   ],
   imports: [

@@ -5,14 +5,17 @@ import { RouterModule, Routes } from '@angular/router';
 import { ConnexionComponent } from './components/connexion/connexion.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import {SidebarComponent} from "./components/sidebar/sidebar.component";
-import { HomeComponent } from './components/home/home.component';
+
+import { EdtCalendarComponent } from "./components/edt-calendar/edt-calendar.component";
+
 
 export const appRoutes: Routes = [
   { path: 'connexion', component: ConnexionComponent },
   { path: 'dashboard', component: DashboardComponent },
-  { path:'home', component:HomeComponent },
-  { path:'', component:HomeComponent },
-  { path: 'sidebar', component: SidebarComponent }
+
+  { path: 'sidebar', component: SidebarComponent },
+
+  { path: 'edt-calendar', component: EdtCalendarComponent}
 ];
 
 @NgModule({

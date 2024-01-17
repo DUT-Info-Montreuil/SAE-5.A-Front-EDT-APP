@@ -1,6 +1,10 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {animate, state, style, transition, trigger} from "@angular/animations";
 import {ConnexionComponent} from "../connexion/connexion.component";
+import {ActivatedRoute} from "@angular/router";
+import {CalendarEvent} from "angular-calendar";
+import {CdkDragDrop, moveItemInArray, transferArrayItem} from "@angular/cdk/drag-drop";
+import { EdtCalendarComponent } from '../edt-calendar/edt-calendar.component';
 
 @Component({
   selector: 'app-sidebar',
@@ -53,23 +57,65 @@ import {ConnexionComponent} from "../connexion/connexion.component";
   ]
 })
 export class SidebarComponent {
+
   isOpen= true;
-  isConnection = false;
-  static isConnection: boolean;
+  componentName = "None";
+  static componentName: string;
+  coursList = [
+    "cours1",
+    "cours2",
+    "cours3",
+    "cours3",
+    "cours3",
+    "cours3",
+    "cours3",
+    "cours3",
+  ];
+
+  externalEvents = [
+    {
+      title: "cours1"
+    },
+    {
+      title: "cours2"
+    },
+    {
+      title: "cours3"
+    },
+    {
+      title: "cours4"
+    },
+  ];
+
+
   get isSideBarOpen() {
       return this.isOpen ? "open" : "closed";
   }
-
-
 
   toggleSideBar(){
       this.isOpen = !this.isOpen;
   }
 
-  onRouterOutletActivate(event: any) {
-    this.isConnection = event instanceof ConnexionComponent;
-    SidebarComponent.isConnection = this.isConnection;
 
+  onRouterOutletActivate(event: any) {
+    if(event  instanceof ConnexionComponent){
+      this.componentName = "ConnexionComponent";
+    }
+    else if (event instanceof EdtCalendarComponent){
+      this.componentName = "EdtCalendarComponent";
+    }
+    else{
+      this.componentName = "None";
+    }
+    SidebarComponent.componentName = this.componentName;
+
+
+  }
+  protected readonly event = event;
+
+  drop(event: CdkDragDrop<{title: string;}[]>) {
+    console.log("event: " + event.item.data.title)
+    console.log("html: " + event.dropPoint)
   }
 }
 

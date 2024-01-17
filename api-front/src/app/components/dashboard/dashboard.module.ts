@@ -3,15 +3,25 @@ import { CommonModule } from '@angular/common';
 import { DashboardComponent } from './dashboard.component';
 import { CreateUsersComponent } from './create-users/create-users.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { CalendarComponent } from './calendar/calendar.component';
-
+import { EdtCalendarComponent } from '../edt-calendar/edt-calendar.component';
 import  { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import {MatFormFieldModule} from "@angular/material/form-field";
+import {MatDatepickerModule} from "@angular/material/datepicker";
+import {MatInputModule} from "@angular/material/input";
+import {MatCardModule} from "@angular/material/card";
+import {MatAutocompleteModule} from "@angular/material/autocomplete";
+import {CdkDropList} from "@angular/cdk/drag-drop";
+import {MatSelectModule} from "@angular/material/select";
+import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 @NgModule({
   declarations: [
     DashboardComponent,
     CreateUsersComponent,
-    CalendarComponent
+    EdtCalendarComponent
+  ],
+  exports: [
+    EdtCalendarComponent
   ],
   imports: [
     CommonModule,
@@ -20,7 +30,15 @@ import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
       useFactory: adapterFactory,
     }),
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatDatepickerModule,
+    MatInputModule,
+    MatCardModule,
+    MatAutocompleteModule,
+    CdkDropList,
+    MatSelectModule,
+    MatProgressSpinnerModule
   ]
 })
 export class DashboardModule { }

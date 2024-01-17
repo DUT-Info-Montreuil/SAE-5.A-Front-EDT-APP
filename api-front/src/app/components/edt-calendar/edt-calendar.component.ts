@@ -28,22 +28,6 @@ function ceilToNearest(amount: number, precision: number) {
     return Math.ceil(amount / precision) * precision;
 }
 
-@Injectable()
-export class CustomEventTitleFormatter extends CalendarEventTitleFormatter {
-    override weekTooltip(event: CalendarEvent<any>, title: string): string {
-        if (!event.meta.tmpEvent) {
-            return super.weekTooltip(event, title) || '';
-        }
-        return '';
-    }
-
-    override dayTooltip(event: CalendarEvent<any>, title: string): string {
-        if (!event.meta.tmpEvent) {
-            return super.dayTooltip(event, title) || '';
-        }
-        return '';
-    }
-}
 
 @Component({
     selector: 'app-edt-calendar',
@@ -53,7 +37,6 @@ export class CustomEventTitleFormatter extends CalendarEventTitleFormatter {
     providers: [
         {
             provide: CalendarEventTitleFormatter,
-            useClass: CustomEventTitleFormatter,
         }
     ],
     styles: [
@@ -62,39 +45,40 @@ export class CustomEventTitleFormatter extends CalendarEventTitleFormatter {
     encapsulation: ViewEncapsulation.None,
 })
 export class EdtCalendarComponent {
-    toggleSuprRessource() {
-        this.showSuprRessource = !this.showSuprRessource;
-    }
-    showSuprRessource = false;
-    viewDate = new Date();
-    events: CalendarEvent[] = [];
-    dragToCreateActive = false;
-    weekStartsOn: 0 = 0;
-    dayStartHour: number = 8;
-    dayEndHour: number = 19;
-    selectedGroupe: string = "0";
-    refreshCalendar = new Subject<void>();
+  toggleSuprRessource() {
+    this.showSuprRessource = !this.showSuprRessource;
+  }
 
-    ressouces: any[] = [];
-    groupes: any[] = [];
-    salles: any[] = [];
-    teachers: any[] = [];
-    types: any[] = [];
+  showSuprRessource = false;
+  viewDate = new Date();
+  events: CalendarEvent[] = [];
+  dragToCreateActive = false;
+  weekStartsOn: 0 = 0;
+  dayStartHour: number = 8;
+  dayEndHour: number = 19;
+  refreshCalendar = new Subject<void>();
 
-    selectedRessource: any;
-    selectedGroupe: any;
-    selectedSalle: any;
-    selectedTeacher: any;
-    selectedType: any;
+  ressouces: any[] = [];
+  groupes: any[] = [];
+  salles: any[] = [];
+  teachers: any[] = [];
+  types: any[] = [];
 
-    coursId: number = 0;
-    groupesList: {idGroupe: any, name: any, subGroupes: any[] | string}[] = [];
-    isInEditMode = false;
-    view: CalendarView = CalendarView.Week;
-    private activeDayIsOpen: boolean = true;
-    CalendarView = CalendarView;
+  selectedRessource: any;
+  selectedGroupe: any;
+  selectedSalle: any;
+  selectedTeacher: any;
+  selectedType: any;
 
-  constructor(private cdr: ChangeDetectorRef, private http: HttpClient) { }
+  coursId: number = 0;
+  groupesList: { idGroupe: any, name: any }[] = [];
+  isInEditMode = false;
+  view: CalendarView = CalendarView.Week;
+  private activeDayIsOpen: boolean = true;
+  CalendarView = CalendarView;
+
+  constructor(private cdr: ChangeDetectorRef, private http: HttpClient) {
+  }
 
   ngOnInit(): void {
     this.getGroupes();
@@ -116,7 +100,7 @@ export class EdtCalendarComponent {
         tmpEvent: true,
       },
     };
-    if(this.isInEditMode){
+    if (this.isInEditMode) {
       this.events = [...this.events, dragToSelectEvent];
       const segmentPosition = segmentElement.getBoundingClientRect();
       this.dragToCreateActive = true;
@@ -124,21 +108,21 @@ export class EdtCalendarComponent {
         weekStartsOn: this.weekStartsOn,
       });
 
-        fromEvent(document, 'mousemove')
-            .pipe(
-                finalize(() => {
+      fromEvent(document, 'mousemove')
+        .pipe(
+          finalize(() => {
 
-                    delete dragToSelectEvent.meta.tmpEvent;
-                    this.dragToCreateActive = false;
-                    this.refresh();
-                    this.initCoursModal(dragToSelectEvent);
+            delete dragToSelectEvent.meta.tmpEvent;
+            this.dragToCreateActive = false;
+            this.refresh();
+            this.initCoursModal(dragToSelectEvent);
 
 
-                }),
-                takeUntil(fromEvent(document, 'mouseup'))
-            )
-            .subscribe((mouseMoveEvent: Event) => {
-                const mouseEvent = mouseMoveEvent as MouseEvent;
+          }),
+          takeUntil(fromEvent(document, 'mouseup'))
+        )
+        .subscribe((mouseMoveEvent: Event) => {
+          const mouseEvent = mouseMoveEvent as MouseEvent;
 
           const minutesDiff = ceilToNearest(
             mouseEvent.clientY - segmentPosition.top,
@@ -161,15 +145,14 @@ export class EdtCalendarComponent {
   }
 
 
-
   saveDate(date: any) {
-    if(date == null){
+    if (date == null) {
       date = new Date().toLocaleDateString();
     }
     let dateList = date.split('/')
     // console.log("dateString: " + date)
     // console.log("new date" + dateList[1]+"/"+dateList[0]+"/"+dateList[2])
-    window.localStorage.setItem("calendarDateView", dateList[1]+"/"+dateList[0]+"/"+dateList[2])
+    window.localStorage.setItem("calendarDateView", dateList[1] + "/" + dateList[0] + "/" + dateList[2])
   }
 
   closeOpenMonthViewDay() {
@@ -192,7 +175,7 @@ export class EdtCalendarComponent {
   }
 
   setViewClick(view: CalendarView, date: Date) {
-    if(!this.isInEditMode){
+    if (!this.isInEditMode) {
       this.view = view;
       this.viewDate = date;
     }
@@ -204,34 +187,34 @@ export class EdtCalendarComponent {
     this.cdr.detectChanges();
   }
 
-    updateEvent(event: CalendarEvent) {
+  updateEvent(event: CalendarEvent) {
 
-        event.id = this.coursId;
-        console.log('updateEvent');
-        console.log(this.selectedRessource);
-        console.log(this.ressouces);
+    event.id = this.coursId;
+    console.log('updateEvent');
+    console.log(this.selectedRessource);
+    console.log(this.ressouces);
 
-        const ressource = this.ressouces.find((ressource) => ressource.idressource == this.selectedRessource);
-        event.title = ressource.titre;
-        console.log('ressource');
-        console.log(ressource);
-        console.log('ressource titre');
-        console.log(ressource.titre);
-        console.log('ressource couleur');
-        console.log(ressource.couleur);
+    const ressource = this.ressouces.find((ressource) => ressource.idressource == this.selectedRessource);
+    event.title = ressource.titre;
+    console.log('ressource');
+    console.log(ressource);
+    console.log('ressource titre');
+    console.log(ressource.titre);
+    console.log('ressource couleur');
+    console.log(ressource.couleur);
 
-        event.color = {
-            primary: ressource.codecouleur,
-            secondary: ressource.codecouleur,
-        },
+    event.color = {
+      primary: ressource.codecouleur,
+      secondary: ressource.codecouleur,
+    },
 
-        console.log('event');
-        console.log(event);
-        this.refresh();
-    }
+      console.log('event');
+    console.log(event);
+    this.refresh();
+  }
 
 
-    getAvailableRessources(): Promise<any> {
+  getAvailableRessources(): Promise<any> {
         return new Promise((resolve, reject) => {
             console.log('getAvailableRessources');
             const token = localStorage.getItem('token');
@@ -571,10 +554,10 @@ export class EdtCalendarComponent {
           event.end = newEnd;
         }
       }
+      if(newEnd){
+        event.end = newEnd;
+      }
       event.start = newStart;
-    }
-    if (newEnd) {
-      event.end = newEnd;
     }
     if (this.view === 'month') {
       this.viewDate = newStart;
@@ -714,38 +697,18 @@ export class EdtCalendarComponent {
   }
 
   private orderedGroupeList(data: any[]) {
-    let listGroupe: {idGroupe: any, name: any, subGroupes: any[] | string}[] = []
+    let listGroupe: {idGroupe: any, name: any}[] = []
     for(let groupe of data){
       console.log(groupe)
       if(!groupe.idGroupe_parent){
         listGroupe.push({
           idGroupe: groupe.IdGroupe,
           name: groupe.Nom,
-          subGroupes: this.getLowestSubGroupes(groupe.IdGroupe, data)
         })
       }
     }
     return listGroupe;
   }
-
-  private getLowestSubGroupes(idGroupe: any, data: any[]): any[] {
-    let subGroupes: any[] = [];
-    for(let groupe of data){
-      if(groupe.idGroupe_parent === idGroupe){
-        let lowestSubGroupes = this.getLowestSubGroupes(groupe.IdGroupe, data);
-        if(lowestSubGroupes.length > 0) {
-          subGroupes.push(...lowestSubGroupes);
-        } else {
-          subGroupes.push({
-            idGroupe: groupe.IdGroupe,
-            name: groupe.Nom
-          });
-        }
-      }
-    }
-    return subGroupes;
-  }
-
   protected readonly window = window;
 }
 

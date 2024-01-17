@@ -87,11 +87,7 @@ role="button" *ngIf="isInEditMode" (click)="setEditMod(false)">
         <mat-label>groupe</mat-label>
         <mat-select [(value)]="selectedGroupe" [(ngModel)]="selectedGroupe" (selectionChange)="getAllCoursInfo(selectedGroupe, getMonday(viewDate), getSunday(viewDate)); window.localStorage.setItem('currentIdGroupe',selectedGroupe.toString());">
           @for (groupe of groupesList; track groupe) {
-            <mat-optgroup [label]="groupe.name">
-              @for (subgroupe of groupe.subGroupes; track subgroupe){
-                <mat-option [value]="subgroupe.idGroupe">{{subgroupe.name}}</mat-option>
-              }
-            </mat-optgroup>
+                <mat-option [value]="groupe.idGroupe">{{groupe.name}}</mat-option>
           }
         </mat-select>
       </mat-form-field>

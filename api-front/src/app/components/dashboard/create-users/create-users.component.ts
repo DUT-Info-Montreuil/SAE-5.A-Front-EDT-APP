@@ -35,6 +35,7 @@ export class CreateUsersComponent {
       next: (data: any) => {
         console.log(data);
         this.groupes = data;
+        return data;
       },
       error: (error: any) => {
         console.log(error);
@@ -143,6 +144,70 @@ export class CreateUsersComponent {
       this.userFormArray.push(userForm);
     }
 
+  }
+
+  onFileSelected(event: any): void {
+    console.log("onFileSelected");
+    console.log(event);
+    const file: File = event.target.files[0];
+    if (file) {
+      this.parseCSV(file);
+    }
+  }
+
+  parseCSV(file: File): void {
+    const reader: FileReader = new FileReader();
+    reader.onload = (e: any) => {
+      const csv: string = e.target.result;
+      const usersData = this.processCSVData(csv);
+      
+      this.mainForm.patchValue({
+        users: usersData
+      });
+    
+    };
+    reader.readAsText(file);
+  }
+
+  processCSVData(csv: string): any[] {
+    const roleControl = this.mainForm.get('role');
+    const usersArray = this.mainForm.get('users') as FormArray;
+
+    usersArray.clear();
+
+
+    const lines: string[] = csv.split('\n');
+
+    const headers: string[] = lines[0].split(',').map(header => header.trim());
+
+    const usersData: any[] = []; // Change the declaration to an array
+
+    for (let i=1; i<lines.length; i++) {
+
+      if (i !== 1) {
+        this.addUser(); // Appel à chaque itération après la première
+      }
+
+      const currentLine: string[] = lines[i].split(',').map(value => value.trim());
+      console.log("current" + currentLine);
+      console.log("headers" + headers);
+      if (currentLine.length === headers.length) {
+        const user: any = {
+          
+          "FirstName": currentLine[headers.indexOf('FirstName')],
+          "LastName": currentLine[headers.indexOf('LastName')],
+          "info": {}
+        };
+
+        if (roleControl?.value === 'professeur') {
+          user.info.idsalle = currentLine[headers.indexOf('idsalle')];
+          user.info.isManager = currentLine[headers.indexOf('isManager')] === 'TRUE';
+        }
+        console.log("user" + user);
+        usersData.push(user); // Use push method to add each user object to the array
+      }
+    }
+    return usersData;
   }
 
   removeUser(index: number): void {

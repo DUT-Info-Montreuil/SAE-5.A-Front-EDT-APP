@@ -7,24 +7,32 @@ import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule,ReactiveFormsModule } from '@angular/forms';
 import { ConnexionComponent } from './components/connexion/connexion.component';
+import { NavbarComponent } from './components/navbar/navbar.component';
+import { HomeComponent } from './components/home/home.component';
 import { DashboardModule } from './components/dashboard/dashboard.module';
+import { SidebarComponent } from './components/sidebar/sidebar.component';
+import { ProfileModule } from './components/profile/profile.module';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     ConnexionComponent,
+    SidebarComponent,
+    NavbarComponent,
+    HomeComponent,
+
   ],
   imports: [
     BrowserAnimationsModule,
-    
     BrowserModule,
     AppRoutingModule,
     CommonModule,
     ReactiveFormsModule,
     HttpClientModule,
     FormsModule,
-    DashboardModule
+    DashboardModule,
+    ProfileModule
   ],
   providers: [],
   bootstrap: [AppComponent]

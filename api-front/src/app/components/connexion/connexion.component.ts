@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { changePage } from '../../../main';
 
 @Component({
   selector: 'app-connexion',
@@ -25,19 +26,32 @@ export class ConnexionComponent {
   connexion() {
     this.http
       .post('http://localhost:5050/utilisateurs/auth', this.loginForm.value, {
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization:
+            'Basic ' +
+            btoa(
+              this.loginForm.value.Username +
+                ':' +
+                this.loginForm.value.Password
+            ),
+        },
       })
       .subscribe({
         next: (data: any) => {
           let token = data.accessToken;
           let firstLogin = data.fistLogin;
-          window.localStorage.setItem('token', token);
+          this.setToken(token);
           if (firstLogin) {
             // TODO: redirect to page first login
             console.log('redirect to page for first login');
           }
-          document.location.pathname = '/create-users';
+          changePage('/home');
         },
       });
+  }
+
+  setToken(token: string) {
+    window.localStorage.setItem('token', token);
   }
 }

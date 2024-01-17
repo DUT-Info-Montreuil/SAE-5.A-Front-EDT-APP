@@ -12,7 +12,7 @@ export class NavbarComponent {
   pageLink(pageName:string) {
     changePage("/"+pageName)
   }
-  isConnection(){
-    return this.sidebar.isConnection
+  getComponent(){
+    return this.sidebar.componentName
   }
 }

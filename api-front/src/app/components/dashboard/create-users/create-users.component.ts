@@ -68,6 +68,14 @@ export class CreateUsersComponent {
     });
   }
 
+  groupeComposeName(groupe:any) {
+    let composeName = groupe.Nom;
+    if (groupe.idParentGroupe) {
+      let parentName = this.groupes.find((grp) => grp.idGroupe == groupe.idParentGroupe);
+      composeName = parentName + composeName;
+    }
+    return composeName;
+  }
   onSubmit(): void {
     const usersArray = this.mainForm.get('users') as FormArray;
     const roleControl = this.mainForm.get('role');

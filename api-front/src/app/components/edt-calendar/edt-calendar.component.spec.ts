@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { HomeComponent } from './home.component';
+import { EdtCalendarComponent } from './edt-calendar.component';
 
-describe('HomeComponent', () => {
-  let component: HomeComponent;
-  let fixture: ComponentFixture<HomeComponent>;
+describe('EdtCalendarComponent', () => {
+  let component: EdtCalendarComponent;
+  let fixture: ComponentFixture<EdtCalendarComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [HomeComponent]
+      declarations: [EdtCalendarComponent]
     })
     .compileComponents();
     
-    fixture = TestBed.createComponent(HomeComponent);
+    fixture = TestBed.createComponent(EdtCalendarComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

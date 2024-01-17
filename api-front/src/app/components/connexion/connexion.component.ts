@@ -55,7 +55,7 @@ export class ConnexionComponent {
             changePage('/first-login');
             return;
           }
-          changePage('/home');
+          changePage('/edt-calendar');
         },
         error: (error) => {
           this.showErrorMessage = true;

@@ -7,7 +7,6 @@ import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule,ReactiveFormsModule } from '@angular/forms';
 import { ConnexionComponent } from './components/connexion/connexion.component';
-import { NavbarComponent } from './components/navbar/navbar.component';
 import { DashboardModule } from './components/dashboard/dashboard.module';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { ProfileModule } from './components/profile/profile.module';
@@ -56,8 +55,6 @@ class CustomDateFormatter extends CalendarNativeDateFormatter {
     AppComponent,
     ConnexionComponent,
     SidebarComponent,
-    NavbarComponent,
-    HomeComponent,
     FirstLoginComponent,
 
 

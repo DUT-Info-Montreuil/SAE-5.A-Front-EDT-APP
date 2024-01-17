@@ -63,6 +63,7 @@ import { EdtCalendarComponent } from '../edt-calendar/edt-calendar.component';
 })
 export class SidebarComponent {
 
+  isConnection = false;
   isOpen= true;
   componentName = "None";
   static componentName: string;
@@ -106,7 +107,7 @@ export class SidebarComponent {
 
     this.isConnection = (event instanceof ConnexionComponent) || (event instanceof FirstLoginComponent);
     
-    SidebarComponent.isConnection = this.isConnection;
+    
 
     if(event  instanceof ConnexionComponent){
       this.componentName = "ConnexionComponent";

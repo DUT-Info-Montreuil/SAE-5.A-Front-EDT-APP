@@ -13,6 +13,7 @@ import { DashboardModule } from './components/dashboard/dashboard.module';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { ProfileModule } from './components/profile/profile.module';
 
+
 @NgModule({
   declarations: [
     AppComponent,

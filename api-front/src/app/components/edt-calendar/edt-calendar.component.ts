@@ -45,10 +45,12 @@ function ceilToNearest(amount: number, precision: number) {
     encapsulation: ViewEncapsulation.None,
 })
 export class EdtCalendarComponent {
-    toggleSuprRessource() {
-        this.showSuprRessource = !this.showSuprRessource;
+    closeModal() {
+        this.toggleModal = !this.toggleModal;
+        this.events.splice(this.events.length - 1, 1);
+        this.refresh();
     }
-    showSuprRessource = false;
+    toggleModal = false;
     viewDate = new Date();
     events: CalendarEvent[] = [];
     dragToCreateActive = false;
@@ -159,6 +161,9 @@ export class EdtCalendarComponent {
 
   closeOpenMonthViewDay() {
     this.activeDayIsOpen = false;
+    //remove last event
+    
+
   }
 
   changeDay(date: any) {
@@ -390,7 +395,7 @@ export class EdtCalendarComponent {
 
 
         console.log('initCoursModal');
-        this.showSuprRessource = true;
+        this.toggleModal = true;
     }
 
     createCours(body:any):Promise<any>{
@@ -497,7 +502,7 @@ export class EdtCalendarComponent {
 
         await this.assignSalle(bodyAssignSalle, idCours);
 
-        this.showSuprRessource = false;
+        this.toggleModal = false;
         this.refresh();
         this.updateEvent(event);
 

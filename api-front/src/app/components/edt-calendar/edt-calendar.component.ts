@@ -19,6 +19,7 @@ import {addDays, addMinutes, endOfWeek, setHours, setMinutes} from 'date-fns';
 import {is} from "date-fns/locale";
 import { HttpClient } from '@angular/common/http';
 import { th } from 'date-fns/locale';
+import {ActivatedRoute} from "@angular/router";
 
 function floorToNearest(amount: number, precision: number) {
     return Math.floor(amount / precision) * precision;
@@ -71,16 +72,22 @@ export class EdtCalendarComponent {
 
   coursId: number = 0;
   groupesList: { idGroupe: any, name: any }[] = [];
-  isInEditMode = false;
+  isInEditMode = !!this.route.snapshot.paramMap.get('edit');
   view: CalendarView = CalendarView.Week;
   private activeDayIsOpen: boolean = true;
   CalendarView = CalendarView;
 
-  constructor(private cdr: ChangeDetectorRef, private http: HttpClient) {
+  constructor(private cdr: ChangeDetectorRef, private http: HttpClient, private route: ActivatedRoute) {
   }
 
   ngOnInit(): void {
+    this.route.queryParams.subscribe(params => {
+      let edit = params['edit'];
+      this.isInEditMode = !!edit;
+    });
+    console.log("isInEditMode: " + this.isInEditMode)
     this.getGroupes();
+
   }
 
 

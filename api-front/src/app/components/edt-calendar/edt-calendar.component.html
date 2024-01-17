@@ -59,23 +59,18 @@
         </mat-select>
       </mat-form-field>
     </div>
-    <div class="grid grid-cols-2" *ngIf="isInEditMode">
-      <div
-          type="button"
-          class="justify-self-end self-center font-medium border-e-2 border-blue-50 rounded-s-lg text-sm w-fit h-fit px-5 py-4 bg-gray-500 focus:outline-none focus:ring-4 focus:ring-gray-300 dark:bg-gray-500 dark:focus:ring-gray-700 dark:border-gray-400 text-white outline-none dark:hover:bg-gray-700 hover:bg-gray-900 select-none"
-          (click)="setView(CalendarView.Week)"
-          [class.active]="view === CalendarView.Week"
-      >
-        semaine
-      </div>
-      <div
-          type="button"
-          class="justify-self-start self-center font-medium rounded-e-lg text-sm w-fit h-fit px-5 py-4 bg-gray-500 focus:outline-none focus:ring-4 focus:ring-gray-300 dark:bg-gray-500 dark:focus:ring-gray-700 dark:border-gray-400 text-white outline-none dark:hover:bg-gray-700 hover:bg-gray-900 select-none"
-          (click)="setView(CalendarView.Day)"
-          [class.active]="view === CalendarView.Day"
-      >
-        jour
-      </div>
+    <div>
+      <form>
+        <mat-form-field class="example-full-width">
+          <mat-label>Prof</mat-label>
+          <input type="text" matInput [formControl]="searchBarControl" [matAutocomplete]="auto">
+          <mat-autocomplete #auto="matAutocomplete" (optionSelected)="setAssignProfSelected($event.option.value)">
+            @for (prof of filteredProfList | async; track prof) {
+              <mat-option [value]="prof">{{getFullProfString(prof)}}</mat-option>
+            }
+          </mat-autocomplete>
+        </mat-form-field>
+      </form>
     </div>
 </div>
 </div>

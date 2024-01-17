@@ -13,13 +13,14 @@ import {
   CalendarView
 } from 'angular-calendar';
 import { WeekViewHourSegment } from 'calendar-utils';
-import {fromEvent, Subject} from 'rxjs';
+import {fromEvent, map, Observable, startWith, Subject} from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
 import {addDays, addMinutes, endOfWeek, setHours, setMinutes} from 'date-fns';
 import {is} from "date-fns/locale";
 import { HttpClient } from '@angular/common/http';
 import { th } from 'date-fns/locale';
 import {ActivatedRoute} from "@angular/router";
+import {FormControl} from "@angular/forms";
 
 function floorToNearest(amount: number, precision: number) {
     return Math.floor(amount / precision) * precision;
@@ -29,6 +30,14 @@ function ceilToNearest(amount: number, precision: number) {
     return Math.ceil(amount / precision) * precision;
 }
 
+export interface Prof {
+  idProf: number,
+  Initiale: string,
+  idSalle: number,
+  FirstName: string,
+  LastName: string,
+  idUtilisateur: number
+}
 
 @Component({
     selector: 'app-edt-calendar',
@@ -46,12 +55,16 @@ function ceilToNearest(amount: number, precision: number) {
     encapsulation: ViewEncapsulation.None,
 })
 export class EdtCalendarComponent {
-    closeModal() {
-        this.toggleModal = !this.toggleModal;
-        this.events.splice(this.events.length - 1, 1);
-        this.refresh();
-    }
-    toggleModal = false;
+  closeModal() {
+      this.toggleModal = !this.toggleModal;
+      this.events.splice(this.events.length - 1, 1);
+      this.refresh();
+  }
+  assignProfSelected: Prof | null = null;
+  profList: Prof[] = [];
+  filteredProfList: Observable<Prof[]> = new Observable<Prof[]>();
+  searchBarControl = new FormControl<string | Prof>('');
+  toggleModal = false;
     viewDate = new Date();
     events: CalendarEvent[] = [];
     dragToCreateActive = false;
@@ -59,7 +72,6 @@ export class EdtCalendarComponent {
     dayStartHour: number = 8;
     dayEndHour: number = 19;
     refreshCalendar = new Subject<void>();
-
   ressouces: any[] = [];
   groupes: any[] = [];
   salles: any[] = [];
@@ -83,15 +95,46 @@ export class EdtCalendarComponent {
   }
 
   ngOnInit(): void {
+    this.geAllProf();
     this.route.queryParams.subscribe(params => {
       let edit = params['edit'];
       this.isInEditMode = !!edit;
     });
     console.log("isInEditMode: " + this.isInEditMode)
     this.getGroupes();
+    this.filteredProfList = this.searchBarControl.valueChanges.pipe(
+      startWith(''),
+      map(value => {
+        const option = typeof value === 'string' ? value : this.getFullProfString(value);
+        return option ? this._filter(option as string) : this.profList.slice();
+      }),
+    );
 
   }
 
+  private _filter(initiale: string) {
+    console.log("initial:" + typeof initiale)
+    const filterValue = initiale?.toLowerCase();
+
+    return this.profList.filter(option => this.getFullProfString(option).toLowerCase().includes(filterValue));
+  }
+
+  getFullProfString(prof: Prof | null){
+    console.log("value: " + prof)
+    if(!prof){
+      return "";
+    }
+    return prof.FirstName +' '+ prof.LastName + ' (' + prof.Initiale + ')';
+  }
+
+  setAssignProfSelected(value: Prof | null){
+    if(value){
+      this.assignProfSelected = value;
+    }
+    else{
+      this.assignProfSelected = null;
+    }
+  }
 
   startDragToCreate(
     segment: WeekViewHourSegment,
@@ -757,6 +800,28 @@ export class EdtCalendarComponent {
     }
 
     return canPlace;
+  }
+
+
+  geAllProf(){
+    const token = localStorage.getItem('token');
+    const headers = { 'Authorization': `Bearer ${token}` , 'Content-Type': 'application/json'};
+
+    this.http.get('http://localhost:5050/utilisateurs/getProfE', {headers}).subscribe({
+      next: (data: any) => {
+        console.log("data: " + JSON.stringify(data))
+        this.profList = data;
+      },
+      error: (error: any) => {
+        console.log(error);
+        this.profList = [{'idProf':0,
+          'Initiale':"",
+          'idSalle':0,
+          'FirstName':"",
+          'LastName':"",
+          'idUtilisateur':0}];
+      }
+    });
   }
 }
 

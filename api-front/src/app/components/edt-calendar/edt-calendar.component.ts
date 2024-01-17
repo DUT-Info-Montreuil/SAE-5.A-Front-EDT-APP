@@ -541,28 +541,42 @@ export class EdtCalendarComponent {
       this.events.splice(externalIndex, 1);
       this.events.push(event);
     }
-    if(newStart){
-      if(newStart !== event.start){
-        this.deplacerCours(event.id, newStart)
-      }
-      else{
-        if (newEnd) {
-          if(newEnd !== event.end){
-            this.modifierCours(event.id, newStart, newEnd)
+    if(newStart) {
+      if (this.canPlaceNewDateHour(newStart)) {
+        if (newStart !== event.start) {
+          if(!newEnd){
+            this.deplacerCours(event.id, newStart)
           }
-          event.end = newEnd;
+          else {
+            if (this.canPlaceNewDateHour(newEnd)) {
+              this.deplacerCours(event.id, newStart)
+              event.end = newEnd;
+              event.start = newStart;
+            }
+          }
+        } else {
+          if (newEnd) {
+            if (this.canPlaceNewDateHour(newEnd)) {
+              if (newEnd !== event.end) {
+                this.modifierCours(event.id, newStart, newEnd)
+              }
+              event.end = newEnd;
+            }
+          }
         }
       }
-      event.start = newStart;
+      if (this.view === 'month') {
+        this.viewDate = newStart;
+        this.activeDayIsOpen = true;
+      }
+      this.events = [...this.events];
     }
     if (newEnd) {
-      event.end = newEnd;
+      if(this.canPlaceNewDateHour(newEnd) && this.canPlaceNewDateHour(newStart)) {
+        event.end = newEnd;
+      }
     }
-    if (this.view === 'month') {
-      this.viewDate = newStart;
-      this.activeDayIsOpen = true;
-    }
-    this.events = [...this.events];
+
 
   }
 
@@ -709,7 +723,17 @@ export class EdtCalendarComponent {
     return listGroupe;
   }
   protected readonly window = window;
+  private canPlaceNewDateHour(date: Date) {
+    let canPlace = true;
+    if(date.getHours() < 8 || date.getHours() > 19){
+      canPlace = false;
+
+    }
+
+    return canPlace;
+  }
 }
+
 
 
 

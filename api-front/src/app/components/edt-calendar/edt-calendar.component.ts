@@ -92,14 +92,15 @@ export class EdtCalendarComponent {
   CalendarView = CalendarView;
 
   constructor(private cdr: ChangeDetectorRef, private http: HttpClient, private route: ActivatedRoute) {
+    console.log("isInEditMode: " + this.isInEditMode)
   }
 
   ngOnInit(): void {
-    this.geAllProf();
     this.route.queryParams.subscribe(params => {
       let edit = params['edit'];
       this.isInEditMode = !!edit;
     });
+    this.geAllProf();
     console.log("isInEditMode: " + this.isInEditMode)
     this.getGroupes();
     this.filteredProfList = this.searchBarControl.valueChanges.pipe(
@@ -660,7 +661,7 @@ export class EdtCalendarComponent {
     const token = localStorage.getItem('token');
     const headers = { 'Authorization': `Bearer ${token}` , 'Content-Type': 'application/json'};
     console.log(date.toLocaleDateString())
-    let body = {"HeureDebut":date.toLocaleTimeString(), "Jour": date.toLocaleDateString()}
+    let body = {"HeureDebut":date.toLocaleTimeString(), "Jour": date.toLocaleDateString().split('/').reverse().join('-')}
     this.http.put('http://localhost:5050/cours/deplacer/'+id, body,{headers}).subscribe({
       next: (data: any) => {
       },

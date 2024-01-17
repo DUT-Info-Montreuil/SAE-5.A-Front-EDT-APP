@@ -13,9 +13,9 @@ import {
   CalendarView
 } from 'angular-calendar';
 import { WeekViewHourSegment } from 'calendar-utils';
-import { fromEvent } from 'rxjs';
+import {fromEvent, Subject} from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
-import { addDays, addMinutes, endOfWeek } from 'date-fns';
+import {addDays, addMinutes, endOfWeek, setHours, setMinutes} from 'date-fns';
 import {is} from "date-fns/locale";
 import { HttpClient } from '@angular/common/http';
 
@@ -25,25 +25,6 @@ function floorToNearest(amount: number, precision: number) {
 
 function ceilToNearest(amount: number, precision: number) {
     return Math.ceil(amount / precision) * precision;
-}
-
-function getDisplayDate() {
-  try {
-    // console.log("date: " + window.localStorage.getItem("calendarDateView"))
-    let dayview = window.localStorage.getItem("calendarDateView")
-    if(dayview !== null){
-      return new Date(dayview)
-    }
-    else {
-      return new Date()
-    }
-
-  }
-  catch(e){
-    return new Date()
-  }
-
-
 }
 
 @Injectable()
@@ -84,24 +65,30 @@ export class EdtCalendarComponent {
         this.showSuprRessource = !this.showSuprRessource;
     }
     showSuprRessource = false;
-    viewDate = getDisplayDate();
+    viewDate = new Date();
     events: CalendarEvent[] = [];
     dragToCreateActive = false;
     weekStartsOn: 0 = 0;
     dayStartHour: number = 8;
     dayEndHour: number = 19;
+    selectedGroupe: string = "0";
+    refreshCalendar = new Subject<void>();
 
     ressouces: any[] = [];
     groupes: any[] = [];
     salles: any[] = [];
     teachers: any[] = [];
-
+  groupesList: {idGroupe: any, name: any, subGroupes: any[] | string}[] = [];
   isInEditMode = false;
   view: CalendarView = CalendarView.Week;
   private activeDayIsOpen: boolean = true;
   CalendarView = CalendarView;
 
   constructor(private cdr: ChangeDetectorRef, private http: HttpClient) { }
+
+  ngOnInit(): void {
+    this.getGroupes();
+  }
 
 
   startDragToCreate(
@@ -344,6 +331,120 @@ export class EdtCalendarComponent {
     }
 
   }
+
+  getMonday(date: Date){
+    date = new Date(date);
+    var day = date.getDay(),
+      diff = date.getDate() - day + (day == 0 ? -6 : 2); // adjust when day is sunday
+    return new Date(date.setDate(diff));
+  }
+
+  getSunday(date: Date){
+    date = new Date(date);
+    var day = date.getDay(),
+      diff = date.getDate() - day + (day == 0 ? 0 : 6); // adjust when day is sunday
+    return new Date(date.setDate(diff));
+  }
+  getAllCoursInfo(idGroupe: string | number | undefined, dateDebut: Date, dateFin: Date) {
+    const token = localStorage.getItem('token');
+    const headers = { 'Authorization': `Bearer ${token}` , 'Content-Type': 'application/json'};
+    let body = {"intervalleDebut":dateDebut.toLocaleDateString().split('/').reverse().join('-'), "intervalleFin": dateFin.toLocaleDateString().split('/').reverse().join('-')}
+    this.http.post('http://localhost:5050/cours/getCoursGroupeExtended/'+idGroupe, body, {headers}).subscribe({
+      next: async (data: any) => {
+        console.log("data: " + JSON.stringify(data))
+        this.events = this.jsonToEvent(data);
+        console.log("events : " + JSON.stringify(this.events))
+        this.refreshCalendar.next()
+      },
+      error: (error: any) => {
+        console.log(error);
+        this.events = [];
+        return {}
+      }
+    });
+
+  }
+
+  jsonToEvent(results: any[]) {
+    let bdEvent: CalendarEvent[] = []
+    for (let result of results) {
+      if (result != null) {
+        // console.log("result: " + JSON.stringify(result))
+      }
+      let heureDebutList = result.HeureDebut.split(':')
+      let nombreHeureList = result.NombreHeure.split(':')
+      let date = new Date(result.Jour);
+      let ressource = result.titre
+      console.log(ressource)
+      let initprof = result.Initiale
+      let resizable = this.getResizable()
+      console.log("heuredébut : " + setHours(setMinutes(date, heureDebutList[1]), heureDebutList[0]))
+      console.log("heurefin : " + setHours(setMinutes(date, Number(nombreHeureList[1]) + Number(heureDebutList[1])), Number(nombreHeureList[0]) + Number(heureDebutList[0])))
+      let draggable = this.isInEditMode
+      bdEvent.push({
+        start: setHours(setMinutes(date, heureDebutList[1]), heureDebutList[0]),
+        end: setHours(setMinutes(date, Number(nombreHeureList[1]) + Number(heureDebutList[1])), Number(nombreHeureList[0]) + Number(heureDebutList[0])),
+        title: ressource,
+        id: result.idCours,
+        resizable: resizable,
+        draggable: draggable,
+      })
+    }
+    console.log("bdEvent: " + JSON.stringify(bdEvent))
+    return bdEvent
+  }
+
+  getGroupes() {
+    const token = localStorage.getItem('token');
+    const headers = { 'Authorization': `Bearer ${token}` , 'Content-Type': 'application/json'};
+
+    this.http.get('http://localhost:5050/groupe/getAll', {headers}).subscribe({
+      next: async (data: any) => {
+        console.log("data: " + JSON.stringify(data))
+        this.groupesList = this.orderedGroupeList(data);
+        console.log(JSON.stringify(this.orderedGroupeList(data)))
+      },
+      error: (error: any) => {
+        // console.log(error);
+        return {}
+      }
+    });
+  }
+
+  private orderedGroupeList(data: any[]) {
+    let listGroupe: {idGroupe: any, name: any, subGroupes: any[] | string}[] = []
+    for(let groupe of data){
+      console.log(groupe)
+      if(!groupe.idGroupe_parent){
+        listGroupe.push({
+          idGroupe: groupe.IdGroupe,
+          name: groupe.Nom,
+          subGroupes: this.getLowestSubGroupes(groupe.IdGroupe, data)
+        })
+      }
+    }
+    return listGroupe;
+  }
+
+  private getLowestSubGroupes(idGroupe: any, data: any[]): any[] {
+    let subGroupes: any[] = [];
+    for(let groupe of data){
+      if(groupe.idGroupe_parent === idGroupe){
+        let lowestSubGroupes = this.getLowestSubGroupes(groupe.IdGroupe, data);
+        if(lowestSubGroupes.length > 0) {
+          subGroupes.push(...lowestSubGroupes);
+        } else {
+          subGroupes.push({
+            idGroupe: groupe.IdGroupe,
+            name: groupe.Nom
+          });
+        }
+      }
+    }
+    return subGroupes;
+  }
+
+  protected readonly window = window;
 }
 
 

@@ -23,6 +23,7 @@ role="button" *ngIf="isInEditMode" (click)="setEditMod(false)">
         [view]="view"
         [(viewDate)]="viewDate"
         (viewDateChange)="closeOpenMonthViewDay(); saveDate($event.toLocaleDateString())"
+        (click)="getAllCoursInfo(selectedGroupe, getMonday(viewDate), getSunday(viewDate))"
     >
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
         <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
@@ -31,7 +32,7 @@ role="button" *ngIf="isInEditMode" (click)="setEditMod(false)">
     <div class="w-full col-span-2 grid grid-cols-3 text-center justify-self-center self-center font-medium rounded-lg text-sm px-5 py-1  bg-gray-500 focus:outline-none focus:ring-4 focus:ring-gray-300 dark:bg-gray-500 dark:focus:ring-gray-700 dark:border-gray-400 text-white">
       <div class="justify-self-center self-center col-span-2"> <h3> {{ viewDate | calendarDate:(view + 'ViewTitle'):'fr' }} </h3></div>
       <div class="justify-self-center m-0e">
-        <input matInput [matDatepicker]="picker" [matDatepickerFilter]="filtreDatePicker" (dateChange)="changeDay($event.value); saveDate($event.value?.toLocaleDateString())" [hidden]="true">
+        <input matInput [matDatepicker]="picker" [matDatepickerFilter]="filtreDatePicker" (dateChange)="changeDay($event.value); saveDate($event.value?.toLocaleDateString()); getAllCoursInfo(selectedGroupe, getMonday(viewDate), getSunday(viewDate));" [hidden]="true">
         <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
       </div>
@@ -43,6 +44,7 @@ role="button" *ngIf="isInEditMode" (click)="setEditMod(false)">
          [view]="view"
          [(viewDate)]="viewDate"
          (viewDateChange)="closeOpenMonthViewDay(); saveDate($event.toLocaleDateString())"
+         (click)="getAllCoursInfo(selectedGroupe, getMonday(viewDate), getSunday(viewDate))"
     >
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
         <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
@@ -55,6 +57,7 @@ role="button" *ngIf="isInEditMode" (click)="setEditMod(false)">
            mwlCalendarToday
            [(viewDate)]="viewDate"
            (viewDateChange)="saveDate($event.toLocaleDateString())"
+           (click)="getAllCoursInfo(selectedGroupe, getMonday(viewDate), getSunday(viewDate));"
       >
         Aujourd'hui
       </div>
@@ -78,6 +81,22 @@ role="button" *ngIf="isInEditMode" (click)="setEditMod(false)">
       jour
     </div>
   </div>
+  <div class="grid grid-cols-3">
+    <div class="col-span-2">
+      <mat-form-field>
+        <mat-label>groupe</mat-label>
+        <mat-select [(value)]="selectedGroupe" [(ngModel)]="selectedGroupe" (selectionChange)="getAllCoursInfo(selectedGroupe, getMonday(viewDate), getSunday(viewDate)); window.localStorage.setItem('currentIdGroupe',selectedGroupe.toString());">
+          @for (groupe of groupesList; track groupe) {
+            <mat-optgroup [label]="groupe.name">
+              @for (subgroupe of groupe.subGroupes; track subgroupe){
+                <mat-option [value]="subgroupe.idGroupe">{{subgroupe.name}}</mat-option>
+              }
+            </mat-optgroup>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+</div>
 </div>
   <br />
 
@@ -187,6 +206,7 @@ role="button" *ngIf="isInEditMode" (click)="setEditMod(false)">
       [dayStartHour]="dayStartHour"
       [dayEndHour]="dayEndHour"
       [excludeDays]="[0,6]"
+      [refresh]="refreshCalendar"
     >
     </mwl-calendar-week-view>
 
@@ -198,6 +218,7 @@ role="button" *ngIf="isInEditMode" (click)="setEditMod(false)">
         [dayStartHour]="dayStartHour"
         [dayEndHour]="dayEndHour"
         (eventTimesChanged)="eventChanged($event)"
+        [refresh]="refreshCalendar"
         (hourSegmentClicked)="setViewClick(CalendarView.Week, $event.date)"
     >
     </mwl-calendar-day-view>

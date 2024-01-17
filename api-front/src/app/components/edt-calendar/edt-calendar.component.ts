@@ -72,7 +72,6 @@ export class EdtCalendarComponent {
     weekStartsOn: 0 = 0;
     dayStartHour: number = 8;
     dayEndHour: number = 19;
-    selectedGroupe: string = "0";
     refreshCalendar = new Subject<void>();
 
     ressouces: any[] = [];

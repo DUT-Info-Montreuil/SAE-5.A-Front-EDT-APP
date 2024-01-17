@@ -479,11 +479,11 @@ export class EdtCalendarComponent {
         });
     }
 
-    assignGroupe(body:any):Promise<any>{
+    assignGroupe(body:any, idCours:number):Promise<any>{
         const token = localStorage.getItem('token');
         const headers = { 'Authorization': `Bearer ${token}` };
         return new Promise((resolve, reject) => {
-            this.http.post('http://localhost:5050/groupe/ajouterCours/' + this.selectedGroupe, body, { headers }).subscribe({
+            this.http.post('http://localhost:5050/cours/ajouterGroupe/' + idCours, body, { headers }).subscribe({
                 next: (data: any) => {
                     resolve(data);
                 },
@@ -526,6 +526,7 @@ export class EdtCalendarComponent {
             'idRessource': this.selectedRessource,
             'typeCours': this.selectedType,
         };
+        console.log(body);
         let idCours = 0;
 
         await this.createCours(body).then((data)=>{
@@ -542,9 +543,9 @@ export class EdtCalendarComponent {
 
 
         const bodyAssignGroupe = {
-            'idCours': idCours,
+            'idGroupe': this.selectedGroupe,
         };
-        await this.assignGroupe(bodyAssignGroupe);
+        await this.assignGroupe(bodyAssignGroupe, idCours);
 
         const bodyAssignSalle = {
             'idSalle': this.selectedSalle,

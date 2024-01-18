@@ -39,8 +39,10 @@ export class FirstLoginComponent {
       
     
     
-    changePage('/home')});
+    changePage('/edt-calendar');
 
 
+      }
+    );
   }
 }

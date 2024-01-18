@@ -9,7 +9,9 @@ import {ActivatedRoute} from "@angular/router";
 import {CalendarEvent} from "angular-calendar";
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from "@angular/cdk/drag-drop";
 import { EdtCalendarComponent } from '../edt-calendar/edt-calendar.component';
-
+import { HttpClient } from '@angular/common/http';
+import { da } from 'date-fns/locale';
+import { changePage } from '../../../main';
 
 @Component({
   selector: 'app-sidebar',
@@ -67,6 +69,8 @@ export class SidebarComponent {
   isOpen= true;
   componentName = "None";
   static componentName: string;
+  showCreation = false;
+  showEdition = false;
   coursList = [
     "cours1",
     "cours2",
@@ -93,6 +97,8 @@ export class SidebarComponent {
     },
   ];
 
+
+  constructor( private http: HttpClient ) {}
 
   get isSideBarOpen() {
       return this.isOpen ? "open" : "closed";
@@ -129,6 +135,40 @@ export class SidebarComponent {
     console.log("event: " + event.item.data.title)
     console.log("html: " + event.dropPoint)
   }
+
+
+  redirectToAccount(){
+    changePage('/profile');
+  }
+  disconnect(){
+    localStorage.removeItem('token');
+    changePage('/connexion');
+  }
+
+
+
+  ngOnInit(): void {
+    const token = localStorage.getItem('token');
+    const headers = { 'Authorization': `Bearer ${token}` };
+    this.http.get('http://localhost:5050/utilisateurs/getLoggedUser' ,{headers}).subscribe((data :any)=>{
+
+    data.role.type
+    if (data.role.type <=2){
+      this.showEdition = true;
+      if (data.role.type == 0){
+        this.showCreation = true;
+      }
+        
+
+        }
+      }
+    )
+  }
+    
+
+
+
+
 }
 
 

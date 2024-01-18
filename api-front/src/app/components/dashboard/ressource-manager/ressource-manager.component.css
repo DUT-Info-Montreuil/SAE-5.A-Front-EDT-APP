@@ -1,0 +1,14 @@
+
+
+.cross{
+    height: 90px;
+    width: 90px;
+  }
+  
+
+  @media screen and (max-width: 768px) {
+    .cross{
+      width: 100%;
+      height: 100%;
+    }
+  }

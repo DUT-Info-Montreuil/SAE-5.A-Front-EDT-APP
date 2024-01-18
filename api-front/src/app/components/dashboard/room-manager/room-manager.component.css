@@ -1,0 +1,28 @@
+
+
+.cross{
+  height: 30px;
+  width: 30px;
+}
+
+
+.littleCard {
+border: 2px solid #000000;
+border-radius: 10px;
+padding-inline: 5px;
+
+
+}
+
+.cardHolder{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: center;
+  align-content: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+
+
+}

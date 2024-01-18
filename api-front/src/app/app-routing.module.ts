@@ -22,6 +22,7 @@ export const appRoutes: Routes = [
   { path: 'sidebar', component: SidebarComponent },
   { path: 'profile', component: ProfileComponent },
   { path: 'first-login', component: FirstLoginComponent },
+  { path: '', redirectTo: '/connexion', pathMatch: 'full' },
 ];
 
 @NgModule({

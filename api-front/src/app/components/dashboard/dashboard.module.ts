@@ -19,6 +19,7 @@ import { RessourceManagerComponent } from './ressource-manager/ressource-manager
 import { GroupManagerComponent } from './group-manager/group-manager.component';
 import { SemestreComponent } from './semestre/semestre.component';
 import { EquipementManagerComponent } from './equipement-manager/equipement-manager.component';
+import { UserManagerComponent } from './user-manager/user-manager.component';
 
 import {Component, OnInit} from '@angular/core';
 import {Observable} from 'rxjs';
@@ -37,6 +38,7 @@ import {AsyncPipe} from '@angular/common';
     SemestreComponent,
     EquipementManagerComponent,
     UserManagerComponent
+    
   ],
   exports: [
     EdtCalendarComponent

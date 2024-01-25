@@ -4,7 +4,7 @@ import { FormGroup, FormBuilder, FormArray, Validators, AbstractControl, FormCon
 import { HttpClient } from '@angular/common/http';
 import { th } from 'date-fns/locale';
 import { set } from 'date-fns';
-import { timeout } from 'rxjs';
+import { Subscription, timeout } from 'rxjs';
 import { SearchService } from '../services/search.service';
 import {Observable} from 'rxjs';
 import {map, startWith} from 'rxjs/operators';
@@ -12,6 +12,8 @@ import {AsyncPipe} from '@angular/common';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
+import { Ressource } from '../models/ressource.model';
+
 
 
 @Component({
@@ -20,7 +22,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
   styleUrl: './ressource-manager.component.css'
 })
 export class RessourceManagerComponent {
-  ressources: any ;
+  ressources: Ressource[] = [] ;
   searchRessources : any;
   semestres: any;
   allProf : any;
@@ -33,7 +35,49 @@ export class RessourceManagerComponent {
   NameSuprRessource : any;  
   ControlProf : any;
 
+  sub : Subscription[] = [];
 
+  constructor( private http: HttpClient , private search : SearchService) {}
+
+  ngOnInit(): void {
+    //this.initializeForm();
+    //this.loadGroupes();
+    //charger les salles au chargeement de la page
+    this.sub.push(
+      this.search.ressource$.subscribe((data : Ressource[]) => {
+        this.ressources = data;
+        this.searchRessources = data;
+      })
+    ) 
+
+
+    this.loadRessources();
+    this.loadSemestre()
+
+      //cree un interval pour recharger les salles toutes les 2 minutes
+    this.idInetval = setInterval(() => {
+      this.loadRessources();
+      this.loadSemestre();
+    }, 1000*60*2);
+
+    const search : any = document.getElementById('ressource-search');
+    console.log(search);
+    search.addEventListener("keyup", (e :any ) => {
+      const searchString : string = e.target.value.toLowerCase();
+      if (searchString != "" ) {
+        this.searchRessources  = this.ressources.filter((e : any) => {return e.titre.toLowerCase().startsWith(searchString.toLowerCase())});
+      }else {
+        this.searchRessources =  this.ressources;
+      }
+    });
+    this.ControlProf = new FormControl();
+  }
+
+  ngOnDestroy() {
+    if (this.idInetval) {
+      clearInterval(this.idInetval);
+    }
+  }
 
   delRessource(){
     const token = localStorage.getItem('token');
@@ -42,7 +86,6 @@ export class RessourceManagerComponent {
       this.loadRessources() });
   }
 
-
   toggleSuprRessource(id? : any){
     this.showSuprRessource = !this.showSuprRessource;
     if (this.showSuprRessource){
@@ -50,14 +93,9 @@ export class RessourceManagerComponent {
       const ressource : any = this.ressources.find((r : any) => r.idressource == id);
       this.NameSuprRessource = ressource.titre;
     }
-    
-
-
   }
 
-
   toggleCreateRessource(){
-
     this.showModalCreateRessource = !this.showModalCreateRessource;
     if (this.showModalCreateRessource == true) {
       this.loadSemestre();
@@ -68,19 +106,14 @@ export class RessourceManagerComponent {
   toggleModalModifRessource(){
     if(this.showSuprRessource==false){
     this.showModalModifressource = !this.showModalModifressource;
-    
     }
-    
   }
 
   showModifRessource(){
     if(this.showSuprRessource==false){
     this.showModalModifressource = true;
-
     }
-
   }
-
 
   loadProf():any {
     const token = localStorage.getItem('token');
@@ -96,11 +129,9 @@ export class RessourceManagerComponent {
     this.idChangeRessource = id;
     this.loadSemestre() ; 
     //this.loadProf();
-
     setTimeout(() => {
     
       const ressource : any = this.ressources.find((r : any) => r.idressource == id);
-      
       const nomRessource : any = document.getElementById('modifNomRessource')
       const numeroRessource : any = document.getElementById('modifNumeroRessource')
       const nbrHeureRessource : any  = document.getElementById('modiftNbrHeureRessource')
@@ -111,19 +142,10 @@ export class RessourceManagerComponent {
       nbrHeureRessource.setAttribute('value', ressource.nbrheuresemestre);
       ressourceSelect.value = ressource.idsemestre;
       ColorRessource.setAttribute('value', ressource.codecouleur);
-      
-
-
       } , 0  );
-
-
-     
-    
   }
 
   addRessource(){
-    
-    
       const nomRessource : any = document.getElementById('inputNomRessource')
       const numeroRessource : any = document.getElementById('inputNumeroRessource')
       const nbrHeureRessource : any  = document.getElementById('inputNbrHeureRessource')
@@ -133,14 +155,9 @@ export class RessourceManagerComponent {
       const headers = { 'Authorization': `Bearer ${token}` };
       const body = { Titre: nomRessource.value, Numero: numeroRessource.value, NbrHeureSemestre: this.hoursToSec(nbrHeureRessource.value), IdSemestre: parseInt(ressourceSelect.value), CodeCouleur: ColorRessource.value };
       return this.http.post('http://localhost:5050/ressource/add' ,body ,  {headers} ).subscribe(()=> { this.loadRessources()});
-    
-    
-
-
   }
 
   changerRessource(){
-    
     const nomRessource : any = document.getElementById('modifNomRessource')
     const numeroRessource : any = document.getElementById('modifNumeroRessource')
     const nbrHeureRessource : any  = document.getElementById('modiftNbrHeureRessource')
@@ -151,113 +168,27 @@ export class RessourceManagerComponent {
       const body = { Titre: nomRessource.value, Numero: numeroRessource.value, NbrHeureSemestre: this.hoursToSec(nbrHeureRessource.value), IdSemestre: ressourceSelect.value, CodeCouleur: ColorRessource.value };
       return this.http.put('http://localhost:5050/ressource/update/'+this.idChangeRessource , body , {headers}).subscribe(()=> { 
         this.loadRessources() });
-
-
-
-
   } 
-
-  
 
   loadSemestre(){
     const token = localStorage.getItem('token');
     const headers = { 'Authorization': `Bearer ${token}` };
     return this.http.get('http://localhost:5050/semestre/getAll', { headers }).subscribe((res: any) =>{
       this.semestres = res
-    
     });
-
   }
 
   loadRessources() :any {
-    const token = localStorage.getItem('token');
-    const headers = { 'Authorization': `Bearer ${token}` };
-    return this.http.get('http://localhost:5050/ressource/getAll', { headers }).subscribe((res: any) =>{
-      for (let i = 0; i < res.length; i++) {
-        res[i].nbrheuresemestre = this.secToHours(res[i].nbrheuresemestre);
-      }
-
-
-      
-    this.ressources = res , this.searchRessources = res
-    console.log(this.ressources); 
-  });
-
-
-
+    this.search.updateRessource();
   }
 
-
-  constructor( private http: HttpClient ) {}
-
-  ngOnInit(): void {
-    //this.initializeForm();
-    //this.loadGroupes();
-    //charger les salles au chargeement de la page
-    this.loadRessources();
-    this.loadSemestre()
-  
-      
-      //cree un interval pour recharger les salles toutes les 2 minutes
-    this.idInetval = setInterval(() => {
-      this.loadRessources();
-      this.loadSemestre();
-
-      
-
-    }, 1000*60*2);
-
-    const search : any = document.getElementById('ressource-search');
-    console.log(search);
-    search.addEventListener("keyup", (e :any ) => {
-      const searchString : string = e.target.value.toLowerCase();
-      
-      
-      if (searchString != "" ) {
-        this.searchRessources  = this.ressources.filter((e : any) => {return e.titre.toLowerCase().startsWith(searchString.toLowerCase())});
-      }else {
-        this.searchRessources =  this.ressources;
-      }
-      
-
-    });
-
-
-
-
-    this.ControlProf = new FormControl();
-
-
-  }
-
-
-  ngOnDestroy() {
-    if (this.idInetval) {
-      clearInterval(this.idInetval);
-    }
-  }
-
-  
   hoursToSec(hour : number){
-
     let sec = hour * 3600;
-
     return sec;
-
-
-
-  
-
   }
 
   secToHours(time : any){
-    
     let hours = (time / 3600);
-
-    
     return hours;
   }
-  
-  
-
 }

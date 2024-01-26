@@ -37,13 +37,13 @@
                 <tr class="bg-white border-b   hover:bg-gray-50 " *ngFor="let r of searchRessources" (click)="chargerRessource(r.idressource)"   >
                    
                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
-                        {{r.titre}}
+                        {{r.nom}}
                     </th>
                     <td class="px-6 py-4">
                         {{r.numero}}
                     </td>
                     <td class="px-6 py-4">
-                        {{r.nbrheuresemestre}}
+                        {{r.nbrHeure}}
                     </td>
                     <td>
                       <img (click)="toggleSuprRessource(r.idressource)" class="cross" src="../../../../assets/betterCross.svg">

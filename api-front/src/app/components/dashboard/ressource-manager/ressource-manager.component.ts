@@ -49,8 +49,6 @@ export class RessourceManagerComponent {
         this.searchRessources = data;
       })
     ) 
-
-
     this.loadRessources();
     this.loadSemestre()
 
@@ -129,7 +127,7 @@ export class RessourceManagerComponent {
     //time out pour attendre que le modal soit afficher
     this.idChangeRessource = id;
     this.loadSemestre() ; 
-    //this.loadProf();
+   
     setTimeout(() => {
     
       const ressource : any = this.ressources.find((r : any) => r.idressource == id);
@@ -181,6 +179,7 @@ export class RessourceManagerComponent {
 
   loadRessources() :any {
     this.search.updateRessource();
+    
   }
 
   hoursToSec(hour : number){

@@ -11,10 +11,6 @@ import { Group } from '../models/group.model';
   providedIn: 'root'
 })
 export class SearchService {
-  
-
- 
-
 
   private salle = new BehaviorSubject<Salle[]>([]);
   salle$ = this.salle.asObservable();
@@ -27,6 +23,7 @@ export class SearchService {
 
   constructor(private http: HttpClient) {
     this.salle$ = this.salle.asObservable();
+    this.ressource$ = this.ressource.asObservable();
   }
 
 
@@ -51,14 +48,18 @@ export class SearchService {
       const token = localStorage.getItem('token');
       const headers = { 'Authorization': `Bearer ${token}` };
       this.http.get('http://localhost:5050/ressource/getAll', { headers }).subscribe((data : any) => {
+        
         const list = data.map((dataPars : any)=> {
           return new Ressource(
-            dataPars.idRessource,
-            dataPars.Nom,
-            dataPars.Numero,
-            this.secToHours(dataPars.nbrHeure)
+            dataPars.idressource,
+            dataPars.titre,
+            dataPars.numero,
+            this.secToHours(dataPars.nbrheuresemestre),
+            dataPars.codecouleur,
+            dataPars.idsemestre
           );
         });
+        
         this.ressource.next(list);
       });
     }

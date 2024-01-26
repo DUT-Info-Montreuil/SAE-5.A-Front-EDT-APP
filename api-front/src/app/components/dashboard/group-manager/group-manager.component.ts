@@ -27,6 +27,7 @@ export class GroupManagerComponent {
   NameSuprGroup : any ;
 
   sub : Subscription[] = [];
+  searchService: any;
 
   delGroup(){
     const token = localStorage.getItem('token');
@@ -43,12 +44,10 @@ export class GroupManagerComponent {
     this.showSuprGroup = !this.showSuprGroup;
     if (this.showSuprGroup){
       this.idSuprGroup = id;
-      this.NameSuprGroup = this.allGroups.find((g : any) => g.IdGroupe == id).Nom;
+      const group = this.allGroups.find((g : any) => g.IdGroupe == id);
+      this.NameSuprGroup = group ? group.nom : null;
     }
-
   }
-
-
 
   constructor( private http: HttpClient ) {}
 
@@ -91,7 +90,14 @@ toggleModalModifGroupe(){
 }
 
 ngOnInit(): void {
-this.loadGroups();
+
+  this.sub.push(this.searchService.groupe$.subscribe((data : any) => {
+    this.allGroups = data;
+    this.masterGroup = data;
+  }));
+
+
+
 
 
 
@@ -113,10 +119,6 @@ chargerGroupe(id : any)
   
   annee.setAttribute('value', group.Annee);*/
   nomGroup.setAttribute('value', group.Nom);
-  
-  
-
-
  } , 0  );
 
 
@@ -141,12 +143,9 @@ changerGroupe(){
 }
 
 goInGroup(id : any){
-
-  
   const button = document.getElementById("goBackButton");
   button?.removeAttribute("disabled")
   button?.style.removeProperty("background-color")
-  
   this.SousGroupeActuel.push(id);
   this.masterGroup = this.allGroups.filter((group : any) => group.idGroupe_parent == id);
 }
@@ -168,14 +167,10 @@ goBackGroupe(){
     v = this.SousGroupeActuel[this.SousGroupeActuel.length - 1]
   }
   this.masterGroup = this.allGroups.filter((group : any) => group.idGroupe_parent == v);
-
-
-
 }
 
 toggleCreateGroupe(){
   this.ModalCreateGroup = !this.ModalCreateGroup;
-
 }
 
 showModalCreateGroup()
@@ -198,19 +193,6 @@ addGroupe(){
   {
     
     this.loadGroups();
-  });
-
-
-
-
-  
+  });  
 }
-
-
-
-
-
-
-
-
 }

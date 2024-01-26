@@ -6,11 +6,15 @@ export class Ressource {
     nom!: string;
     numero!: string;
     nbrHeure!: number;
+    codeCouleur!: string;
+    idSemestre!: number;
 
-    constructor(idRessource : number , nom: string, numero: string , nbrHeure : number) {
+    constructor(idRessource : number , nom: string, numero: string , nbrHeure : number , codeCouleur : string , idSemestre : number) {
         this.idRessource = idRessource;
         this.nom = nom;
         this.numero = numero;
         this.nbrHeure = nbrHeure;
+        this.codeCouleur =  codeCouleur;
+        this.idSemestre = idSemestre;
     }
 }

@@ -77,6 +77,7 @@ export class RessourceManagerComponent {
     if (this.idInetval) {
       clearInterval(this.idInetval);
     }
+    this.sub.forEach((s : any) => s.unsubscribe());
   }
 
   delRessource(){

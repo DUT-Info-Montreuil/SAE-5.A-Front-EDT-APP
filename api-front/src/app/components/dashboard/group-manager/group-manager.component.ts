@@ -4,10 +4,11 @@ import { FormGroup, FormBuilder, FormArray, Validators, AbstractControl, FormCon
 import { HttpClient } from '@angular/common/http';
 import { th } from 'date-fns/locale';
 import { set } from 'date-fns';
-import { timeout } from 'rxjs';
+
 import { SearchService } from '../services/search.service';
 import { validateEvents } from 'angular-calendar/modules/common/util/util';
-
+import { Group } from '../models/group.model';
+import { Subscription, timeout } from 'rxjs';
 
 @Component({
   selector: 'app-group-manager',
@@ -15,7 +16,7 @@ import { validateEvents } from 'angular-calendar/modules/common/util/util';
   styleUrl: './group-manager.component.css'
 })
 export class GroupManagerComponent {
-  allGroups: any; 
+  allGroups: Group[] = []; 
   masterGroup : any;
   SousGroupeActuel : number[] = [] ; 
   ModalCreateGroup : boolean = false;
@@ -24,6 +25,8 @@ export class GroupManagerComponent {
   showSuprGroup : boolean = false;
   idSuprGroup : any = 0;
   NameSuprGroup : any ;
+
+  sub : Subscription[] = [];
 
   delGroup(){
     const token = localStorage.getItem('token');

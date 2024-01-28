@@ -3,6 +3,9 @@ import { CommonModule } from '@angular/common';
 import { FormGroup, FormBuilder, FormArray, Validators, AbstractControl, FormControl } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { set } from 'date-fns';
+import { Utilisateur } from '../models/utilisateur.model';
+import { Subscription } from 'rxjs';
+import { SearchService } from '../services/search.service';
 
 @Component({
   selector: 'app-user-manager',
@@ -10,8 +13,8 @@ import { set } from 'date-fns';
   styleUrl: './user-manager.component.css'
 })
 export class UserManagerComponent {
-  searchUser : any;
-  allUsers : any;
+  searchUser : Utilisateur[] = [];
+  allUsers : Utilisateur[] = [];
   ShowCreateUser : boolean = false;
   showModalModifUser : boolean = false;
   showSuprUser : boolean = false;
@@ -19,11 +22,21 @@ export class UserManagerComponent {
   idDelUser : number = 0;
   DelUserLastName : any;
 
+  sub : Subscription[] = [];
 
-  constructor( private http: HttpClient ) {}
+
+  constructor( private http: HttpClient , private search : SearchService ) {}
 
 
   ngOnInit(): void {
+
+    this.sub.push(
+      this.search.utilisateur$.subscribe((data : Utilisateur[]) => {
+        this.allUsers = data;
+        this.searchUser = data;
+      })
+    )
+
     this.loadAllUsers();
   } 
 
@@ -49,8 +62,8 @@ export class UserManagerComponent {
     this.showSuprUser = !this.showSuprUser;
     if (id){
       this.idDelUser = id;
-      let u  = this.allUsers.filter((user : any) => user.IdUtilisateur == id)[0];
-      this.DelUserLastName = u.Username;
+      let u  = this.allUsers.filter((user : any) => user.idUtilisateur == id)[0];
+      this.DelUserLastName = u.userName;
 
     }
     if (!this.showSuprUser){
@@ -81,15 +94,15 @@ export class UserManagerComponent {
     this.idChangeUser = id;
     this.togglleModalModifUser();
     setTimeout(() => {
-      let u  = this.allUsers.filter((user : any) => user.IdUtilisateur == id)[0];
+      let u  = this.allUsers.filter((user : any) => user.idUtilisateur == id)[0];
       const nom = document.getElementById("modifNomEleve") as HTMLInputElement;
       const prenom = document.getElementById("modifPrenomEleve") as HTMLInputElement;
       const userName = document.getElementById("modifUserNameEleve") as HTMLInputElement;
 
 
-      nom.value = u.LastName;
-      prenom.value = u.FirstName;
-      userName.value = u.Username;
+      nom.value = u.nom;
+      prenom.value = u.prenom;
+      userName.value = u.userName;
 
     } , 0 );
 
@@ -144,13 +157,7 @@ export class UserManagerComponent {
 
 
   loadAllUsers(){
-    console.log("load all users");
-    const token = localStorage.getItem('token');
-    const header = { 'Authorization': `Bearer ${token}` };
-    this.http.get('http://localhost:5050/utilisateurs/getAll', { headers: header }).subscribe((res: any) => {
-      this.allUsers = res;
-      this.searchUser = res;
-    });
+    this.search.updateUtilisateur();
   }
 
 

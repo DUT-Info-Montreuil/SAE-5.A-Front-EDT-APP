@@ -4,10 +4,11 @@ import { FormGroup, FormBuilder, FormArray, Validators, AbstractControl, FormCon
 import { HttpClient } from '@angular/common/http';
 import { th } from 'date-fns/locale';
 import { set } from 'date-fns';
-import { timeout } from 'rxjs';
+
 import { SearchService } from '../services/search.service';
 import { validateEvents } from 'angular-calendar/modules/common/util/util';
-
+import { Group } from '../models/group.model';
+import { Subscription, timeout } from 'rxjs';
 
 @Component({
   selector: 'app-group-manager',
@@ -15,7 +16,7 @@ import { validateEvents } from 'angular-calendar/modules/common/util/util';
   styleUrl: './group-manager.component.css'
 })
 export class GroupManagerComponent {
-  allGroups: any; 
+  allGroups: Group[] = []; 
   masterGroup : any;
   SousGroupeActuel : number[] = [] ; 
   ModalCreateGroup : boolean = false;
@@ -24,6 +25,10 @@ export class GroupManagerComponent {
   showSuprGroup : boolean = false;
   idSuprGroup : any = 0;
   NameSuprGroup : any ;
+  temp  : any;
+
+  sub : Subscription[] = [];
+  
 
   delGroup(){
     const token = localStorage.getItem('token');
@@ -40,44 +45,47 @@ export class GroupManagerComponent {
     this.showSuprGroup = !this.showSuprGroup;
     if (this.showSuprGroup){
       this.idSuprGroup = id;
-      this.NameSuprGroup = this.allGroups.find((g : any) => g.IdGroupe == id).Nom;
+      const group = this.allGroups.find((g : any) => g.IdGroupe == id);
+      this.NameSuprGroup = group ? group.nom : null;
     }
-
   }
 
-
-
-  constructor( private http: HttpClient ) {}
+  constructor( private http: HttpClient , private search : SearchService ) {}
 
   loadGroups():any {
-    const token = localStorage.getItem('token');
-    const headers = { 'Authorization': `Bearer ${token}` };
-    this.http.get("http://localhost:5050/groupe/getAll", { headers }).subscribe((res: any) => 
-    {
-      let v : any = 0 ;
-      console.log(this.SousGroupeActuel) 
-      if (this.SousGroupeActuel.length <= 0){
-        v = null;
-        const button = document.getElementById("goBackButton");
-        button?.setAttribute("disabled", "")
-        button?.style.setProperty("background-color", "#6389f2")
-        //button?.style.setProperty("background-color", "#6389f2")
-      }
-      else{
-        v = this.SousGroupeActuel[this.SousGroupeActuel.length - 1]
-        const button = document.getElementById("goBackButton");
-        button?.removeAttribute("disabled")
-        //button?.style.setProperty("background-color", "#4287f5")
-      }
+      console.log("loadGroups")
+      this.search.updateGroupe()
+
+      setTimeout(() => {
+        let v : any = 0 ;
+        console.log(this.SousGroupeActuel) 
+        if (this.SousGroupeActuel.length <= 0){
+          v = null;
+          const button = document.getElementById("goBackButton");
+          button?.setAttribute("disabled", "")
+          button?.style.setProperty("background-color", "#6389f2")
+          //button?.style.setProperty("background-color", "#6389f2")
+        }
+        else{
+          v = this.SousGroupeActuel[this.SousGroupeActuel.length - 1]
+          const button = document.getElementById("goBackButton");
+          button?.removeAttribute("disabled")
+          //button?.style.setProperty("background-color", "#4287f5")
+        }
+        console.log(this.allGroups)
+        this.masterGroup = this.allGroups.filter((group : any) => group.idGroupe_parent == v);
+        console.log(this.masterGroup)
       
-      this.masterGroup = res.filter((group : any) => group.idGroupe_parent == v);
-      this.allGroups = res;
-      ;
-    });
+      } , 1000);
+       
+        
 
+     
+        
+    };
 
+    
 
-}
 
 toggleModalModifGroupe(){
   if(this.showSuprGroup == false){
@@ -88,10 +96,20 @@ toggleModalModifGroupe(){
 }
 
 ngOnInit(): void {
-this.loadGroups();
 
+  this.sub.push(this.search.groupe$.subscribe((data : any) => {
+    this.allGroups = data;
+  }));
 
+  this.loadGroups();
 
+}
+
+ngOnDestroy() {
+
+  this.sub.forEach((sub : Subscription) => {
+    sub.unsubscribe();
+  })
 }
 
 chargerGroupe(id : any)
@@ -100,7 +118,7 @@ chargerGroupe(id : any)
   this.idModifGroupe = id;
   setTimeout(() => {
   
-  const group : any = this.allGroups.find((g : any) => g.IdGroupe == id);
+  const group : any = this.allGroups.find((g : any) => g.idGroupe == id);
   
   const nomGroup : any = document.getElementById('changerNomGroupe')
   /*  const annee : any = document.getElementById('changerAnneeGroupe')
@@ -109,11 +127,7 @@ chargerGroupe(id : any)
   anneeScolaire.setAttribute('value', group.AnneeScolaire);
   
   annee.setAttribute('value', group.Annee);*/
-  nomGroup.setAttribute('value', group.Nom);
-  
-  
-
-
+  nomGroup.setAttribute('value', group.nom);
  } , 0  );
 
 
@@ -138,14 +152,12 @@ changerGroupe(){
 }
 
 goInGroup(id : any){
-
-  
   const button = document.getElementById("goBackButton");
   button?.removeAttribute("disabled")
   button?.style.removeProperty("background-color")
-  
   this.SousGroupeActuel.push(id);
   this.masterGroup = this.allGroups.filter((group : any) => group.idGroupe_parent == id);
+  this.loadGroups();
 }
 
 goBackGroupe(){
@@ -165,14 +177,10 @@ goBackGroupe(){
     v = this.SousGroupeActuel[this.SousGroupeActuel.length - 1]
   }
   this.masterGroup = this.allGroups.filter((group : any) => group.idGroupe_parent == v);
-
-
-
 }
 
 toggleCreateGroupe(){
   this.ModalCreateGroup = !this.ModalCreateGroup;
-
 }
 
 showModalCreateGroup()
@@ -195,19 +203,6 @@ addGroupe(){
   {
     
     this.loadGroups();
-  });
-
-
-
-
-  
+  });  
 }
-
-
-
-
-
-
-
-
 }

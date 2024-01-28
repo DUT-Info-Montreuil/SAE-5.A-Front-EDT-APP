@@ -37,13 +37,13 @@
                 <tr class="bg-white border-b   hover:bg-gray-50 " *ngFor="let r of searchRessources" (click)="chargerRessource(r.idressource)"   >
                    
                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
-                        {{r.titre}}
+                        {{r.nom}}
                     </th>
                     <td class="px-6 py-4">
                         {{r.numero}}
                     </td>
                     <td class="px-6 py-4">
-                        {{r.nbrheuresemestre}}
+                        {{r.nbrHeure}}
                     </td>
                     <td>
                       <img (click)="toggleSuprRessource(r.idressource)" class="cross" src="../../../../assets/betterCross.svg">
@@ -87,7 +87,7 @@
           <label for="countries" class="block mb-2 text-sm font-medium text-gray-900 ">selectioner un semestre </label>
                 <select id="ressourceSelect" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
                 <option hidden>selectioner un semestre</option>
-                <option *ngFor="let s of semestres" value="{{s.IdSemestre}}">{{s.Numero}}</option>
+                <option *ngFor="let s of semestres" value="{{s.idSemestre}}">{{s.nom}}</option>
 
                 </select>
 
@@ -103,7 +103,7 @@
 
         <div class="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
           <button class="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" (click)="toggleCreateRessource()">
-            Anuler
+            Annuler
           </button>
           <button (click)="addRessource()" class="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" (click)="toggleCreateRessource()">
             Sauvegarder
@@ -163,7 +163,7 @@
         <!--footer-->
         <div class="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
           <button class="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" (click)="toggleModalModifRessource()">
-            Anuler
+            Annuler
           </button>
           <button (click)="changerRessource()" class="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" (click)="toggleModalModifRessource()">
             Sauvegarder 
@@ -182,7 +182,7 @@
           <!--header-->
           <div class="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
             <h3 class="text-3xl font-semibold">
-              Voulez vous supprmier la ressource {{NameSuprRessource}} ?
+              Voulez vous supprimer la ressource {{NameSuprRessource}} ?
             </h3>
             <button class="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none" (click)="toggleSuprRessource()">
               <span class="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
@@ -195,7 +195,7 @@
           <!--footer-->
           <div class="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
             <button class="text-emerald-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" (click)="toggleSuprRessource()">
-              Anuler
+              Annuler
             </button>
             <button (click)="delRessource()" class="bg-red-500 text-white active:bg-red-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" (click)="toggleSuprRessource()">
               SUPPRIMER 

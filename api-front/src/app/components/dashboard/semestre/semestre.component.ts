@@ -6,6 +6,8 @@ import { th } from 'date-fns/locale';
 import { set } from 'date-fns';
 import { timeout } from 'rxjs';
 import { SearchService } from '../services/search.service';
+import { Semestre } from '../models/semestre.model';
+
 
 
 @Component({
@@ -14,7 +16,7 @@ import { SearchService } from '../services/search.service';
   styleUrl: './semestre.component.css'
 })
 export class SemestreComponent {
-  allSemestres: any 
+  allSemestres: Semestre[] = [] ; 
   showModalCreateSemestre : boolean = false;
   showModalModifSemestre : boolean = false;
   idChangeSemestre : any;
@@ -22,7 +24,9 @@ export class SemestreComponent {
   idSuprSemestre : any;
   NameSuprSemestre : any;
 
-  constructor( private http: HttpClient ) {}
+  sub : any[] = [];
+
+  constructor( private http: HttpClient, private search : SearchService) {}
 
 
   delSemestre(){
@@ -40,7 +44,7 @@ export class SemestreComponent {
     if (this.showSuprSemestre){
       this.idSuprSemestre = id;
       
-      const s : any = this.allSemestres.find((r : any) => r.IdSemestre == id);
+      const s : any = this.allSemestres.find((r : any) => r.idSemestre == id);
       
       this.NameSuprSemestre = s.Numero;
     }
@@ -50,12 +54,7 @@ export class SemestreComponent {
   }
 
   loadSemestre() {
-    const token = localStorage.getItem('token');
-    const header = { 'Authorization': `Bearer ${token}` };
-    this.http.get('http://localhost:5050/semestre/getAll', { headers: header }).subscribe((res: any) => {
-      this.allSemestres = res;
-    });
-
+    this.search.updateSemestre();
   }
 
 
@@ -83,11 +82,11 @@ export class SemestreComponent {
       this.idChangeSemestre = id;
      setTimeout(() => {
      
-      const s : any = this.allSemestres.find((r : any) => r.IdSemestre == id);
+      const s : any = this.allSemestres.find((r : any) => r.idSemestre == id);
       
       const numSemestre : any = document.getElementById('modifierNumero')
      
-      numSemestre.setAttribute('value', s.Numero);
+      numSemestre.setAttribute('value', s.nom);
       
       
 
@@ -118,7 +117,23 @@ export class SemestreComponent {
   }
 
   ngOnInit(): void {
+
+    this.sub.push(
+      this.search.semestre$.subscribe((semestre : Semestre[]) => {
+        this.allSemestres = semestre;
+        }
+      )
+    )
+
+
     this.loadSemestre();
+
+  }
+
+  ngOnDestroy(): void {
+    this.sub.forEach((s) => {
+      s.unsubscribe();
+    });
   }
 
 

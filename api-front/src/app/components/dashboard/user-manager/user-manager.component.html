@@ -37,22 +37,22 @@
                 </tr>
             </thead>
             <tbody>
-                <tr class="bg-white border-b   hover:bg-gray-50 " *ngFor="let r of searchUser" (click)="chargerUser(r.IdUtilisateur)"   >
+                <tr class="bg-white border-b   hover:bg-gray-50 " *ngFor="let r of searchUser" (click)="chargerUser(r.idUtilisateur)"   >
                    
                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
-                        {{r.FirstName}}
+                        {{r.nom}}
                     </th>
                     <td class="px-6 py-4">
-                        {{r.LastName}}
+                        {{r.prenom}}
                     </td>
                     <td class="px-6 py-4">  
-                        {{r.Username}}
+                        {{r.userName}}
                     </td>
                     <td class="px-6 py-4">
                         {{getStringRole(r.role)}}
                     </td>
                     <td>
-                      <img (click)="toggleSuprUser(r.IdUtilisateur)" class="cross" src="../../../../assets/betterCross.svg">
+                      <img (click)="toggleSuprUser(r.idUtilisateur)" class="cross" src="../../../../assets/betterCross.svg">
                     </td>
                 </tr>
             </tbody>
@@ -118,11 +118,11 @@
         <!--body-->
         <div class="relative p-6 flex-auto">
           <div>
-              <label for="small-input" class="block mb-2 text-sm font-medium text-gray-900 ">Nom de l'eleve </label>
+              <label for="small-input" class="block mb-2 text-sm font-medium text-gray-900 ">Nom  </label>
               <input type="text" id="modifNomEleve" class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 ">
           </div>
           <div>
-            <label for="small-input" class="block mb-2 text-sm font-medium text-gray-900 ">Prenom de l'eleve </label>
+            <label for="small-input" class="block mb-2 text-sm font-medium text-gray-900 ">Prenom  </label>
             <input type="text" id="modifPrenomEleve" class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 ">
         </div>
           <div>
@@ -165,7 +165,7 @@
         <!--footer-->
         <div class="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
           <button class="text-emerald-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" (click)="toggleSuprUser()">
-            Anuler
+            Annuler
           </button>
           <button (click)="delUser()" class="bg-red-500 text-white active:bg-red-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" (click)="toggleSuprUser()">
             SUPPRIMER 

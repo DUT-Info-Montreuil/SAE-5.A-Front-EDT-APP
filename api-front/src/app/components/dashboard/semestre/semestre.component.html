@@ -25,13 +25,13 @@
                 </tr>
             </thead>
             <tbody>
-                <tr class="bg-white border-b   hover:bg-gray-50 " *ngFor="let r of allSemestres" (click)="chargerRessource(r.IdSemestre)"   >
+                <tr class="bg-white border-b   hover:bg-gray-50 " *ngFor="let r of allSemestres" (click)="chargerRessource(r.idSemestre)"   >
                    
                     <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
-                        {{r.Numero}}
+                        {{r.nom}}
                     </td>
                     <td >
-                      <img class="cross" (click)="toggleSuprSemestre(r.IdSemestre)" src="../../../../assets/betterCross.svg"/>
+                      <img class="cross" (click)="toggleSuprSemestre(r.idSemestre)" src="../../../../assets/betterCross.svg"/>
                     </td>
                 </tr>
             </tbody>
@@ -68,10 +68,10 @@
         <!--footer-->
         <div class="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
           <button class="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" (click)="toggleCreateSemestre()">
-            Close
+            Annuler
           </button>
           <button (click)="addSemestre()" class="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" (click)="toggleCreateSemestre()">
-            Save 
+            Sauvegarder 
           </button>
         </div>
       </div>
@@ -91,7 +91,7 @@
         <!--header-->
         <div class="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
           <h3 class="text-3xl font-semibold">
-            Modal Title
+            Modifier le semestre
           </h3>
           <button class="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none" (click)="toggleModalModifSemestre()">
             <span class="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
@@ -110,10 +110,10 @@
         <!--footer-->
         <div class="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
           <button class="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" (click)="toggleModalModifSemestre()">
-            Close
+            Annuler
           </button>
           <button (click)="changerRessource()" class="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" (click)="toggleModalModifSemestre()">
-            Save 
+            Sauvegarder 
           </button>
         </div>
       </div>
@@ -130,7 +130,7 @@
         <!--header-->
         <div class="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
           <h3 class="text-3xl font-semibold">
-            Voulez vous supprmier la ressource {{NameSuprSemestre}} ?
+            Voulez vous supprimer le semestre  {{NameSuprSemestre}} ?
           </h3>
           <button class="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none" (click)="toggleSuprSemestre()">
             <span class="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
@@ -143,7 +143,7 @@
         <!--footer-->
         <div class="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
           <button class="text-emerald-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" (click)="toggleSuprSemestre()">
-            Anuler
+            Annuler
           </button>
           <button (click)="delSemestre()" class="bg-red-500 text-white active:bg-red-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" (click)="toggleSuprSemestre()">
             SUPPRIMER 

@@ -1,5 +1,14 @@
 # ApiFront
 
+In order to execute the whole project (back and front) you just need to start the docker-compose.yml that i in the folder "compose" using the foolowing command:
+
+````
+
+docker-compose up
+
+````
+
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.0.5.
 
 ## Development server

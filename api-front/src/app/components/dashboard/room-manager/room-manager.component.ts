@@ -65,7 +65,7 @@ export class RoomManagerComponent implements OnInit{
     search.addEventListener('keyup', (e: any) => {
       if(search.value != "") {
         const searchString = e.target.value.toLowerCase();
-      this.searchRoom = this.salles.filter((salle: any) => {return salle.Nom.toLowerCase().startsWith(searchString)});
+      this.searchRoom = this.salles.filter((salle: any) => {return salle.nom.toLowerCase().startsWith(searchString)});
     }else {
       this.searchRoom = this.salles;
       }

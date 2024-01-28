@@ -63,7 +63,7 @@ export class RessourceManagerComponent {
     search.addEventListener("keyup", (e :any ) => {
       const searchString : string = e.target.value.toLowerCase();
       if (searchString != "" ) {
-        this.searchRessources  = this.ressources.filter((e : any) => {return e.titre.toLowerCase().startsWith(searchString.toLowerCase())});
+        this.searchRessources  = this.ressources.filter((e : any) => {return e.nom.toLowerCase().startsWith(searchString.toLowerCase())});
       }else {
         this.searchRessources =  this.ressources;
       }

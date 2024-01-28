@@ -25,9 +25,10 @@ export class GroupManagerComponent {
   showSuprGroup : boolean = false;
   idSuprGroup : any = 0;
   NameSuprGroup : any ;
+  temp  : any;
 
   sub : Subscription[] = [];
-  searchService: any;
+  
 
   delGroup(){
     const token = localStorage.getItem('token');
@@ -49,37 +50,42 @@ export class GroupManagerComponent {
     }
   }
 
-  constructor( private http: HttpClient ) {}
+  constructor( private http: HttpClient , private search : SearchService ) {}
 
   loadGroups():any {
-    const token = localStorage.getItem('token');
-    const headers = { 'Authorization': `Bearer ${token}` };
-    this.http.get("http://localhost:5050/groupe/getAll", { headers }).subscribe((res: any) => 
-    {
-      let v : any = 0 ;
-      console.log(this.SousGroupeActuel) 
-      if (this.SousGroupeActuel.length <= 0){
-        v = null;
-        const button = document.getElementById("goBackButton");
-        button?.setAttribute("disabled", "")
-        button?.style.setProperty("background-color", "#6389f2")
-        //button?.style.setProperty("background-color", "#6389f2")
-      }
-      else{
-        v = this.SousGroupeActuel[this.SousGroupeActuel.length - 1]
-        const button = document.getElementById("goBackButton");
-        button?.removeAttribute("disabled")
-        //button?.style.setProperty("background-color", "#4287f5")
-      }
+      console.log("loadGroups")
+      this.search.updateGroupe()
+
+      setTimeout(() => {
+        let v : any = 0 ;
+        console.log(this.SousGroupeActuel) 
+        if (this.SousGroupeActuel.length <= 0){
+          v = null;
+          const button = document.getElementById("goBackButton");
+          button?.setAttribute("disabled", "")
+          button?.style.setProperty("background-color", "#6389f2")
+          //button?.style.setProperty("background-color", "#6389f2")
+        }
+        else{
+          v = this.SousGroupeActuel[this.SousGroupeActuel.length - 1]
+          const button = document.getElementById("goBackButton");
+          button?.removeAttribute("disabled")
+          //button?.style.setProperty("background-color", "#4287f5")
+        }
+        console.log(this.allGroups)
+        this.masterGroup = this.allGroups.filter((group : any) => group.idGroupe_parent == v);
+        console.log(this.masterGroup)
       
-      this.masterGroup = res.filter((group : any) => group.idGroupe_parent == v);
-      this.allGroups = res;
-      ;
-    });
+      } , 1000);
+       
+        
 
+     
+        
+    };
 
+    
 
-}
 
 toggleModalModifGroupe(){
   if(this.showSuprGroup == false){
@@ -91,16 +97,19 @@ toggleModalModifGroupe(){
 
 ngOnInit(): void {
 
-  this.sub.push(this.searchService.groupe$.subscribe((data : any) => {
+  this.sub.push(this.search.groupe$.subscribe((data : any) => {
     this.allGroups = data;
-    this.masterGroup = data;
   }));
 
+  this.loadGroups();
 
+}
 
+ngOnDestroy() {
 
-
-
+  this.sub.forEach((sub : Subscription) => {
+    sub.unsubscribe();
+  })
 }
 
 chargerGroupe(id : any)
@@ -109,7 +118,7 @@ chargerGroupe(id : any)
   this.idModifGroupe = id;
   setTimeout(() => {
   
-  const group : any = this.allGroups.find((g : any) => g.IdGroupe == id);
+  const group : any = this.allGroups.find((g : any) => g.idGroupe == id);
   
   const nomGroup : any = document.getElementById('changerNomGroupe')
   /*  const annee : any = document.getElementById('changerAnneeGroupe')
@@ -118,7 +127,7 @@ chargerGroupe(id : any)
   anneeScolaire.setAttribute('value', group.AnneeScolaire);
   
   annee.setAttribute('value', group.Annee);*/
-  nomGroup.setAttribute('value', group.Nom);
+  nomGroup.setAttribute('value', group.nom);
  } , 0  );
 
 
@@ -148,6 +157,7 @@ goInGroup(id : any){
   button?.style.removeProperty("background-color")
   this.SousGroupeActuel.push(id);
   this.masterGroup = this.allGroups.filter((group : any) => group.idGroupe_parent == id);
+  this.loadGroups();
 }
 
 goBackGroupe(){

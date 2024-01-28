@@ -33,18 +33,18 @@
 
             </thead>
             <tbody>
-                <tr class="bg-white border-b   hover:bg-gray-50 " *ngFor="let r of masterGroup" (click)="chargerGroupe(r.IdGroupe)"   >
+                <tr class="bg-white border-b   hover:bg-gray-50 " *ngFor="let r of masterGroup" (click)="chargerGroupe(r.idGroupe)"   >
                    
                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
-                        {{r.Nom}}
+                        {{r.nom}}
                     </th>
                     
                     <td class="px-6 py-4">
                         <!--<button  class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center " type="button">Sous-groupe</button>-->
-                        <img (click)="goInGroup(r.IdGroupe)" class="svg" src="../../../../assets/rightArrow.svg" alt="">
+                        <img (click)="goInGroup(r.idGroupe)" class="svg" src="../../../../assets/rightArrow.svg" alt="">
                     </td>
                     <td>
-                        <img (click)="toggleSuprGroup(r.IdGroupe)" class="svg" src="../../../../assets/betterCross.svg" alt="">
+                        <img (click)="toggleSuprGroup(r.idGroupe)" class="svg" src="../../../../assets/betterCross.svg" alt="">
                     </td>
                 </tr>
             </tbody>
@@ -82,7 +82,7 @@
         <!--footer-->
         <div class="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
           <button class="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" (click)="toggleCreateGroupe()">
-            Anuler
+            Annuler
           </button>
           <button (click)="addGroupe()" class="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" (click)="toggleCreateGroupe()">
             Sauvegarder 
@@ -123,7 +123,7 @@
         <!--footer-->
         <div class="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
           <button class="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" (click)="toggleModalModifGroupe()">
-            Anuler
+            Annuler
           </button>
           <button (click)="changerGroupe()" class="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" (click)="toggleModalModifGroupe()">
             Sauvegarder 
@@ -143,7 +143,7 @@
         <!--header-->
         <div class="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
           <h3 class="text-3xl font-semibold">
-            Voulez vous supprmier la ressource {{NameSuprGroup}} ?
+            Voulez vous supprimer le groupe {{NameSuprGroup}} ?
           </h3>
           <button class="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none" (click)="toggleSuprGroup()">
             <span class="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
@@ -159,7 +159,7 @@
               <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
             </svg>
             <div class="ms-3 text-sm font-medium">
-              Attention suprimer un groupe parent suprime aussi les sous-groupes
+              Attention supprimer un groupe parent suprime aussi les sous-groupes
             </div>
             
           </div>
@@ -168,7 +168,7 @@
         <!--footer-->
         <div class="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
           <button class="text-emerald-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" (click)="toggleSuprGroup()">
-            Anuler
+            Annuler
           </button>
           <button (click)="delGroup()" class="bg-red-500 text-white active:bg-red-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" (click)="toggleSuprGroup()">
             SUPPRIMER 
